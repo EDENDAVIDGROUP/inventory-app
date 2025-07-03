@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>עריכת מוצר</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 40px;
+      direction: rtl;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .row > div {
+      flex: 1;
+      min-width: 200px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .save { background-color: #28a745; color: white; }
+    .delete { background-color: #dc3545; color: white; }
+    .back { background-color: #007bff; color: white; }
+  </style>
+</head>
+<body>
+  <h1>עריכת מוצר</h1>
+  <form>
+    <!-- פרטים כלליים -->
+    <div class="section">
+      <h3>פרטים כלליים</h3>
+      <div class="row">
+        <div><label>מק"ט</label><input type="text" /></div>
+        <div><label>שם מוצר</label><input type="text" /></div>
+        <div><label>מותג</label><input type="text" /></div>
+        <div><label>קטגוריה</label><input type="text" /></div>
+      </div>
+      <label>תיאור קצר</label>
+      <input type="text" />
+      <label>תיאור ארוך</label>
+      <textarea rows="4"></textarea>
+      <label>אחריות</label>
+      <input type="text" />
+      <label>לקוחות (ריבוי)</label>
+      <input type="text" placeholder="לדוגמה: סופר פארם, הום סנטר..." />
+    </div>
+
+    <!-- מחירים -->
+    <div class="section">
+      <h3>מחירים</h3>
+      <div class="row">
+        <div><label>מחיר עלות</label><input type="number" step="0.01" /></div>
+        <div><label>מחיר מומלץ</label><input type="number" step="0.01" /></div>
+        <div><label>מחיר ללקוח מסוים</label><input type="text" placeholder="לדוגמה: סופר פארם - 89 ₪" /></div>
+      </div>
+    </div>
+
+    <!-- לוגיסטיקה -->
+    <div class="section">
+      <h3>לוגיסטיקה</h3>
+      <div class="row">
+        <div><label>מלאי</label><input type="number" /></div>
+        <div>
+          <label>סוג משלוח</label>
+          <select>
+            <option>רגיל</option>
+            <option>אקספרס</option>
+            <option>דיגיטלי</option>
+          </select>
+        </div>
+        <div><label>נפח</label><input type="text" /></div>
+        <div><label>סוג נפח</label><input type="text" placeholder="לדוגמה: ליטר, קוב, סמ"ק..." /></div>
+      </div>
+    </div>
+
+    <!-- שיווק -->
+    <div class="section">
+      <h3>שיווק</h3>
+      <label>לינק לוידאו יוטיוב</label>
+      <input type="text" placeholder="https://youtube.com/..." />
+      <label>גלריית תמונות</label>
+      <input type="file" multiple />
+    </div>
+
+    <!-- כפתורים -->
+    <div class="buttons">
+      <button class="save">שמור שינויים</button>
+      <button class="delete">מחק מוצר</button>
+      <button class="back" type="button" onclick="window.location.href='products.html'">חזרה למוצרים</button>
+    </div>
+  </form>
+</body>
+</html>
