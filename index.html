@@ -12,6 +12,28 @@
             background-color: #f5f5f5;
             font-family: Arial, sans-serif;
         }
+        .sidebar {
+            width: 250px;
+            background-color: #1e1e2f;
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+            position: fixed;
+        }
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .main {
+            margin-right: 270px;
+            padding: 20px;
+        }
         .card-icon {
             font-size: 2rem;
         }
@@ -19,98 +41,118 @@
 </head>
 
 <body>
-    <div class="container mt-4">
-        <div class="row g-3">
-            <!-- קוביות סטטיסטיקה עליונות -->
-            <div class="col-md-3">
-                <div class="card text-white bg-primary text-center">
-                    <div class="card-body">
-                        <div class="card-icon">💰</div>
-                        <h5 class="card-title">הכנסות (החודש)</h5>
-                        <p class="card-text">₪35,810.00</p>
+    <div class="sidebar">
+        <h2>קבוצת עדן דוד בע"מ</h2>
+        <a href="#">יבוא הזמנות</a>
+        <a href="#">הזמנות חדשות</a>
+        <a href="#">הזמנות בטיפול</a>
+        <a href="#">הזמנות שגויות</a>
+        <hr>
+        <a href="#">עסקאות</a>
+        <a href="#">מבצעים</a>
+        <a href="#">דוחות</a>
+        <a href="#">מוצרים</a>
+        <a href="#">משלוחים</a>
+        <a href="#">הנהלת חשבונות</a>
+        <a href="#">יבוא מוצרים</a>
+        <a href="#">היסטוריית הזמנות</a>
+        <a href="#">הגדרות</a>
+    </div>
+
+    <div class="main">
+        <div class="container mt-4">
+            <div class="row g-3">
+                <!-- קוביות סטטיסטיקה עליונות -->
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary text-center">
+                        <div class="card-body">
+                            <div class="card-icon">💰</div>
+                            <h5 class="card-title">הכנסות (החודש)</h5>
+                            <p class="card-text">₪35,810.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-warning text-center">
+                        <div class="card-body">
+                            <div class="card-icon">📦</div>
+                            <h5 class="card-title">הזמנות (החודש)</h5>
+                            <p class="card-text">41</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-info text-center">
+                        <div class="card-body">
+                            <div class="card-icon">📋</div>
+                            <h5 class="card-title">פריטים</h5>
+                            <p class="card-text">255</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-danger text-center">
+                        <div class="card-body">
+                            <div class="card-icon">⚠️</div>
+                            <h5 class="card-title">אזל מהמלאי</h5>
+                            <p class="card-text">132</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-warning text-center">
-                    <div class="card-body">
-                        <div class="card-icon">📦</div>
-                        <h5 class="card-title">הזמנות (החודש)</h5>
-                        <p class="card-text">41</p>
+
+            <div class="row mt-4">
+                <!-- מוצרים הכי נמכרים -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">המוצרים הכי נמכרים</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>שם מוצר</th>
+                                        <th>מחיר</th>
+                                        <th>תאריך</th>
+                                        <th>סטטוס</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>מצנן 5500 ARPO</td>
+                                        <td>₪1,380</td>
+                                        <td>03/07/2025</td>
+                                        <td><span class="badge bg-success">שולם</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>אוהל PVC</td>
+                                        <td>₪960</td>
+                                        <td>02/07/2025</td>
+                                        <td><span class="badge bg-success">שולם</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>שולחן פעילות</td>
+                                        <td>₪690</td>
+                                        <td>01/07/2025</td>
+                                        <td><span class="badge bg-success">שולם</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- דוח לקוח חודשי -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">דוח לקוח חודשי</div>
+                        <div class="card-body">
+                            <canvas id="customerChart" height="140"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-info text-center">
-                    <div class="card-body">
-                        <div class="card-icon">📋</div>
-                        <h5 class="card-title">פריטים</h5>
-                        <p class="card-text">255</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-white bg-danger text-center">
-                    <div class="card-body">
-                        <div class="card-icon">⚠️</div>
-                        <h5 class="card-title">אזל מהמלאי</h5>
-                        <p class="card-text">132</p>
-                    </div>
-                </div>
-            </div>
+
         </div>
-
-        <div class="row mt-4">
-            <!-- מוצרים הכי נמכרים -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-secondary text-white">המוצרים הכי נמכרים</div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>שם מוצר</th>
-                                    <th>מחיר</th>
-                                    <th>תאריך</th>
-                                    <th>סטטוס</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>מצנן 5500 ARPO</td>
-                                    <td>₪1,380</td>
-                                    <td>03/07/2025</td>
-                                    <td><span class="badge bg-success">שולם</span></td>
-                                </tr>
-                                <tr>
-                                    <td>אוהל PVC</td>
-                                    <td>₪960</td>
-                                    <td>02/07/2025</td>
-                                    <td><span class="badge bg-success">שולם</span></td>
-                                </tr>
-                                <tr>
-                                    <td>שולחן פעילות</td>
-                                    <td>₪690</td>
-                                    <td>01/07/2025</td>
-                                    <td><span class="badge bg-success">שולם</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- דוח לקוח חודשי -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-secondary text-white">דוח לקוח חודשי</div>
-                    <div class="card-body">
-                        <canvas id="customerChart" height="140"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script>
