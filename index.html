@@ -1,28 +1,95 @@
-<!-- Sidebar -->
-<div class="sidebar">
-  <h2>קבוצת עדן דוד בע"מ</h2>
-  <ul>
-    <!-- חלק ראשון – ניהול הזמנות -->
-    <li><a href="import-orders.html">🧾 יבוא הזמנות</a></li>
-    <li><a href="#">🛒 הזמנות חדשות</a></li>
-    <li><a href="#">🛠️ הזמנות בטיפול</a></li>
-    <li><a href="#">❌ הזמנות שגויות</a></li>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מערכת ניהול</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      display: flex;
+    }
 
-    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+    .sidebar {
+      width: 220px;
+      background-color: #1c1d2f;
+      color: white;
+      height: 100vh;
+      padding: 20px;
+    }
 
-    <!-- חלק שני – ניהול מסחרי ועסקי -->
-    <li><a href="#">🤝 עסקאות</a></li>
-    <li><a href="#">💥 מבצעים</a></li>
-    <li><a href="#">📊 דוחות</a></li>
+    .sidebar h2 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
 
-    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
 
-    <!-- חלק שלישי – ניהול תפעולי -->
-    <li><a href="#">📦 מוצרים</a></li>
-    <li><a href="#">🚚 משלוחים</a></li>
-    <li><a href="#">📁 הנהלת חשבונות</a></li>
-    <li><a href="#">🧾 יבוא מוצרים</a></li>
-    <li><a href="#">📄 היסטוריית הזמנות</a></li>
-    <li><a href="#">⚙️ הגדרות</a></li>
-  </ul>
-</div>
+    .sidebar li {
+      margin: 10px 0;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      display: block;
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    .sidebar a:hover {
+      background-color: #2e2f40;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #444;
+      margin: 15px 0;
+    }
+
+    .content {
+      padding: 30px;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2 onclick="location.href='index.html'" style="cursor:pointer;">קבוצת עדן דוד בע"מ</h2>
+    <ul>
+      <!-- חלק 1 – ניהול הזמנות -->
+      <li><a href="import-orders.html">🧾 יבוא הזמנות</a></li>
+      <li><a href="#">🛒 הזמנות חדשות</a></li>
+      <li><a href="#">🛠️ הזמנות בטיפול</a></li>
+      <li><a href="#">❌ הזמנות שגויות</a></li>
+
+      <hr>
+
+      <!-- חלק 2 – פעילות מסחרית -->
+      <li><a href="#">🤝 עסקאות</a></li>
+      <li><a href="#">💥 מבצעים</a></li>
+      <li><a href="#">📊 דוחות</a></li>
+
+      <hr>
+
+      <!-- חלק 3 – תפעול -->
+      <li><a href="#">📦 מוצרים</a></li>
+      <li><a href="#">🚚 משלוחים</a></li>
+      <li><a href="#">📁 הנהלת חשבונות</a></li>
+      <li><a href="#">🧾 יבוא מוצרים</a></li>
+      <li><a href="#">📄 היסטוריית הזמנות</a></li>
+      <li><a href="#">⚙️ הגדרות</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1>ברוך הבא למערכת הניהול</h1>
+    <p>בחר קטגוריה מהתפריט הימני כדי להתחיל.</p>
+  </div>
+</body>
+</html>
