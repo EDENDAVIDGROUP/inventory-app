@@ -1,35 +1,82 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>דמו מערכת ניהול</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דמו ניהול מוצרים - שלב 2</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
-<body style="font-family: sans-serif; direction: rtl; text-align: center; padding: 40px;">
-  <h1>ברוך הבא לדמו שלך, עדן!</h1>
-  <p>מערכת ניהול מוצרים, לקוחות, הזמנות, דוחות ושליחה לצ'יטה.</p>
-  <hr />
-  <h2>מה כבר עובד:</h2>
-  <ul style="text-align: right; display: inline-block;">
-    <li>מודול מוצרים עם מחיר צרכן, עלות, תיאורים, תמונות, קטגוריה, ווריאציות</li>
-    <li>מנגנון הנחות לפי אחוזים לפי לקוח (למשל BOXMASTER / PRO-TOOLS)</li>
-    <li>חישוב מחיר סיטונאי + תוספת קבועה למשלוח</li>
-    <li>שידור מוצרים ללקוחות API וגיבוי</li>
-    <li>עדכון תיאורי מוצר בזמן אמת דרך המערכת</li>
-    <li>יכולת ליצור מבצע זמני ללקוחות API ולהציע מחיר אחר</li>
-    <li>אינטגרציה להזמנות במייל – לקוח שולח אקסל > נכנס אוטומטית</li>
-    <li>הזמנות נשלחות לצ’יטה אוטומטית</li>
-    <li>אפשרות דוחות עוגת מכירות</li>
-    <li>
-      התממשקות מלאה לחשבוניות iCount  
-      <ul style="text-align: right; font-size: 90%">
-        <li>חשבונית נפרדת לכל הזמנה (למשל מחסני חשמל)</li>
-        <li>חשבונית מרוכזת אחת בחודש (למשל מועדון טוב)</li>
-        <li>כל ההזמנות נכנסות לאייקאונט כהזמנות בזמן אמת</li>
-      </ul>
-    </li>
-  </ul>
+<body>
 
-  <p style="color: red; font-weight: bold;">מכאן נמשיך לבנות את המסכים והניהול המלא 🎯</p>
+  <h1>שלב 2 - הוספת מוצרים</h1>
+  <p>מלא את הפרטים של המוצר החדש:</p>
+
+  <div>
+    <input type="text" id="productName" placeholder="שם מוצר">
+    <input type="number" id="retailPrice" placeholder="מחיר לצרכן">
+    <input type="number" id="costPrice" placeholder="מחיר עלות">
+    <button onclick="addProduct()">הוסף מוצר</button>
+  </div>
+
+  <h2>רשימת מוצרים</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>שם מוצר</th>
+        <th>מחיר לצרכן (ש"ח)</th>
+        <th>מחיר עלות (ש"ח)</th>
+      </tr>
+    </thead>
+    <tbody id="productTableBody"></tbody>
+  </table>
+
+  <script>
+    function addProduct() {
+      const name = document.getElementById('productName').value.trim();
+      const retail = document.getElementById('retailPrice').value.trim();
+      const cost = document.getElementById('costPrice').value.trim();
+
+      if (!name || !retail || !cost) {
+        alert('יש למלא את כל השדות');
+        return;
+      }
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${parseFloat(retail).toFixed(2)}</td>
+        <td>${parseFloat(cost).toFixed(2)}</td>
+      `;
+      document.getElementById('productTableBody').appendChild(row);
+
+      // ניקוי שדות
+      document.getElementById('productName').value = '';
+      document.getElementById('retailPrice').value = '';
+      document.getElementById('costPrice').value = '';
+    }
+  </script>
+
 </body>
 </html>
