@@ -3,74 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>לוח ניהול - קבוצת עדן דוד</title>
+  <title>מערכת ניהול - קבוצת עדן דוד</title>
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
-      display: flex;
+      font-family: Arial, sans-serif;
       direction: rtl;
+      background-color: #f4f6fa;
     }
-    aside {
-      width: 220px;
-      background-color: #1f2235;
-      color: white;
-      padding: 20px;
+    .sidebar {
       height: 100vh;
+      width: 240px;
+      position: fixed;
+      right: 0;
+      top: 0;
+      background-color: #1c1e30;
+      color: #fff;
+      padding: 20px 10px;
+      overflow-y: auto;
     }
-    aside h2 {
-      font-size: 18px;
+    .sidebar h2 {
+      text-align: center;
       margin-bottom: 30px;
+      font-size: 18px;
     }
-    ul {
-      list-style: none;
-      padding: 0;
+    .sidebar a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      transition: 0.2s;
     }
-    ul li {
-      margin: 12px 0;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
+    .sidebar a:hover {
+      background-color: #33364d;
     }
-    ul li span {
+    .sidebar a span {
       margin-left: 8px;
     }
-    ul li a {
-      text-decoration: none;
-      color: white;
-      display: flex;
-      align-items: center;
-    }
-    ul li a:hover {
-      color: #00d8ff;
-    }
-    main {
+    .main {
+      margin-right: 260px;
       padding: 40px;
-      flex-grow: 1;
+    }
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 180px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 10px 0 0;
     }
   </style>
 </head>
 <body>
-  <aside>
-    <h2>קבוצת עדן דוד בע״מ</h2>
-    <ul>
-      <li><a href="#"><span>📊</span> דף הבית</a></li>
-      <li><a href="#"><span>📥</span> יבוא הזמנות</a></li>
-      <li><a href="#"><span>🛒</span> הזמנות חדשות</a></li>
-      <li><a href="#"><span>🛠️</span> הזמנות בטיפול</a></li>
-      <li><a href="#"><span>🧾</span> היסטוריית הזמנות</a></li>
-      <li><a href="#"><span>🚚</span> משלוחים</a></li>
-      <li><a href="#"><span>📘</span> הנהלת חשבונות</a></li>
-      <li><a href="#"><span>📦</span> מוצרים</a></li>
-      <li><a href="#"><span>💼</span> עסקאות</a></li>
-      <li><a href="#"><span>📤</span> יבוא מוצרים</a></li>
-      <li><a href="#"><span>📈</span> דוחות</a></li>
-      <li><a href="#"><span>⚙️</span> הגדרות</a></li>
-    </ul>
-  </aside>
-  <main>
-    <h1>ברוך הבא למערכת הניהול ✨</h1>
-    <p>בחר קטגוריה מהתפריט הימני כדי להתחיל ⬅️</p>
-  </main>
+  <div class="sidebar">
+    <h2><strong>קבוצת עדן דוד בע"מ</strong></h2>
+    <a href="index.html"><span>📊</span>דף הבית</a>
+    <a href="import-orders.html"><span>📥</span>יבוא הזמנות</a>
+    <a href="new-orders.html"><span>🛒</span>הזמנות חדשות</a>
+    <a href="in-process.html"><span>🛠️</span>הזמנות בטיפול</a>
+    <a href="history.html"><span>📄</span>רישוי הזמנות</a>
+    <a href="shipments.html"><span>🚛</span>משלוחים</a>
+    <a href="accounting.html"><span>🗂️</span>הנהלת חשבונות</a>
+    <a href="products.html"><span>📦</span>מוצרים</a>
+    <a href="deals.html"><span>🤝</span>עסקאות</a>
+    <a href="import-products.html"><span>📥</span>יבוא מוצרים</a>
+    <a href="reports.html"><span>📈</span>דוחות</a>
+    <a href="settings.html"><span>⚙️</span>הגדרות</a>
+  </div>
+
+  <div class="main">
+    <h1><span style="background:#377dff;color:white;padding:5px 15px;border-radius:5px;">✨ ברוך הבא למערכת הניהול</span></h1>
+    <p>בחר קטגוריה מהתפריט הימני כדי להתחיל</p>
+
+    <div class="cards">
+      <div class="card">
+        <h2>128</h2>
+        <p>עסקאות פעילות</p>
+      </div>
+      <div class="card">
+        <h2>45</h2>
+        <p>הזמנות בתהליך</p>
+      </div>
+      <div class="card">
+        <h2>72</h2>
+        <p>מוצרים במלאי</p>
+      </div>
+      <div class="card">
+        <h2>2</h2>
+        <p>חשבוניות פתוחות</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
