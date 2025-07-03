@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ייבוא הזמנות</title>
+  <meta charset="UTF-8" />
+  <title>יבוא הזמנות</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f7f7f7;
-      padding: 40px;
-      text-align: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
     }
-    h1 {
-      color: #333;
-    }
-    .import-box {
-      background-color: white;
-      border-radius: 10px;
-      padding: 30px;
-      max-width: 600px;
-      margin: auto;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .import-box p {
-      margin: 10px 0 20px;
-      color: #666;
-    }
-    .upload-area {
-      border: 2px dashed #aaa;
-      padding: 30px;
-      cursor: pointer;
-      background-color: #f0f0f0;
-      transition: background 0.3s;
-    }
-    .upload-area:hover {
-      background-color: #e8e8e8;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    .button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
       color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+      height: 100vh;
+      padding-top: 20px;
+      position: fixed;
     }
-    .button:hover {
-      background-color: #45a049;
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+    }
+    .sidebar a:hover {
+      background-color: #34495e;
+    }
+    .content {
+      margin-right: 250px;
+      padding: 40px;
+      flex-grow: 1;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 16px;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .back-btn:hover {
+      background-color: #2980b9;
     }
   </style>
 </head>
 <body>
-  <div class="import-box">
-    <h1>ייבוא הזמנות</h1>
-    <p>שלוב קובץ Excel של הזמנות השיומיות על ידי.</p>
-    
-    <label for="orderFile">
-      <div class="upload-area">
-        ↑ לחץ כאן להעלאה קובץ Excel
-      </div>
-    </label>
-    <input type="file" id="orderFile" accept=".xls,.xlsx">
-    <button class="button">ייבוא שלב</button>
+  <div class="sidebar">
+    <h2>תפריט ניהול</h2>
+    <a href="index.html.deshbord">דף הבית</a>
+    <a href="import-orders.html">יבוא הזמנות</a>
+    <a href="new-orders.html">הזמנות חדשות</a>
+    <a href="processing-orders.html">הזמנות בטיפול</a>
+    <a href="order-history.html">היסטוריית הזמנות</a>
+    <a href="shipments.html">משלוחים</a>
+    <a href="accounting.html">הנהלת חשבונות</a>
+    <a href="products.html">מוצרים</a>
+    <a href="deals.html">עסקאות</a>
+    <a href="import-products.html">יבוא מוצרים</a>
+    <a href="reports.html">דוחות</a>
+    <a href="settings.html">הגדרות</a>
+  </div>
+
+  <div class="content">
+    <div class="top-bar">
+      <h1>יבוא הזמנות</h1>
+      <a href="index.html.deshbord" class="back-btn">חזרה לדף הבית</a>
+    </div>
+    <hr />
+    <p>כאן תוכל לייבא קובץ אקסל של הזמנות, לבצע בדיקות תקינות, ולעבד את הקובץ למשלוח אוטומטי.</p>
+    <!-- כאן נוסיף בעתיד טופס העלאה, טבלת תצוגה, ועוד -->
   </div>
 </body>
 </html>
