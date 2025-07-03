@@ -1,82 +1,108 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>דמו ניהול מוצרים - שלב 2</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>דשבורד ניהול</title>
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f8fc;
+    }
+    .sidebar {
+      height: 100vh;
+      width: 250px;
+      background-color: #1f2235;
+      color: white;
+      position: fixed;
+      right: 0;
+      top: 0;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      margin-bottom: 15px;
+      cursor: pointer;
+    }
+    .sidebar li:hover {
+      text-decoration: underline;
+    }
+    .main {
+      margin-right: 270px;
+      padding: 40px;
+    }
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background-color: white;
       padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      flex: 1;
+      min-width: 180px;
     }
-    input, button {
-      padding: 8px;
-      margin: 5px;
+    .card h3 {
+      margin: 0;
+      font-size: 28px;
     }
-    table {
-      width: 100%;
-      margin-top: 30px;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #aaa;
-      padding: 10px;
-    }
-    th {
-      background-color: #f2f2f2;
+    .card p {
+      margin: 10px 0 0;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <h1>שלב 2 - הוספת מוצרים</h1>
-  <p>מלא את הפרטים של המוצר החדש:</p>
-
-  <div>
-    <input type="text" id="productName" placeholder="שם מוצר">
-    <input type="number" id="retailPrice" placeholder="מחיר לצרכן">
-    <input type="number" id="costPrice" placeholder="מחיר עלות">
-    <button onclick="addProduct()">הוסף מוצר</button>
+  <div class="sidebar">
+    <h2>קבוצת עדן דוד בע"מ</h2>
+    <ul>
+      <li>📊 דף הבית</li>
+      <li>📦 מוצרים</li>
+      <li>🛒 הזמנות חדשות</li>
+      <li>🛠️ הזמנות בטיפול</li>
+      <li>📜 היסטוריית הזמנות</li>
+      <li style="margin-right: 20px;">🚚 משלוחים</li>
+      <li style="margin-right: 20px;">🧾 הנהלת חשבונות</li>
+      <li>📈 דוחות</li>
+      <li>⚙️ הגדרות</li>
+    </ul>
   </div>
 
-  <h2>רשימת מוצרים</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>שם מוצר</th>
-        <th>מחיר לצרכן (ש"ח)</th>
-        <th>מחיר עלות (ש"ח)</th>
-      </tr>
-    </thead>
-    <tbody id="productTableBody"></tbody>
-  </table>
+  <div class="main">
+    <h1>👋 ברוך הבא עדן</h1>
+    <p>מערכת ניהול מלאה – לקוחות, מוצרים, הזמנות, חשבוניות ודוחות.</p>
 
-  <script>
-    function addProduct() {
-      const name = document.getElementById('productName').value.trim();
-      const retail = document.getElementById('retailPrice').value.trim();
-      const cost = document.getElementById('costPrice').value.trim();
-
-      if (!name || !retail || !cost) {
-        alert('יש למלא את כל השדות');
-        return;
-      }
-
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${name}</td>
-        <td>${parseFloat(retail).toFixed(2)}</td>
-        <td>${parseFloat(cost).toFixed(2)}</td>
-      `;
-      document.getElementById('productTableBody').appendChild(row);
-
-      // ניקוי שדות
-      document.getElementById('productName').value = '';
-      document.getElementById('retailPrice').value = '';
-      document.getElementById('costPrice').value = '';
-    }
-  </script>
+    <div class="cards">
+      <div class="card">
+        <h3>128</h3>
+        <p>עסקאות פעילות</p>
+      </div>
+      <div class="card">
+        <h3>45</h3>
+        <p>הזמנות בתהליך</p>
+      </div>
+      <div class="card">
+        <h3>72</h3>
+        <p>מוצרים במלאי</p>
+      </div>
+      <div class="card">
+        <h3>2</h3>
+        <p>חשבוניות פתוחות</p>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
