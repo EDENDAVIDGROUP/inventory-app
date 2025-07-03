@@ -1,52 +1,108 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>יבוא מוצרים</title>
   <style>
     body {
-      font-family: sans-serif;
+      margin: 0;
+      font-family: Arial, sans-serif;
       direction: rtl;
-      text-align: center;
-      background-color: #f6f8fa;
-      padding: 40px;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
-    h1 {
-      color: #333;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    input[type="file"] {
-      margin-top: 20px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #0070f3;
-      border: none;
+
+    .sidebar {
+      width: 220px;
+      background-color: #1c1d2f;
       color: white;
-      border-radius: 4px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #005bb5;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover {
+      background-color: #2c2d3f;
+      cursor: pointer;
+    }
+
+    .nav-item span {
+      margin-right: 10px;
+    }
+
+    .separator {
+      height: 1px;
+      background-color: #444;
+      margin: 16px 0;
+    }
+
+    .content {
+      flex-grow: 1;
+      background-color: #f4f4f4;
+      padding: 40px;
+    }
+
+    .back-button {
+      padding: 10px 20px;
+      background-color: #1c1d2f;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 4px;
+    }
+
+    .back-button:hover {
+      background-color: #2c2d3f;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>יבוא מוצרים</h1>
-    <p>כאן ניתן לטעון קובץ Excel עם כל המוצרים שברצונך להעלות למערכת.</p>
-    <input type="file" accept=".xlsx, .xls, .csv" />
-    <br />
-    <button>טען קובץ</button>
+
+  <div class="sidebar">
+    <h2 onclick="window.location.href='index.html'">קבוצת עדן דוד בע"מ</h2>
+
+    <div class="nav-item" onclick="window.location.href='import-orders.html'"><span>📄</span>יבוא הזמנות</div>
+    <div class="nav-item"><span>🛒</span>הזמנות חדשות</div>
+    <div class="nav-item"><span>🛠️</span>הזמנות בטיפול</div>
+    <div class="nav-item"><span>❌</span>הזמנות שגויות</div>
+
+    <div class="separator"></div>
+
+    <div class="nav-item"><span>🤝</span>עסקאות</div>
+    <div class="nav-item"><span>💥</span>מבצעים</div>
+    <div class="nav-item"><span>📊</span>דוחות</div>
+
+    <div class="separator"></div>
+
+    <div class="nav-item"><span>📦</span>מוצרים</div>
+    <div class="nav-item"><span>🚚</span>משלוחים</div>
+    <div class="nav-item"><span>📁</span>הנהלת חשבונות</div>
+    <div class="nav-item" onclick="window.location.href='import-products.html'"><span>📄</span>יבוא מוצרים</div>
+    <div class="nav-item"><span>📄</span>היסטוריית הזמנות</div>
+    <div class="nav-item"><span>⚙️</span>הגדרות</div>
   </div>
+
+  <div class="content">
+    <h1>יבוא מוצרים</h1>
+    <p>כאן ניתן להעלות קובץ Excel עם מוצרים או לבצע יבוא מקובץ.</p>
+    <button class="back-button" onclick="window.location.href='index.html'">חזרה לדף הבית</button>
+  </div>
+
 </body>
 </html>
