@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>יבוא הזמנות</title>
   <style>
     body {
@@ -9,6 +9,7 @@
       font-family: Arial, sans-serif;
       display: flex;
     }
+
     .sidebar {
       width: 250px;
       background-color: #2c3e50;
@@ -17,45 +18,59 @@
       padding-top: 20px;
       position: fixed;
     }
+
     .sidebar h2 {
       text-align: center;
       margin-bottom: 30px;
     }
+
     .sidebar a {
       display: block;
       color: white;
       text-decoration: none;
       padding: 12px 20px;
     }
+
     .sidebar a:hover {
       background-color: #34495e;
     }
+
     .content {
       margin-right: 250px;
       padding: 40px;
       flex-grow: 1;
+      width: 100%;
     }
+
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .back-btn {
+
+    .button-bar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
       background-color: #3498db;
       color: white;
       padding: 10px 16px;
       text-decoration: none;
       border-radius: 4px;
     }
-    .back-btn:hover {
+
+    .btn:hover {
       background-color: #2980b9;
     }
   </style>
 </head>
 <body>
+
   <div class="sidebar">
     <h2>תפריט ניהול</h2>
-    <a href="index.html.deshbord">דף הבית</a>
+    <a href="index.html">דף הבית</a>
     <a href="import-orders.html">יבוא הזמנות</a>
     <a href="new-orders.html">הזמנות חדשות</a>
     <a href="processing-orders.html">הזמנות בטיפול</a>
@@ -72,11 +87,14 @@
   <div class="content">
     <div class="top-bar">
       <h1>יבוא הזמנות</h1>
-      <a href="index.html.deshbord" class="back-btn">חזרה לדף הבית</a>
+      <div class="button-bar">
+        <a href="index.html" class="btn">חזרה לדף הבית</a>
+        <a href="logout.html" class="btn">יציאה</a>
+      </div>
     </div>
-    <hr />
-    <p>כאן תוכל לייבא קובץ אקסל של הזמנות, לבצע בדיקות תקינות, ולעבד את הקובץ למשלוח אוטומטי.</p>
-    <!-- כאן נוסיף בעתיד טופס העלאה, טבלת תצוגה, ועוד -->
+    <hr>
+    <p>כאן תוכל להעלות קובץ אקסל של הזמנות יומיות מהמועדון שלך, ולייבא למערכת באופן אוטומטי.</p>
   </div>
+
 </body>
 </html>
