@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ייבוא הזמנות</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f7f7f7;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .import-box {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .import-box p {
+      margin: 10px 0 20px;
+      color: #666;
+    }
+    .upload-area {
+      border: 2px dashed #aaa;
+      padding: 30px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      transition: background 0.3s;
+    }
+    .upload-area:hover {
+      background-color: #e8e8e8;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="import-box">
+    <h1>ייבוא הזמנות</h1>
+    <p>שלוב קובץ Excel של הזמנות השיומיות על ידי.</p>
+    
+    <label for="orderFile">
+      <div class="upload-area">
+        ↑ לחץ כאן להעלאה קובץ Excel
+      </div>
+    </label>
+    <input type="file" id="orderFile" accept=".xls,.xlsx">
+    <button class="button">ייבוא שלב</button>
+  </div>
+</body>
+</html>
