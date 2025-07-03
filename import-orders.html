@@ -5,96 +5,64 @@
   <title>יבוא הזמנות</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      display: flex;
+      margin: 40px;
+      background-color: #f4f4f4;
+      direction: rtl;
     }
 
-    .sidebar {
-      width: 250px;
-      background-color: #2c3e50;
-      color: white;
-      height: 100vh;
-      padding-top: 20px;
-      position: fixed;
+    h1 {
+      color: #333;
     }
 
-    .sidebar h2 {
-      text-align: center;
-      margin-bottom: 30px;
+    .upload-section {
+      margin-top: 30px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 600px;
     }
 
-    .sidebar a {
+    input[type="file"] {
       display: block;
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
+      margin-bottom: 20px;
     }
 
-    .sidebar a:hover {
-      background-color: #34495e;
-    }
-
-    .content {
-      margin-right: 250px;
-      padding: 40px;
-      flex-grow: 1;
-      width: 100%;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .button-bar {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
+    button {
       background-color: #3498db;
       color: white;
-      padding: 10px 16px;
-      text-decoration: none;
+      border: none;
+      padding: 10px 18px;
       border-radius: 4px;
+      cursor: pointer;
     }
 
-    .btn:hover {
+    button:hover {
       background-color: #2980b9;
     }
   </style>
 </head>
 <body>
 
-  <div class="sidebar">
-    <h2>תפריט ניהול</h2>
-    <a href="index.html">דף הבית</a>
-    <a href="import-orders.html">יבוא הזמנות</a>
-    <a href="new-orders.html">הזמנות חדשות</a>
-    <a href="processing-orders.html">הזמנות בטיפול</a>
-    <a href="order-history.html">היסטוריית הזמנות</a>
-    <a href="shipments.html">משלוחים</a>
-    <a href="accounting.html">הנהלת חשבונות</a>
-    <a href="products.html">מוצרים</a>
-    <a href="deals.html">עסקאות</a>
-    <a href="import-products.html">יבוא מוצרים</a>
-    <a href="reports.html">דוחות</a>
-    <a href="settings.html">הגדרות</a>
+  <h1>יבוא הזמנות מקובץ</h1>
+
+  <div class="upload-section">
+    <label for="excelFile">בחר קובץ Excel עם הזמנות:</label>
+    <input type="file" id="excelFile" accept=".xlsx, .xls">
+    <button onclick="uploadFile()">ייבוא הזמנות</button>
   </div>
 
-  <div class="content">
-    <div class="top-bar">
-      <h1>יבוא הזמנות</h1>
-      <div class="button-bar">
-        <a href="index.html" class="btn">חזרה לדף הבית</a>
-        <a href="logout.html" class="btn">יציאה</a>
-      </div>
-    </div>
-    <hr>
-    <p>כאן תוכל להעלות קובץ אקסל של הזמנות יומיות מהמועדון שלך, ולייבא למערכת באופן אוטומטי.</p>
-  </div>
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('excelFile');
+      if (!fileInput.files.length) {
+        alert("נא לבחור קובץ לפני הייבוא.");
+        return;
+      }
+      alert("קובץ נטען בהצלחה (הדמו – ללא עיבוד בפועל).");
+    }
+  </script>
 
 </body>
 </html>
