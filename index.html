@@ -1,91 +1,28 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>מערכת ניהול</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      direction: rtl;
-    }
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>קבוצת עדן דוד בע"מ</h2>
+  <ul>
+    <!-- חלק ראשון – ניהול הזמנות -->
+    <li><a href="import-orders.html">🧾 יבוא הזמנות</a></li>
+    <li><a href="#">🛒 הזמנות חדשות</a></li>
+    <li><a href="#">🛠️ הזמנות בטיפול</a></li>
+    <li><a href="#">❌ הזמנות שגויות</a></li>
 
-    .container {
-      display: flex;
-    }
+    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
 
-    .sidebar {
-      width: 220px;
-      background-color: #1c1e32;
-      color: white;
-      height: 100vh;
-      padding: 20px 10px;
-    }
+    <!-- חלק שני – ניהול מסחרי ועסקי -->
+    <li><a href="#">🤝 עסקאות</a></li>
+    <li><a href="#">💥 מבצעים</a></li>
+    <li><a href="#">📊 דוחות</a></li>
 
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 30px;
-      cursor: pointer;
-    }
+    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ccc;">
 
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    .sidebar a:hover {
-      background-color: #2a2d4a;
-    }
-
-    .sidebar a span {
-      margin-left: 10px;
-    }
-
-    .content {
-      flex-grow: 1;
-      padding: 40px;
-    }
-
-    .home-box {
-      background-color: #2d6cdf;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 22px;
-      display: inline-block;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="sidebar">
-      <h2 onclick="location.href='index.html'">קבוצת עדן דוד בע״מ</h2>
-
-      <a href="import-orders.html"><span>📥</span> יבוא הזמנות</a>
-      <a href="#"><span>🛒</span> הזמנות חדשות</a>
-      <a href="#"><span>🛠️</span> הזמנות בטיפול</a>
-      <a href="#"><span>❌</span> הזמנות שגויות</a>
-      <a href="#"><span>🚚</span> משלוחים</a>
-      <a href="#"><span>📁</span> הנהלת חשבונות</a>
-      <a href="#"><span>📦</span> מוצרים</a>
-      <a href="#"><span>🤝</span> עסקאות</a>
-      <a href="import-products.html"><span>📥</span> יבוא מוצרים</a>
-      <a href="#"><span>📊</span> דוחות</a>
-      <a href="#"><span>🏷️</span> מבצעים</a>
-      <a href="#"><span>🕓</span> היסטוריית הזמנות</a>
-      <a href="#"><span>⚙️</span> הגדרות</a>
-    </div>
-    <div class="content">
-      <div class="home-box">ברוך הבא למערכת הניהול</div>
-      <p>בחר קטגוריה מהתפריט הימני כדי להתחיל ⬅️</p>
-    </div>
-  </div>
-</body>
-</html>
+    <!-- חלק שלישי – ניהול תפעולי -->
+    <li><a href="#">📦 מוצרים</a></li>
+    <li><a href="#">🚚 משלוחים</a></li>
+    <li><a href="#">📁 הנהלת חשבונות</a></li>
+    <li><a href="#">🧾 יבוא מוצרים</a></li>
+    <li><a href="#">📄 היסטוריית הזמנות</a></li>
+    <li><a href="#">⚙️ הגדרות</a></li>
+  </ul>
+</div>
