@@ -2,118 +2,75 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>דף הבית - קבוצת עדן דוד</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>לוח ניהול - קבוצת עדן דוד</title>
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      background-color: #f5f6fa;
       display: flex;
+      direction: rtl;
     }
-
-    .sidebar {
-      width: 230px;
-      background-color: #1e1e2f;
+    aside {
+      width: 220px;
+      background-color: #1f2235;
       color: white;
-      height: 100vh;
       padding: 20px;
+      height: 100vh;
     }
-
-    .sidebar h2 {
+    aside h2 {
       font-size: 18px;
       margin-bottom: 30px;
     }
-
-    .sidebar ul {
-      list-style-type: none;
+    ul {
+      list-style: none;
       padding: 0;
     }
-
-    .sidebar ul li {
-      margin: 15px 0;
-      cursor: pointer;
-    }
-
-    .main {
-      flex: 1;
-      padding: 30px;
-    }
-
-    .main h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-
-    .main p {
-      color: #555;
-      margin-bottom: 40px;
-    }
-
-    .cards {
+    ul li {
+      margin: 12px 0;
+      font-size: 15px;
       display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
+      align-items: center;
     }
-
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      flex: 1 0 200px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      text-align: center;
+    ul li span {
+      margin-left: 8px;
     }
-
-    .card h2 {
-      margin: 0;
-      font-size: 24px;
+    ul li a {
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
     }
-
-    .card p {
-      margin: 5px 0 0;
-      color: #555;
+    ul li a:hover {
+      color: #00d8ff;
+    }
+    main {
+      padding: 40px;
+      flex-grow: 1;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
+  <aside>
     <h2>קבוצת עדן דוד בע״מ</h2>
     <ul>
-      <li>📊 דף הבית</li>
-      <li>📦 מוצרים</li>
-      <li>🛒 הזמנות חדשות</li>
-      <li>🛠️ הזמנות בטיפול</li>
-      <li>📁 היסטוריית הזמנות</li>
-      <li>🚚 משלוחים</li>
-      <li>🧾 הנהלת חשבונות</li>
-      <li>📄 דוחות</li>
-      <li>⚙️ הגדרות</li>
+      <li><a href="#"><span>📊</span> דף הבית</a></li>
+      <li><a href="#"><span>📥</span> יבוא הזמנות</a></li>
+      <li><a href="#"><span>🛒</span> הזמנות חדשות</a></li>
+      <li><a href="#"><span>🛠️</span> הזמנות בטיפול</a></li>
+      <li><a href="#"><span>🧾</span> היסטוריית הזמנות</a></li>
+      <li><a href="#"><span>🚚</span> משלוחים</a></li>
+      <li><a href="#"><span>📘</span> הנהלת חשבונות</a></li>
+      <li><a href="#"><span>📦</span> מוצרים</a></li>
+      <li><a href="#"><span>💼</span> עסקאות</a></li>
+      <li><a href="#"><span>📤</span> יבוא מוצרים</a></li>
+      <li><a href="#"><span>📈</span> דוחות</a></li>
+      <li><a href="#"><span>⚙️</span> הגדרות</a></li>
     </ul>
-  </div>
-
-  <div class="main">
-    <h1>👋 ברוך הבא עדן</h1>
-    <p>מערכת לניהול מלאי – לקוחות, מוצרים, הזמנות, חשבוניות ודוחות.</p>
-
-    <div class="cards">
-      <div class="card">
-        <h2>2</h2>
-        <p>חשבוניות פתוחות</p>
-      </div>
-      <div class="card">
-        <h2>72</h2>
-        <p>מוצרים במלאי</p>
-      </div>
-      <div class="card">
-        <h2>45</h2>
-        <p>הזמנות בתהליך</p>
-      </div>
-      <div class="card">
-        <h2>128</h2>
-        <p>עסקאות פעילות</p>
-      </div>
-    </div>
-  </div>
+  </aside>
+  <main>
+    <h1>ברוך הבא למערכת הניהול ✨</h1>
+    <p>בחר קטגוריה מהתפריט הימני כדי להתחיל ⬅️</p>
+  </main>
 </body>
 </html>
