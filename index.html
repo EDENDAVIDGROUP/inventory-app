@@ -3,89 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>קבוצת עדן דוד בע"מ</title>
+  <title>מערכת ניהול - קבוצת עדן דוד בע"מ</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      direction: rtl;
-      background-color: #f4f4f4;
+      display: flex;
     }
-
     .sidebar {
-      width: 240px;
-      background-color: #1e1e2f;
-      color: #fff;
+      width: 260px;
+      background-color: #1f2937;
+      color: white;
       height: 100vh;
       position: fixed;
-      top: 0;
       right: 0;
-      overflow-y: auto;
+      top: 0;
       padding: 20px;
+      box-sizing: border-box;
     }
-
     .sidebar h2 {
-      margin-top: 0;
       font-size: 18px;
-      color: #fff;
+      margin-bottom: 30px;
+      cursor: pointer;
     }
-
-    .sidebar a {
-      display: block;
-      padding: 10px;
-      color: #fff;
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      margin-bottom: 12px;
+    }
+    .sidebar ul li a {
+      color: white;
       text-decoration: none;
-      border-radius: 4px;
-      margin-bottom: 5px;
-      transition: background 0.3s;
+      font-size: 16px;
     }
-
-    .sidebar a:hover {
-      background-color: #333;
-    }
-
     .divider {
-      border-top: 1px solid #555;
-      margin: 15px 0;
+      border-top: 1px solid #374151;
+      margin: 20px 0;
     }
-
-    .main-content {
+    .main {
       margin-right: 260px;
-      padding: 20px;
+      padding: 40px;
+      flex-grow: 1;
     }
   </style>
 </head>
 <body>
-
   <div class="sidebar">
-    <h2>קבוצת עדן דוד בע"מ</h2>
-
-    <a href="import-orders.html">📄 יבוא הזמנות</a>
-    <a href="#">🛒 הזמנות חדשות</a>
-    <a href="#">🛠️ הזמנות בטיפול</a>
-    <a href="#">❌ הזמנות שגויות</a>
-
-    <div class="divider"></div>
-
-    <a href="#">🤝 עסקאות</a>
-    <a href="#">💥 מבצעים</a>
-    <a href="#">📊 דוחות</a>
+    <h2 onclick="location.href='index.html'">קבוצת עדן דוד בע"מ</h2>
+    <ul>
+      <li><a href="import-orders.html">יבוא הזמנות</a></li>
+      <li><a href="#">הזמנות חדשות</a></li>
+      <li><a href="#">הזמנות בטיפול</a></li>
+      <li><a href="#">הזמנות שגויות</a></li>
+    </ul>
 
     <div class="divider"></div>
 
-    <a href="#">📦 מוצרים</a>
-    <a href="#">🚚 משלוחים</a>
-    <a href="#">📁 הנהלת חשבונות</a>
-    <a href="import-products.html">🧾 יבוא מוצרים</a>
-    <a href="#">📜 היסטוריית הזמנות</a>
-    <a href="#">⚙️ הגדרות</a>
+    <ul>
+      <li><a href="#">עסקאות</a></li>
+      <li><a href="#">מבצעים</a></li>
+      <li><a href="#">דוחות</a></li>
+      <li><a href="products.html">מוצרים</a></li>
+      <li><a href="#">משלוחים</a></li>
+      <li><a href="#">הנהלת חשבונות</a></li>
+      <li><a href="import-products.html">יבוא מוצרים</a></li>
+      <li><a href="#">היסטוריית הזמנות</a></li>
+      <li><a href="#">הגדרות</a></li>
+    </ul>
   </div>
 
-  <div class="main-content">
+  <div class="main">
     <h1>ברוך הבא למערכת הניהול</h1>
-    <p>בחר קטגוריה מתוך סרגל הכלים כדי להתחיל.</p>
+    <p>בחר פעולה מהתפריט הימני כדי להתחיל.</p>
   </div>
-
 </body>
 </html>
-
