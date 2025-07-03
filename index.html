@@ -11,28 +11,34 @@
         body {
             background-color: #f5f5f5;
             font-family: Arial, sans-serif;
+            display: flex;
         }
         .sidebar {
             width: 250px;
-            background-color: #1e1e2f;
+            background-color: #1f2235;
+            color: white;
             min-height: 100vh;
-            padding: 20px;
-            color: white;
-            position: fixed;
+            padding-top: 1rem;
         }
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 30px;
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 15px;
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
         }
-        .main {
-            margin-right: 270px;
-            padding: 20px;
+        .sidebar ul li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #343a40;
+            cursor: pointer;
+        }
+        .sidebar ul li:hover {
+            background-color: #343a40;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 2rem;
         }
         .card-icon {
             font-size: 2rem;
@@ -42,25 +48,28 @@
 
 <body>
     <div class="sidebar">
-        <h2>קבוצת עדן דוד בע"מ</h2>
-        <a href="#">יבוא הזמנות</a>
-        <a href="#">הזמנות חדשות</a>
-        <a href="#">הזמנות בטיפול</a>
-        <a href="#">הזמנות שגויות</a>
-        <hr>
-        <a href="#">עסקאות</a>
-        <a href="#">מבצעים</a>
-        <a href="#">דוחות</a>
-        <a href="#">מוצרים</a>
-        <a href="#">משלוחים</a>
-        <a href="#">הנהלת חשבונות</a>
-        <a href="#">יבוא מוצרים</a>
-        <a href="#">היסטוריית הזמנות</a>
-        <a href="#">הגדרות</a>
+        <h4>קבוצת עדן דוד בע"מ</h4>
+        <ul>
+            <li>יבוא הזמנות</li>
+            <li>הזמנות חדשות</li>
+            <li>הזמנות בטיפול</li>
+            <li>הזמנות שגויות</li>
+            <hr>
+            <li>עסקאות</li>
+            <li>מבצעים</li>
+            <li>דוחות</li>
+            <hr>
+            <li>מוצרים</li>
+            <li>משלוחים</li>
+            <li>הנהלת חשבונות</li>
+            <li>יבוא מוצרים</li>
+            <li>היסטוריית הזמנות</li>
+            <li>הגדרות</li>
+        </ul>
     </div>
 
-    <div class="main">
-        <div class="container mt-4">
+    <div class="content">
+        <div class="container-fluid">
             <div class="row g-3">
                 <!-- קוביות סטטיסטיקה עליונות -->
                 <div class="col-md-3">
