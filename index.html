@@ -1,95 +1,96 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>מערכת ניהול</title>
+  <meta charset="UTF-8" />
+  <title>מערכת ניהול - קבוצת עדן דוד בע"מ</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       direction: rtl;
       display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .sidebar {
       width: 220px;
       background-color: #1c1d2f;
       color: white;
-      height: 100vh;
       padding: 20px;
+      overflow-y: auto;
+      box-sizing: border-box;
     }
 
     .sidebar h2 {
-      margin-top: 0;
       font-size: 18px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      margin: 10px 0;
-    }
-
-    .sidebar a {
-      text-decoration: none;
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
       color: white;
-      display: block;
-      padding: 8px;
-      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.2s;
     }
 
-    .sidebar a:hover {
-      background-color: #2e2f40;
+    .nav-item:hover {
+      background-color: #2c2d3f;
+      cursor: pointer;
     }
 
-    hr {
-      border: none;
-      border-top: 1px solid #444;
-      margin: 15px 0;
+    .nav-item span {
+      margin-right: 10px;
+    }
+
+    .separator {
+      height: 1px;
+      background-color: #444;
+      margin: 16px 0;
     }
 
     .content {
-      padding: 30px;
       flex-grow: 1;
+      background-color: #f4f4f4;
+      padding: 40px;
     }
   </style>
 </head>
 <body>
+
   <div class="sidebar">
-    <h2 onclick="location.href='index.html'" style="cursor:pointer;">קבוצת עדן דוד בע"מ</h2>
-    <ul>
-      <!-- חלק 1 – ניהול הזמנות -->
-      <li><a href="import-orders.html">🧾 יבוא הזמנות</a></li>
-      <li><a href="#">🛒 הזמנות חדשות</a></li>
-      <li><a href="#">🛠️ הזמנות בטיפול</a></li>
-      <li><a href="#">❌ הזמנות שגויות</a></li>
+    <h2 onclick="window.location.href='index.html'" style="cursor:pointer;">קבוצת עדן דוד בע"מ</h2>
 
-      <hr>
+    <div class="nav-item" onclick="window.location.href='import-orders.html'"><span>📄</span>יבוא הזמנות</div>
+    <div class="nav-item"><span>🛒</span>הזמנות חדשות</div>
+    <div class="nav-item"><span>🛠️</span>הזמנות בטיפול</div>
+    <div class="nav-item"><span>❌</span>הזמנות שגויות</div>
 
-      <!-- חלק 2 – פעילות מסחרית -->
-      <li><a href="#">🤝 עסקאות</a></li>
-      <li><a href="#">💥 מבצעים</a></li>
-      <li><a href="#">📊 דוחות</a></li>
+    <div class="separator"></div>
 
-      <hr>
+    <div class="nav-item"><span>🤝</span>עסקאות</div>
+    <div class="nav-item"><span>💥</span>מבצעים</div>
+    <div class="nav-item"><span>📊</span>דוחות</div>
 
-      <!-- חלק 3 – תפעול -->
-      <li><a href="#">📦 מוצרים</a></li>
-      <li><a href="#">🚚 משלוחים</a></li>
-      <li><a href="#">📁 הנהלת חשבונות</a></li>
-      <li><a href="#">🧾 יבוא מוצרים</a></li>
-      <li><a href="#">📄 היסטוריית הזמנות</a></li>
-      <li><a href="#">⚙️ הגדרות</a></li>
-    </ul>
+    <div class="separator"></div>
+
+    <div class="nav-item"><span>📦</span>מוצרים</div>
+    <div class="nav-item"><span>🚚</span>משלוחים</div>
+    <div class="nav-item"><span>📁</span>הנהלת חשבונות</div>
+    <div class="nav-item"><span>📄</span>יבוא מוצרים</div>
+    <div class="nav-item"><span>📄</span>היסטוריית הזמנות</div>
+    <div class="nav-item"><span>⚙️</span>הגדרות</div>
   </div>
 
   <div class="content">
     <h1>ברוך הבא למערכת הניהול</h1>
     <p>בחר קטגוריה מהתפריט הימני כדי להתחיל.</p>
   </div>
+
 </body>
 </html>
+
