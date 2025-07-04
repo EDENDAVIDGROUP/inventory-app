@@ -4,196 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>דף ניהול - קבוצת עדן דוד בע"מ</title>
+    <title>הגדרות - קבוצת עדן דוד בע"מ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             font-family: Arial, sans-serif;
-            display: flex;
+            direction: rtl;
         }
-        .sidebar {
-            width: 250px;
-            background-color: #1f2235;
-            color: white;
-            min-height: 100vh;
-            padding-top: 1rem;
+        .container {
+            margin-top: 50px;
         }
-        .sidebar h4 {
-            text-align: center;
-            margin-bottom: 2rem;
+        h2 {
+            margin-bottom: 30px;
         }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            padding: 10px 20px;
-            border-bottom: 1px solid #343a40;
-            cursor: pointer;
-        }
-        .sidebar ul li:hover {
-            background-color: #343a40;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 2rem;
-        }
-        .card-icon {
-            font-size: 2rem;
+        table {
+            background-color: #fff;
         }
     </style>
 </head>
 
 <body>
-    <div class="sidebar">
-        <h4>קבוצת עדן דוד בע"מ</h4>
-        <ul>
-            <li>יבוא הזמנות</li>
-            <li>הזמנות חדשות</li>
-            <li>הזמנות בטיפול</li>
-            <li>הזמנות שגויות</li>
-            <hr>
-            <li>עסקאות</li>
-            <li>מבצעים</li>
-            <li>דוחות</li>
-            <hr>
-            <li>מוצרים</li>
-            <li>משלוחים</li>
-            <li>הנהלת חשבונות</li>
-            <li>יבוא מוצרים</li>
-            <li>היסטוריית הזמנות</li>
-            <li>הגדרות</li>
-        </ul>
+    <div class="container">
+        <h2 class="text-center">הגדרות פלטפורמות ולקוחות</h2>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>פלטפורמה / לקוח</th>
+                    <th>סוג אינטגרציה</th>
+                    <th>אחוז הנחה</th>
+                    <th>הערות</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BOXMASTER</td>
+                    <td>API</td>
+                    <td>20%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>PRO-TOOLS</td>
+                    <td>API</td>
+                    <td>15%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>מועדון טוב</td>
+                    <td>אקסל במייל</td>
+                    <td>10%</td>
+                    <td>חייב חשבונית מרוכזת</td>
+                </tr>
+                <tr>
+                    <td>מחסני חשמל</td>
+                    <td>PDF במייל</td>
+                    <td>20%</td>
+                    <td>חשבונית נפרדת לכל הזמנה</td>
+                </tr>
+                <tr>
+                    <td>סופר-פארם</td>
+                    <td>API</td>
+                    <td>15%</td>
+                    <td>פלטפורמת Mirakl</td>
+                </tr>
+                <tr>
+                    <td>הום סנטר</td>
+                    <td>API</td>
+                    <td>20%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>אייס</td>
+                    <td>API</td>
+                    <td>20%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>לאסט פרייס</td>
+                    <td>PDF במייל</td>
+                    <td>20%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>פי1000</td>
+                    <td>PDF במייל</td>
+                    <td>20%</td>
+                    <td>--</td>
+                </tr>
+                <tr>
+                    <td>עלמא סחר</td>
+                    <td>אקסל במייל</td>
+                    <td>--</td>
+                    <td>מחירים קבועים מראש</td>
+                </tr>
+                <tr>
+                    <td>דולצה ויטה</td>
+                    <td>מכיל 6 מועדונים</td>
+                    <td>--</td>
+                    <td>שלך לגמלאי, טוב, טוב פלוס, פייס, ויזה, לאומי בונוס</td>
+                </tr>
+                <tr>
+                    <td>לקוחות שונים</td>
+                    <td>מחיר ידני</td>
+                    <td>--</td>
+                    <td>--</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row g-3">
-                <!-- קוביות סטטיסטיקה עליונות -->
-                <div class="col-md-3">
-                    <div class="card text-white bg-primary text-center">
-                        <div class="card-body">
-                            <div class="card-icon">💰</div>
-                            <h5 class="card-title">הכנסות (החודש)</h5>
-                            <p class="card-text">₪35,810.00</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-warning text-center">
-                        <div class="card-body">
-                            <div class="card-icon">📦</div>
-                            <h5 class="card-title">הזמנות (החודש)</h5>
-                            <p class="card-text">41</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-info text-center">
-                        <div class="card-body">
-                            <div class="card-icon">📋</div>
-                            <h5 class="card-title">פריטים</h5>
-                            <p class="card-text">255</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-danger text-center">
-                        <div class="card-body">
-                            <div class="card-icon">⚠️</div>
-                            <h5 class="card-title">אזל מהמלאי</h5>
-                            <p class="card-text">132</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <!-- מוצרים הכי נמכרים -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-secondary text-white">המוצרים הכי נמכרים</div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>שם מוצר</th>
-                                        <th>מחיר</th>
-                                        <th>תאריך</th>
-                                        <th>סטטוס</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>מצנן 5500 ARPO</td>
-                                        <td>₪1,380</td>
-                                        <td>03/07/2025</td>
-                                        <td><span class="badge bg-success">שולם</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>אוהל PVC</td>
-                                        <td>₪960</td>
-                                        <td>02/07/2025</td>
-                                        <td><span class="badge bg-success">שולם</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>שולחן פעילות</td>
-                                        <td>₪690</td>
-                                        <td>01/07/2025</td>
-                                        <td><span class="badge bg-success">שולם</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- דוח לקוח חודשי -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-secondary text-white">דוח לקוח חודשי</div>
-                        <div class="card-body">
-                            <canvas id="customerChart" height="140"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        const ctx = document.getElementById('customerChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['1/7', '2/7', '3/7', '4/7', '5/7', '6/7', '7/7'],
-                datasets: [{
-                    label: 'מספר הזמנות',
-                    data: [5, 3, 6, 4, 7, 2, 6],
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 
 </html>
