@@ -47,6 +47,10 @@
         .card-icon {
             font-size: 2rem;
         }
+        .scroll-table {
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 
@@ -59,29 +63,46 @@
             <li><a href="orders-in-process.html">הזמנות בטיפול</a></li>
             <li><a href="wrong-orders.html">הזמנות שגויות</a></li>
             <hr>
-<li><a href="deals.html">עסקאות</a></li>
+            <li><a href="deals.html">עסקאות</a></li>
             <li><a href="promotions.html">מבצעים</a></li>
-<li><a href="reports.html" class="text-white text-decoration-none d-block">דוחות</a></li>
+            <li><a href="reports.html" class="text-white text-decoration-none d-block">דוחות</a></li>
             <hr>
             <li><a href="products.html">מוצרים</a></li>
             <li><a href="shipping.html">משלוחים</a></li>
             <li><a href="accounting.html">הנהלת חשבונות</a></li>
             <li><a href="import-products.html">יבוא מוצרים</a></li>
             <li><a href="orders-history.html">היסטוריית הזמנות</a></li>
-<li><a href="settings.html" class="text-white text-decoration-none d-block">הגדרות</a></li>
+            <li><a href="settings.html" class="text-white text-decoration-none d-block">הגדרות</a></li>
         </ul>
     </div>
 
     <div class="content">
         <div class="container-fluid">
             <div class="row g-3">
-                <!-- קוביות סטטיסטיקה -->
-                <div class="col-md-3">
-                    <div class="card text-white bg-primary text-center">
+                <div class="col-md-2">
+                    <div class="card text-white bg-danger text-center">
                         <div class="card-body">
-                            <div class="card-icon">💰</div>
-                            <h5 class="card-title">הכנסות (החודש)</h5>
-                            <p class="card-text">₪35,810.00</p>
+                            <div class="card-icon">❌</div>
+                            <h5 class="card-title">אזל מהמלאי</h5>
+                            <p class="card-text">132</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card text-white" style="background-color: #6f42c1; text-align: center;">
+                        <div class="card-body">
+                            <div class="card-icon">⚠️</div>
+                            <h5 class="card-title">עומד להיגמר</h5>
+                            <p class="card-text">14</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card text-white bg-info text-center">
+                        <div class="card-body">
+                            <div class="card-icon">📋</div>
+                            <h5 class="card-title">פריטים</h5>
+                            <p class="card-text">255</p>
                         </div>
                     </div>
                 </div>
@@ -95,31 +116,21 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card text-white bg-info text-center">
+                    <div class="card text-white bg-primary text-center">
                         <div class="card-body">
-                            <div class="card-icon">📋</div>
-                            <h5 class="card-title">פריטים</h5>
-                            <p class="card-text">255</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-danger text-center">
-                        <div class="card-body">
-                            <div class="card-icon">⚠️</div>
-                            <h5 class="card-title">אזל מהמלאי</h5>
-                            <p class="card-text">132</p>
+                            <div class="card-icon">💰</div>
+                            <h5 class="card-title">הכנסות (החודש)</h5>
+                            <p class="card-text">₪35,810.00</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- שורות תחתונות -->
             <div class="row mt-4">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-secondary text-white">המוצרים הכי נמכרים</div>
-                        <div class="card-body">
+                        <div class="card-body scroll-table">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -154,8 +165,7 @@
                     </div>
                 </div>
 
-                <!-- גרף דוח לקוח חודשי -->
-                <div class="col-md-6">
+                <div class="col-md-12 mt-3">
                     <div class="card">
                         <div class="card-header bg-secondary text-white">דוח לקוח חודשי</div>
                         <div class="card-body">
@@ -164,7 +174,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -200,3 +209,4 @@
     </script>
 </body>
 </html>
+
