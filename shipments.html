@@ -64,15 +64,15 @@
     <div class="shipment-header">
       <h2>רשימת משלוחים</h2>
       <div>
-        <button class="btn-generate" onclick="generateLabels()">שדר להדפסת מדבקות</button>
-        <button class="btn-print">הדפס מדבקות</button>
+        <button class="btn-generate" onclick="generateLabels(true)">שדר להדפסת מדבקות</button>
+        <button class="btn-print" onclick="generateLabels(false)">הדפס מדבקות</button>
       </div>
     </div>
 
     <table class="table table-bordered text-center">
       <thead>
         <tr>
-          <th><input type="checkbox" /></th>
+          <th><input type="checkbox" id="selectAll" /></th>
           <th>מספר הזמנה</th>
           <th>שם לקוח</th>
           <th>כתובת</th>
@@ -107,7 +107,12 @@
   <svg id="barcode" style="display:none"></svg>
 
   <script>
-    async function generateLabels() {
+    document.getElementById('selectAll').addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll("tbody input[type='checkbox']");
+      checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    async function generateLabels(shouldDownload) {
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF();
       const rows = document.querySelectorAll("tbody tr");
@@ -124,17 +129,14 @@
         const phone = row.cells[4].textContent;
         const product = row.cells[5].textContent;
 
-        // יצירת ברקוד SVG
         JsBarcode(barcodeSvg, orderId, { format: "CODE128", width: 2, height: 40 });
         const svgData = new XMLSerializer().serializeToString(barcodeSvg);
         const svg64 = btoa(unescape(encodeURIComponent(svgData)));
         const image64 = "data:image/svg+xml;base64," + svg64;
 
-        // מיקום המדבקה בדף
         const x = (count % 2) * 105;
         const y = Math.floor(count / 2) % 4 * 70;
 
-        // ציור מדבקה
         pdf.setFontSize(10);
         pdf.text(`לקוח: ${customerName}`, x + 5, y + 10);
         pdf.text(`כתובת: ${address}`, x + 5, y + 18);
@@ -147,8 +149,13 @@
         if (count % 8 === 0) pdf.addPage();
       }
 
-      pdf.save("labels.pdf");
+      if (shouldDownload) {
+        pdf.save("labels.pdf");
+      } else {
+        window.open(pdf.output("bloburl"));
+      }
     }
   </script>
 </body>
 </html>
+
