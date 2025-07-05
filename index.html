@@ -44,8 +44,17 @@
             flex-grow: 1;
             padding: 2rem;
         }
-        .card-icon {
-            font-size: 2rem;
+        .stat-card {
+            background-color: #2c2f48;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
         }
         .scroll-table {
             max-height: 300px;
@@ -78,58 +87,43 @@
 
     <div class="content">
         <div class="container-fluid">
-            <div class="row g-3">
-                <div class="col-md-2">
-                    <div class="card text-white bg-danger text-center">
-                        <div class="card-body">
-                            <div class="card-icon">❌</div>
-                            <h5 class="card-title">אזל מהמלאי</h5>
-                            <p class="card-text">132</p>
-                        </div>
+            <div class="row g-2 mb-4">
+                <div class="col-2">
+                    <div class="stat-card">
+                        <div>הזמנות</div>
+                        <div class="stat-value">41</div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="card text-white" style="background-color: #6f42c1; text-align: center;">
-                        <div class="card-body">
-                            <div class="card-icon">⚠️</div>
-                            <h5 class="card-title">עומד להיגמר</h5>
-                            <p class="card-text">14</p>
-                        </div>
+                <div class="col-2">
+                    <div class="stat-card">
+                        <div>הכנסות (החודש)</div>
+                        <div class="stat-value">₪35,810.00</div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="card text-white bg-info text-center">
-                        <div class="card-body">
-                            <div class="card-icon">📋</div>
-                            <h5 class="card-title">פריטים</h5>
-                            <p class="card-text">255</p>
-                        </div>
+                <div class="col-2">
+                    <div class="stat-card">
+                        <div>פריטים</div>
+                        <div class="stat-value">255</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-warning text-center">
-                        <div class="card-body">
-                            <div class="card-icon">📦</div>
-                            <h5 class="card-title">הזמנות (החודש)</h5>
-                            <p class="card-text">41</p>
-                        </div>
+                <div class="col-3">
+                    <div class="stat-card">
+                        <div>עומד להיגמר</div>
+                        <div class="stat-value">14</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card text-white bg-primary text-center">
-                        <div class="card-body">
-                            <div class="card-icon">💰</div>
-                            <h5 class="card-title">הכנסות (החודש)</h5>
-                            <p class="card-text">₪35,810.00</p>
-                        </div>
+                <div class="col-3">
+                    <div class="stat-card">
+                        <div>אזל מהמלאי</div>
+                        <div class="stat-value">132</div>
                     </div>
                 </div>
             </div>
 
-            <div class="row mt-4">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header bg-secondary text-white">המוצרים הכי נמכרים</div>
+                        <div class="card-header bg-secondary text-white">50 המוצרים הנמכרים ביותר</div>
                         <div class="card-body scroll-table">
                             <table class="table">
                                 <thead>
@@ -159,6 +153,7 @@
                                         <td>01/07/2025</td>
                                         <td><span class="badge bg-success">שולם</span></td>
                                     </tr>
+                                    <!-- כאן יופיעו שורות נוספות בעתיד -->
                                 </tbody>
                             </table>
                         </div>
