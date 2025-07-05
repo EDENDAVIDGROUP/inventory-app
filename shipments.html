@@ -100,7 +100,6 @@
           <td>אוהל 3x3</td>
           <td>נשלח</td>
         </tr>
-        <!-- More rows as needed -->
       </tbody>
     </table>
   </div>
@@ -131,11 +130,11 @@
         const svg64 = btoa(unescape(encodeURIComponent(svgData)));
         const image64 = "data:image/svg+xml;base64," + svg64;
 
-        // חישוב מיקום המדבקה בדף
+        // מיקום המדבקה בדף
         const x = (count % 2) * 105;
         const y = Math.floor(count / 2) % 4 * 70;
 
-        // ציור המדבקה
+        // ציור מדבקה
         pdf.setFontSize(10);
         pdf.text(`לקוח: ${customerName}`, x + 5, y + 10);
         pdf.text(`כתובת: ${address}`, x + 5, y + 18);
