@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>משלוחים</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .shipment-container {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .shipment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .btn-print {
+      background-color: #198754;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+    .btn-print:hover {
+      background-color: #157347;
+    }
+    .btn-generate {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-left: 10px;
+    }
+    .btn-generate:hover {
+      background-color: #bb2d3b;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+    }
+    thead {
+      background-color: #343a40;
+      color: white;
+    }
+    tbody tr {
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="shipment-container">
+    <div class="shipment-header">
+      <h2>רשימת משלוחים</h2>
+      <div>
+        <button class="btn-generate" onclick="generateLabels()">שדר להדפסת מדבקות</button>
+        <button class="btn-print">הדפס מדבקות</button>
+      </div>
+    </div>
+
+    <table class="table table-bordered text-center">
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>מספר הזמנה</th>
+          <th>שם לקוח</th>
+          <th>כתובת</th>
+          <th>טלפון</th>
+          <th>מוצר</th>
+          <th>סטטוס</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>1001</td>
+          <td>דני כהן</td>
+          <td>תל אביב, דיזנגוף 100</td>
+          <td>050-1234567</td>
+          <td>מצנן ARPO 5500</td>
+          <td>ממתין למשלוח</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>1002</td>
+          <td>רות לוי</td>
+          <td>חיפה, שדרות בן גוריון 12</td>
+          <td>052-7654321</td>
+          <td>אוהל 3x3</td>
+          <td>נשלח</td>
+        </tr>
+        <!-- More rows as needed -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function generateLabels() {
+      alert("פעולת יצירת המדבקות תתבצע כאן בעתיד (PDF מרוכז)");
+      // כאן תתווסף לוגיקת יצירת PDF
+    }
+  </script>
+</body>
+</html>
