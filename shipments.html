@@ -57,6 +57,12 @@
     tbody tr {
       background-color: #fff;
     }
+    select {
+      width: 100%;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
   </style>
 </head>
 <body>
@@ -78,6 +84,7 @@
           <th>כתובת</th>
           <th>טלפון</th>
           <th>מוצר</th>
+          <th>סוג מטען</th>
           <th>סטטוס</th>
         </tr>
       </thead>
@@ -89,6 +96,13 @@
           <td>תל אביב, דיזנגוף 100</td>
           <td>050-1234567</td>
           <td>מצנן ARPO 5500</td>
+          <td>
+            <select>
+              <option>רגיל</option>
+              <option>חריג</option>
+              <option>נקודת איסוף</option>
+            </select>
+          </td>
           <td>ממתין למשלוח</td>
         </tr>
         <tr>
@@ -98,6 +112,13 @@
           <td>חיפה, שדרות בן גוריון 12</td>
           <td>052-7654321</td>
           <td>אוהל 3x3</td>
+          <td>
+            <select>
+              <option>רגיל</option>
+              <option selected>חריג</option>
+              <option>נקודת איסוף</option>
+            </select>
+          </td>
           <td>נשלח</td>
         </tr>
       </tbody>
@@ -128,6 +149,7 @@
         const address = row.cells[3].textContent;
         const phone = row.cells[4].textContent;
         const product = row.cells[5].textContent;
+        const deliveryType = row.cells[6].querySelector("select").value;
 
         JsBarcode(barcodeSvg, orderId, { format: "CODE128", width: 2, height: 40 });
         const svgData = new XMLSerializer().serializeToString(barcodeSvg);
@@ -142,8 +164,9 @@
         pdf.text(`כתובת: ${address}`, x + 5, y + 18);
         pdf.text(`טלפון: ${phone}`, x + 5, y + 26);
         pdf.text(`מספר הזמנה: ${orderId}`, x + 5, y + 34);
-        pdf.text(`הערות: ${product}`, x + 5, y + 42);
-        pdf.addImage(image64, "PNG", x + 5, y + 45, 80, 20);
+        pdf.text(`סוג מטען: ${deliveryType}`, x + 5, y + 42);
+        pdf.text(`הערות: ${product}`, x + 5, y + 50);
+        pdf.addImage(image64, "PNG", x + 5, y + 55, 80, 20);
 
         count++;
         if (count % 8 === 0) pdf.addPage();
@@ -158,4 +181,3 @@
   </script>
 </body>
 </html>
-
