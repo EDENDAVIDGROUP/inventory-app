@@ -57,24 +57,15 @@
     tbody tr {
       background-color: #fff;
     }
-    select, input[type="date"] {
-      width: 100%;
-      padding: 4px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-    #searchInput, #statusFilter, #deliveryTypeFilter, #dateFilter {
-      margin-bottom: 10px;
-      padding: 8px;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
     .filters {
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
       flex-wrap: wrap;
+    }
+    .filters > * {
+      flex: 1;
+      min-width: 200px;
     }
   </style>
 </head>
