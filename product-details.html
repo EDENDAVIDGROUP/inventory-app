@@ -118,12 +118,23 @@
         e.preventDefault();
         const productData = collectFormData();
 
-        // שמירה ב-localStorage
-        const existing = JSON.parse(localStorage.getItem('products') || '[]');
-        existing.push(productData);
-        localStorage.setItem('products', JSON.stringify(existing));
+        let products = JSON.parse(localStorage.getItem('products') || '[]');
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get("productId");
 
-        console.log("📦 מוצר נשמר ב-localStorage:", productData);
+        if (productId) {
+          const index = products.findIndex(p => p.sku === productId);
+          if (index !== -1) {
+            products[index] = productData;
+          } else {
+            products.push(productData);
+          }
+        } else {
+          products.push(productData);
+        }
+
+        localStorage.setItem('products', JSON.stringify(products));
+        console.log("📦 מוצר עודכן/נוסף ב-localStorage:", productData);
         alert("המוצר נשמר בהצלחה!");
         window.location.href = 'products.html';
       });
@@ -212,6 +223,11 @@
 
     <!-- כפתור שמירה -->
     <button type="submit">שמור שינויים</button>
+      <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 30px;">
+      <button type="submit">שמור שינויים</button>
+      <button type="button" onclick="window.history.back()">חזרה לדף קודם</button>
+      <button type="button" onclick="window.location.href='index.html'">מסך הבית</button>
+    </div>
   </form>
 </body>
 </html>
