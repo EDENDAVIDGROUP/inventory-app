@@ -81,10 +81,8 @@
           shortDesc: "מטבח קומפקטי לילדים",
           longDesc: "מטבח עץ איכותי בצבע שמנת כולל תנור וכיריים.",
           warranty: "שנה אחריות",
-          clients: "סופר פארם, מחסני חשמל",
           costPrice: 350,
           retailPrice: 690,
-          customClientPrice: "סופר פארם - 89 ₪",
           stock: 100,
           shippingType: "רגיל",
           boxCount: 2,
@@ -104,8 +102,8 @@
 
       function collectFormData() {
         const fields = [
-          'productName', 'sku', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty', 'clients',
-          'costPrice', 'retailPrice', 'customClientPrice', 'stock', 'shippingType', 'boxCount',
+          'productName', 'sku', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty',
+          'costPrice', 'retailPrice', 'stock', 'shippingType', 'boxCount',
           'variation', 'length', 'width', 'height', 'volume', 'volumeType', 'youtube'
         ];
         const data = {};
@@ -151,9 +149,6 @@
 
       <label for="warranty">אחריות</label>
       <input type="text" id="warranty" name="warranty" />
-
-      <label for="clients">לקוחות</label>
-      <input type="text" id="clients" name="clients" />
     </div>
 
     <!-- מחירים -->
@@ -162,7 +157,6 @@
       <div class="row">
         <div><label for="costPrice">מחיר עלות</label><input type="number" id="costPrice" name="costPrice" /></div>
         <div><label for="retailPrice">מחיר מומלץ</label><input type="number" id="retailPrice" name="retailPrice" /></div>
-        <div><label for="customClientPrice">מחיר ללקוח מסוים</label><input type="text" id="customClientPrice" name="customClientPrice" /></div>
       </div>
     </div>
 
@@ -176,7 +170,7 @@
       <select id="shippingType" name="shippingType">
         <option value="רגיל">רגיל - 35 ש"ח</option>
         <option value="חריג">חריג - 85 ש"ח</option>
-        <option value="נקודת איסוף">נקודת איסוף</option>
+        <option value="נקודת איסוף">נקודת איסוף - 10 ש"ח</option>
       </select>
 
       <label for="boxCount">כמות קופסאות</label>
