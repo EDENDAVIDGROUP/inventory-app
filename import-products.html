@@ -11,8 +11,6 @@
         padding: 40px;
         background-color: #f4f4f4;
         direction: rtl;
-        position: relative;
-        min-height: 100vh;
       }
       .container {
         max-width: 800px;
@@ -21,6 +19,7 @@
         padding: 40px;
         border-radius: 8px;
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        position: relative;
       }
       h1 {
         text-align: center;
@@ -45,10 +44,11 @@
         background-color: #2c2d3f;
       }
       .home-button {
-        position: absolute;
+        position: fixed;
         bottom: 20px;
         left: 20px;
         background-color: #6c757d;
+        z-index: 999;
       }
       .home-button:hover {
         background-color: #5a6268;
