@@ -128,7 +128,9 @@
     const products = ['מצנן ARPO 5500', 'אוהל 3x3', 'גנרטור 2500W', 'שולחן פעילות עץ', 'שוקת מים ניידת'];
     const cities = ['תל אביב', 'חיפה', 'ירושלים', 'אשדוד', 'באר שבע', 'נתניה', 'הרצליה', 'פתח תקווה'];
 
-    const orders = Array.from({ length: 20 }).map((_, i) => {
+    const importedOrders = JSON.parse(localStorage.getItem('importedOrders') || '[]');
+
+    const demoOrders = Array.from({ length: 20 }).map((_, i) => {
       return {
         date: '06/07/2025',
         id: (1001 + i).toString(),
@@ -142,6 +144,8 @@
         shipping: shippingTypes[i % shippingTypes.length]
       };
     });
+
+    const orders = [...importedOrders, ...demoOrders];
 
     function renderTable(data = orders) {
       const tbody = document.getElementById('ordersBody');
@@ -160,10 +164,8 @@
           <td>${order.product}</td>
           <td><span class="badge bg-warning status">${order.status}</span></td>
           <td><span class="badge bg-primary">${order.shipping}</span></td>
-          <td>
-            <a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
-            <a href="edit-order.html?order=${order.id}" class="btn btn-outline-secondary btn-sm">ערוך</a>
-          </td>`;
+          <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
+              <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>`;
         tbody.appendChild(row);
       });
     }
@@ -175,8 +177,7 @@
       const shipping = document.getElementById('shippingSelect').value;
 
       const filtered = orders.filter(order => {
-        const searchable = `${order.name} ${order.id} ${order.phone} ${order.city}`.toLowerCase();
-        return (!name || searchable.includes(name.toLowerCase())) &&
+        return (!name || Object.values(order).some(val => val.includes(name))) &&
                (!platform || order.platform === platform) &&
                (!shipping || order.shipping === shipping) &&
                (status.length === 0 || status.includes(order.status));
