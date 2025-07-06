@@ -77,6 +77,9 @@
             <option selected>בחר פלטפורמה</option>
             <option>BOXMASTER</option>
             <option>מועדון טוב</option>
+            <option>מחסני חשמל</option>
+            <option>קונימבו</option>
+            <option>סופר-פארם</option>
           </select>
         </div>
         <div class="col-md-2">
@@ -93,8 +96,8 @@
           <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון, עיר...">
         </div>
         <div class="col-md-12 text-end filter-actions">
-          <button type="button" class="btn btn-primary">סנן</button>
-          <button type="reset" class="btn btn-outline-secondary">איפוס</button>
+          <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
+          <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
         </div>
       </form>
     </div>
@@ -112,43 +115,41 @@
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- דמו הזמנות -->
-        <script>
-          const ordersTableBody = document.currentScript.parentElement;
-          const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה'];
-          const platforms = ['BOXMASTER', 'מועדון טוב'];
-          const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון'];
-
-          for (let i = 0; i < 20; i++) {
-            const date = new Date(2025, 6, 1 + i);
-            const formattedDate = date.toLocaleDateString('he-IL');
-            const id = `#1000${i}`;
-            const name = customers[i % customers.length];
-            const phone = `050-12${i}4567`;
-            const statusInternal = statuses[i % statuses.length];
-            const statusExternal = (i % 2 === 0) ? 'נמסרה' : 'בהמתנה';
-            const platform = platforms[i % platforms.length];
-
-            ordersTableBody.innerHTML += `
-              <tr>
-                <td>${id}</td>
-                <td>${name}</td>
-                <td class="editable" onclick="makeEditable(this)">${phone}</td>
-                <td class="editable status-internal" onclick="makeEditable(this)">${statusInternal}</td>
-                <td class="editable status-external" onclick="makeEditable(this)">${statusExternal}</td>
-                <td class="editable" onclick="makeEditable(this)">${platform}</td>
-                <td>${formattedDate}</td>
-                <td><a href="order-details.html?id=${id}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
-              </tr>
-            `;
-          }
-        </script>
-      </tbody>
+      <tbody id="ordersBody"></tbody>
     </table>
   </div>
 
   <script>
+    const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה'];
+    const externalStatuses = ['נמסרה', 'בהמתנה'];
+    const platforms = ['BOXMASTER', 'מועדון טוב', 'מחסני חשמל', 'קונימבו', 'סופר-פארם'];
+    const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון', 'משה פרץ', 'נועה קרני'];
+
+    const tbody = document.getElementById('ordersBody');
+    for (let i = 0; i < 50; i++) {
+      const orderId = `#20${i + 1}`;
+      const customer = customers[i % customers.length];
+      const phone = `050-1${i}34567`;
+      const statusInternal = statuses[i % statuses.length];
+      const statusExternal = externalStatuses[i % 2];
+      const platform = platforms[i % platforms.length];
+      const date = new Date();
+      date.setDate(date.getDate() - (i + 30));
+      const formattedDate = date.toLocaleDateString('he-IL');
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${orderId}</td>
+          <td>${customer}</td>
+          <td class="editable" onclick="makeEditable(this)">${phone}</td>
+          <td class="editable status-internal" onclick="makeEditable(this)">${statusInternal}</td>
+          <td class="editable status-external" onclick="makeEditable(this)">${statusExternal}</td>
+          <td class="editable" onclick="makeEditable(this)">${platform}</td>
+          <td>${formattedDate}</td>
+          <td><a href="order-details.html?id=${orderId}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
+        </tr>`;
+    }
+
     function makeEditable(cell) {
       if (cell.querySelector('input')) return;
       const oldValue = cell.innerText;
@@ -162,8 +163,7 @@
       input.focus();
     }
 
-    // חיפוש חופשי
-    document.getElementById('searchInput').addEventListener('input', function() {
+    document.getElementById('searchInput').addEventListener('input', function () {
       const query = this.value.toLowerCase();
       const rows = document.querySelectorAll('#ordersTable tbody tr');
       rows.forEach(row => {
