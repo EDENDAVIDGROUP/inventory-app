@@ -17,7 +17,7 @@
     .table th, .table td {
       vertical-align: middle;
     }
-    .btn-group .btn {
+    .btn-group .btn, .bulk-actions .btn {
       margin-left: 5px;
     }
     .tag {
@@ -95,10 +95,16 @@
       <div id="filterTags" class="mt-3"></div>
     </div>
 
+    <!-- פעולות מרובות -->
+    <div class="bulk-actions mb-3">
+      <button class="btn btn-success" onclick="handleBulkAction()">טפל בהזמנות נבחרות</button>
+    </div>
+
     <!-- טבלת הזמנות -->
     <table class="table table-bordered text-center">
       <thead class="table-dark">
         <tr>
+          <th><input type="checkbox" id="selectAll"></th>
           <th>תאריך</th>
           <th>מס' הזמנה</th>
           <th>שם לקוח</th>
@@ -113,9 +119,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>06/07/2025</td><td>1001</td><td>יוסי לוי</td><td>050-1234567</td><td>BOXMASTER</td><td>2</td><td>ARPO 5500 מצנן</td><td><span class="badge bg-warning">הזמנה חדשה</span></td><td><span class="badge bg-primary">רגיל</span></td><td><a href="order-details.html?order=1001" class="btn btn-outline-info btn-sm">צפה</a> <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>
+          <td><input type="checkbox" class="order-checkbox"></td>
+          <td>06/07/2025</td><td>1001</td><td>יוסי לוי</td><td>050-1234567</td><td>BOXMASTER</td><td>2</td><td>ARPO 5500 מצנן</td><td><span class="badge bg-warning status">הזמנה חדשה</span></td><td><span class="badge bg-primary">רגיל</span></td><td><a href="order-details.html?order=1001" class="btn btn-outline-info btn-sm">צפה</a> <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>
         </tr>
-        <!-- ניתן להוסיף שורות נוספות -->
       </tbody>
     </table>
   </div>
@@ -156,6 +162,22 @@
       document.getElementById('searchInput').value = '';
       document.getElementById('filterTags').innerHTML = '';
     });
+
+    // Bulk action logic
+    document.getElementById('selectAll').addEventListener('change', function () {
+      document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = this.checked);
+    });
+
+    function handleBulkAction() {
+      const selected = document.querySelectorAll('.order-checkbox:checked');
+      selected.forEach(cb => {
+        const row = cb.closest('tr');
+        const statusSpan = row.querySelector('.status');
+        statusSpan.textContent = 'בטיפול';
+        statusSpan.classList.remove('bg-warning');
+        statusSpan.classList.add('bg-success');
+      });
+    }
   </script>
 </body>
 
