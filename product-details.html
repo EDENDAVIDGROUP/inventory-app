@@ -117,8 +117,16 @@
       document.querySelector('form').addEventListener('submit', function (e) {
         e.preventDefault();
         const productData = collectFormData();
-        console.log("📦 נתוני מוצר לשמירה:", productData);
-        alert("השינויים נשמרו (סימולציה)!");
+
+        // שמירה ב-localStorage
+        const existing = JSON.parse(localStorage.getItem('products') || '[]');
+        existing.push(productData);
+        localStorage.setItem('products', JSON.stringify(existing));
+
+        console.log("📦 מוצר נשמר ב-localStorage:", productData);
+        alert("המוצר נשמר בהצלחה!");
+        window.location.href = 'products.html';
+      });
       });
     });
   </script>
