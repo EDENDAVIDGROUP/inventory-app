@@ -165,7 +165,7 @@
           <td><span class="badge bg-warning status">${order.status}</span></td>
           <td><span class="badge bg-primary">${order.shipping}</span></td>
           <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
-              <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>`;
+              <a href="edit-order.html?orderId=${order.id}" class="btn btn-outline-secondary btn-sm">ערוך</a></td>`;
         tbody.appendChild(row);
       });
     }
@@ -177,7 +177,8 @@
       const shipping = document.getElementById('shippingSelect').value;
 
       const filtered = orders.filter(order => {
-        return (!name || Object.values(order).some(val => val.includes(name))) &&
+        const searchText = `${order.name} ${order.id} ${order.phone} ${order.city}`;
+        return (!name || searchText.includes(name)) &&
                (!platform || order.platform === platform) &&
                (!shipping || order.shipping === shipping) &&
                (status.length === 0 || status.includes(order.status));
