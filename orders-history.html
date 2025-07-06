@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>היסטוריית הזמנות</title>
+  <title>orders-history</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body {
@@ -28,19 +28,28 @@
       font-weight: bold;
       color: #198754;
     }
+    .editable {
+      cursor: pointer;
+    }
+    .edit-input {
+      width: 100%;
+      border: none;
+      background-color: #eef;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2 class="text-center mb-4">היסטוריית הזמנות</h2>
+    <h2 class="text-center mb-4">orders-history</h2>
 
     <div class="search-bar">
       <input type="text" class="form-control" id="searchInput" placeholder="חיפוש לפי שם לקוח, טלפון או מספר הזמנה">
     </div>
 
-    <div class="filter-bar">
-      <label for="dateFilter" class="form-label">הצג הזמנות מה־24 שעות האחרונות בלבד</label>
-      <input type="checkbox" id="dateFilter" class="form-check-input">
+    <div class="filter-bar form-check">
+      <input type="checkbox" class="form-check-input" id="dateFilter">
+      <label class="form-check-label" for="dateFilter">הצג הזמנות מה־24 שעות האחרונות בלבד</label>
     </div>
 
     <table class="table table-bordered order-table bg-white" id="ordersTable">
@@ -53,26 +62,29 @@
           <th>סטטוס כללי</th>
           <th>פלטפורמה</th>
           <th>תאריך הזמנה</th>
+          <th>פעולות</th>
         </tr>
       </thead>
       <tbody>
         <tr data-date="2025-07-05">
           <td>#123456</td>
           <td>ישראל כהן</td>
-          <td>050-1234567</td>
-          <td class="status-internal">יצא למשלוח</td>
-          <td class="status-external">נמסרה</td>
-          <td>BOXMASTER</td>
+          <td class="editable" onclick="makeEditable(this)">050-1234567</td>
+          <td class="editable status-internal" onclick="makeEditable(this)">יצא למשלוח</td>
+          <td class="editable status-external" onclick="makeEditable(this)">נמסרה</td>
+          <td class="editable" onclick="makeEditable(this)">BOXMASTER</td>
           <td>05/07/2025</td>
+          <td><a href="order-details.html?id=123456" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
         </tr>
         <tr data-date="2025-07-04">
           <td>#123455</td>
           <td>שרה לוי</td>
-          <td>052-7654321</td>
-          <td class="status-internal">איסוף עצמי</td>
-          <td class="status-external">בהמתנה</td>
-          <td>מועדון טוב</td>
+          <td class="editable" onclick="makeEditable(this)">052-7654321</td>
+          <td class="editable status-internal" onclick="makeEditable(this)">איסוף עצמי</td>
+          <td class="editable status-external" onclick="makeEditable(this)">בהמתנה</td>
+          <td class="editable" onclick="makeEditable(this)">מועדון טוב</td>
           <td>04/07/2025</td>
+          <td><a href="order-details.html?id=123455" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
         </tr>
       </tbody>
     </table>
@@ -97,13 +109,28 @@
         const dateAttr = row.getAttribute('data-date');
         const orderDate = new Date(dateAttr);
         const diffHours = (now - orderDate) / (1000 * 60 * 60);
-        if (dateFilter.checked) {
-          row.style.display = diffHours <= 24 ? '' : 'none';
-        } else {
-          row.style.display = '';
-        }
+        row.style.display = dateFilter.checked ? (diffHours <= 24 ? '' : 'none') : '';
       });
     });
+
+    function makeEditable(cell) {
+      if (cell.querySelector('input')) return;
+      const oldValue = cell.innerText;
+      const input = document.createElement('input');
+      input.value = oldValue;
+      input.className = 'edit-input';
+      input.onblur = () => {
+        cell.innerText = input.value;
+      };
+      input.onkeydown = e => {
+        if (e.key === 'Enter') {
+          input.blur();
+        }
+      };
+      cell.innerText = '';
+      cell.appendChild(input);
+      input.focus();
+    }
   </script>
 </body>
 </html>
