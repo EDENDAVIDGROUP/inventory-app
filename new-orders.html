@@ -140,7 +140,7 @@
     });
 
     const importedOrders = JSON.parse(localStorage.getItem('importedOrders')) || [];
-    const orders = [...demoOrders, ...importedOrders];
+    let orders = [...demoOrders, ...importedOrders];
 
     function displayOrders(list) {
       const tbody = document.getElementById('ordersBody');
@@ -149,7 +149,7 @@
       list.forEach((order, i) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><input type="checkbox" class="order-checkbox"></td>
+          <td><input type="checkbox" class="order-checkbox" data-id="${order.id}"></td>
           <td>${order.date || ''}</td>
           <td>${order.id || ''}</td>
           <td>${order.name || ''}</td>
@@ -167,6 +167,29 @@
         `;
         tbody.appendChild(row);
       });
+    }
+
+    function routeSelected(targetStatus) {
+      const checkboxes = document.querySelectorAll('.order-checkbox:checked');
+      const idsToRoute = Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
+
+      const routedOrders = orders.filter(o => idsToRoute.includes(o.id));
+      routedOrders.forEach(order => order.status = targetStatus);
+
+      // שמירה לקבוצה החדשה
+      const storageKey = targetStatus === 'בטיפול' ? 'processingOrders'
+                        : targetStatus === 'שגויה' ? 'errorOrders'
+                        : targetStatus === 'למשלוח' ? 'shippingOrders'
+                        : null;
+      if (storageKey) {
+        const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        localStorage.setItem(storageKey, JSON.stringify([...existing, ...routedOrders]));
+      }
+
+      // הסרה מהזמנות חדשות
+      orders = orders.filter(o => !idsToRoute.includes(o.id));
+      localStorage.setItem('importedOrders', JSON.stringify(orders));
+      displayOrders(orders);
     }
 
     function applyFilters() {
@@ -192,16 +215,6 @@
       document.getElementById('statusFilter').value = '';
       document.getElementById('shippingFilter').value = '';
       displayOrders(orders);
-    }
-
-    function routeSelected(targetStatus) {
-      const checkboxes = document.querySelectorAll('.order-checkbox:checked');
-      checkboxes.forEach(cb => {
-        const row = cb.closest('tr');
-        const statusSpan = row.querySelector('.status');
-        statusSpan.textContent = targetStatus;
-        statusSpan.className = 'badge bg-secondary status';
-      });
     }
 
     document.getElementById('selectAll').addEventListener('change', function () {
