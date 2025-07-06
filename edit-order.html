@@ -1,223 +1,67 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>עריכת הזמנה</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הזמנות חדשות</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f4f4f4;
-      padding: 30px;
+      background-color: #f5f5f5;
       font-family: Arial, sans-serif;
-    }
-    .form-section {
-      background-color: #fff;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
     }
-    .form-section h4 {
-      margin-bottom: 20px;
-    }
-    table th, table td {
+    .table th, .table td {
       vertical-align: middle;
       text-align: center;
+    }
+    .badge {
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h2 class="mb-4 text-center">עריכת הזמנה</h2>
-
-  <!-- פרטי הזמנה -->
-  <div class="form-section">
-    <h4>פרטי הזמנה</h4>
-    <div class="row">
-      <div class="col-md-4">
-        <label>מספר הזמנה:</label>
-        <input type="text" class="form-control" id="order-id" value="123456" disabled>
-      </div>
-      <div class="col-md-4">
-        <label>תאריך הזמנה:</label>
-        <input type="text" class="form-control" value="2025-07-06" disabled>
-      </div>
-      <div class="col-md-4">
-        <label>סטטוס הזמנה:</label>
-        <select class="form-select" id="order-status">
-          <option>פתוחה</option>
-          <option>בטיפול</option>
-          <option>נשלחה</option>
-          <option>בוטלה</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <!-- פרטי לקוח -->
-  <div class="form-section">
-    <h4>פרטי לקוח</h4>
-    <div class="row">
-      <div class="col-md-4">
-        <label>שם לקוח:</label>
-        <input type="text" class="form-control" id="customer-name" value="דני כהן">
-      </div>
-      <div class="col-md-4">
-        <label>טלפון:</label>
-        <input type="tel" class="form-control" id="customer-phone" value="050-1234567">
-      </div>
-      <div class="col-md-4">
-        <label>אימייל:</label>
-        <input type="email" class="form-control" id="customer-email" value="dani@example.com">
-      </div>
-    </div>
-  </div>
-
-  <!-- פרטי משלוח -->
-  <div class="form-section">
-    <h4>פרטי משלוח</h4>
-    <div class="row">
-      <div class="col-md-3">
-        <label>רחוב:</label>
-        <input type="text" class="form-control" id="shipping-street" value="הזית">
-      </div>
-      <div class="col-md-2">
-        <label>מספר:</label>
-        <input type="text" class="form-control" id="shipping-number" value="12">
-      </div>
-      <div class="col-md-3">
-        <label>עיר:</label>
-        <input type="text" class="form-control" id="shipping-city" value="תל אביב">
-      </div>
-      <div class="col-md-2">
-        <label>מיקוד:</label>
-        <input type="text" class="form-control" id="shipping-zip" value="67890">
-      </div>
-      <div class="col-md-2">
-        <label>קומה / הערות:</label>
-        <input type="text" class="form-control" id="shipping-notes" value="קומה 2">
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-4">
-        <label>סוג משלוח:</label>
-        <select class="form-select" id="shipping-type">
-          <option selected>רגיל (₪35)</option>
-          <option>חריג (₪85)</option>
-          <option>נקודת איסוף</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label>טלפון למשלוח:</label>
-        <input type="tel" class="form-control" id="shipping-phone" value="050-7654321">
-      </div>
-    </div>
-  </div>
-
-  <!-- פרטי מוצרים -->
-  <div class="form-section">
-    <h4>פרטי המוצרים שהוזמנו</h4>
-    <table class="table table-bordered">
+  <div class="container">
+    <h2 class="mb-4 text-center">הזמנות חדשות</h2>
+    <table class="table table-bordered bg-white">
       <thead class="table-light">
         <tr>
-          <th>שם מוצר</th>
-          <th>מק"ט</th>
-          <th>כמות</th>
-          <th>מחיר ליחידה</th>
-          <th>סה"כ</th>
           <th>פעולות</th>
+          <th>שיטת שילוח</th>
+          <th>סטטוס</th>
+          <th>מוצר</th>
+          <th>כמות</th>
+          <th>פלטפורמה</th>
+          <th>עיר</th>
+          <th>טלפון</th>
+          <th>שם לקוח</th>
+          <th>מס' הזמנה</th>
+          <th>תאריך</th>
         </tr>
       </thead>
       <tbody>
+        <!-- דוגמה לשורת הזמנה -->
         <tr>
+          <td>
+            <a href="edit-order.html?orderId=1001" class="btn btn-warning btn-sm">ערוך</a>
+            <a href="#" class="btn btn-info btn-sm">צפה</a>
+          </td>
+          <td><span class="badge bg-primary">צ'יטה עם מדבקה</span></td>
+          <td><span class="badge bg-warning text-dark">הזמנה חדשה</span></td>
           <td>מצנן ARPO 5500</td>
-          <td>AR5500</td>
-          <td><input type="number" class="form-control" id="product-qty-1" value="2"></td>
-          <td>890</td>
-          <td>1780</td>
-          <td><button class="btn btn-danger btn-sm">הסר</button></td>
+          <td>3</td>
+          <td>BOXMASTER</td>
+          <td>תל אביב</td>
+          <td>0554568527</td>
+          <td>לקוח 1</td>
+          <td>1001</td>
+          <td>06/07/2025</td>
         </tr>
+        <!-- תוכל להוסיף עוד שורות כך -->
       </tbody>
     </table>
-    <button class="btn btn-secondary btn-sm">+ הוסף מוצר להזמנה</button>
   </div>
-
-  <!-- סכום כולל -->
-  <div class="form-section">
-    <h4>חיוב</h4>
-    <div class="row">
-      <div class="col-md-4">
-        <label>סה"כ מוצרים:</label>
-        <input type="text" class="form-control" value="₪1780" disabled>
-      </div>
-      <div class="col-md-4">
-        <label>משלוח:</label>
-        <input type="number" class="form-control" id="shipping-cost" value="35">
-      </div>
-      <div class="col-md-4">
-        <label>סה"כ לתשלום:</label>
-        <input type="text" class="form-control" value="₪1815" disabled>
-      </div>
-    </div>
-  </div>
-
-  <!-- פעולות -->
-  <div class="text-center">
-    <button class="btn btn-success" onclick="saveOrderChanges()">שמור שינויים</button>
-    <button class="btn btn-outline-secondary ms-2">בטל</button>
-    <button class="btn btn-primary ms-2">הדפס הזמנה</button>
-  </div>
-</div>
-
-<script>
-function saveOrderChanges() {
-  const orderData = {
-    orderId: document.getElementById("order-id").value,
-    status: document.getElementById("order-status").value,
-    customer: {
-      name: document.getElementById("customer-name").value,
-      phone: document.getElementById("customer-phone").value,
-      email: document.getElementById("customer-email").value
-    },
-    shipping: {
-      street: document.getElementById("shipping-street").value,
-      number: document.getElementById("shipping-number").value,
-      city: document.getElementById("shipping-city").value,
-      zip: document.getElementById("shipping-zip").value,
-      notes: document.getElementById("shipping-notes").value,
-      phone: document.getElementById("shipping-phone").value,
-      type: document.getElementById("shipping-type").value
-    },
-    products: [
-      {
-        name: "מצנן ARPO 5500",
-        sku: "AR5500",
-        quantity: parseInt(document.getElementById("product-qty-1").value),
-        price: 890
-      }
-    ],
-    shippingCost: parseFloat(document.getElementById("shipping-cost").value)
-  };
-
-  fetch('/api/orders/update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(orderData)
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert("ההזמנה נשמרה בהצלחה!");
-  })
-  .catch(err => {
-    console.error("שגיאה בשמירה:", err);
-    alert("אירעה שגיאה בשמירת ההזמנה.");
-  });
-}
-</script>
 
 </body>
 </html>
