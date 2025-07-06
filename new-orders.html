@@ -65,13 +65,15 @@
             <option value="הזמנה חדשה">הזמנה חדשה</option>
             <option value="בטיפול">בטיפול</option>
             <option value="הושלמה">הושלמה</option>
+            <option value="שגויה">שגויה</option>
+            <option value="למשלוח">למשלוח</option>
           </select>
         </div>
         <div class="col-md-3">
           <label class="form-label">שיטת שילוח</label>
           <select id="shippingFilter" class="form-select">
             <option value="">הכל</option>
-            <option value="צ'יטה עם מדבקה">צ'יטה עם מדבקה</option>
+            <option value="משלוח">משלוח</option>
             <option value="נקודת איסוף">נקודת איסוף</option>
             <option value="איסוף עצמי">איסוף עצמי</option>
             <option value="חריג">חריג</option>
@@ -85,7 +87,11 @@
 
     <!-- פעולות מרובות -->
     <div class="bulk-actions mb-3">
-      <button class="btn btn-success" onclick="handleBulkAction()">טפל בהזמנות נבחרות</button>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="routeSelected('בטיפול')">נתב להזמנות בטיפול</button>
+        <button class="btn btn-danger" onclick="routeSelected('שגויה')">נתב להזמנות שגויות</button>
+        <button class="btn btn-primary" onclick="routeSelected('למשלוח')">נתב למשלוחים</button>
+      </div>
     </div>
 
     <!-- טבלת הזמנות -->
@@ -117,7 +123,7 @@
       const cities = ['תל אביב', 'חיפה', 'ירושלים', 'באר שבע', 'אשדוד', 'נתניה', 'רחובות', 'הרצליה'];
       const platforms = ['BOXMASTER', 'PRO-TOOLS', 'מועדון טוב'];
       const products = ['מצנן ARPO 5500', 'אוהל 3x3', 'גנרטור 2500W', 'שולחן פעילות עץ'];
-      const shipping = ["צ'יטה עם מדבקה", 'נקודת איסוף', 'איסוף עצמי', 'חריג'];
+      const shipping = ['משלוח', 'נקודת איסוף', 'איסוף עצמי', 'חריג'];
 
       return {
         date: '06/07/2025',
@@ -153,7 +159,7 @@
           <td>${order.quantity || ''}</td>
           <td>${order.product || ''}</td>
           <td><span class="badge bg-warning status">${order.status || 'הזמנה חדשה'}</span></td>
-          <td><span class="badge bg-primary">${order.shipping || 'צ\'יטה עם מדבקה'}</span></td>
+          <td><span class="badge bg-primary">${order.shipping || 'משלוח'}</span></td>
           <td>
             <a href="order-details.html?orderId=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
             <a href="edit-order.html?orderId=${order.id}" class="btn btn-outline-secondary btn-sm">ערוך</a>
@@ -188,14 +194,13 @@
       displayOrders(orders);
     }
 
-    function handleBulkAction() {
+    function routeSelected(targetStatus) {
       const checkboxes = document.querySelectorAll('.order-checkbox:checked');
       checkboxes.forEach(cb => {
         const row = cb.closest('tr');
         const statusSpan = row.querySelector('.status');
-        statusSpan.textContent = 'בטיפול';
-        statusSpan.classList.remove('bg-warning');
-        statusSpan.classList.add('bg-success');
+        statusSpan.textContent = targetStatus;
+        statusSpan.className = 'badge bg-secondary status';
       });
     }
 
