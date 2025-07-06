@@ -22,12 +22,14 @@
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 600px;
+      max-width: 800px;
     }
 
-    input[type="file"] {
+    input[type="file"], select {
       display: block;
       margin-bottom: 20px;
+      width: 100%;
+      padding: 8px;
     }
 
     button {
@@ -43,44 +45,50 @@
       background-color: #2980b9;
     }
 
-    #ordersTable {
-      margin-top: 40px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 12px;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-
-    th {
-      background-color: #f0f0f0;
+    #mappingSection {
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
-
   <h1>יבוא הזמנות מקובץ</h1>
 
   <div class="upload-section">
     <label for="excelFile">בחר קובץ Excel עם הזמנות:</label>
     <input type="file" id="excelFile" accept=".xlsx, .xls">
+    <div id="mappingSection"></div>
     <button onclick="uploadFile()">ייבוא הזמנות</button>
   </div>
 
-  <div id="ordersTable"></div>
-
   <script>
+    let headerRow = [];
+    let sheetData = [];
+    let selectedClient = "";
+
+    function createMappingUI(headers) {
+      const mappingFields = ['id', 'name', 'phone', 'city', 'platform', 'quantity', 'product', 'status', 'shipping'];
+      const labels = {
+        id: 'מספר הזמנה', name: 'שם לקוח', phone: 'טלפון', city: 'עיר', platform: 'פלטפורמה',
+        quantity: 'כמות', product: 'מוצר', status: 'סטטוס', shipping: 'שיטת שילוח'
+      };
+
+      let html = '<h3>מיפוי עמודות</h3>';
+      html += '<label>בחר לקוח:</label><select id="clientSelector"><option value="">בחר לקוח</option>';
+      const clients = ['שלך לגמלאי', 'טוב פלוס', 'פייס', 'לאומי בונוס', 'ויזה', 'BOXMASTER', 'PRO-TOOLS'];
+      clients.forEach(c => html += `<option value="${c}">${c}</option>`);
+      html += '</select>';
+
+      mappingFields.forEach(field => {
+        html += `<label>${labels[field]}:</label><select id="map_${field}">`;
+        html += '<option value="">בחר עמודה</option>';
+        headers.forEach(h => {
+          html += `<option value="${h}">${h}</option>`;
+        });
+        html += '</select>';
+      });
+      document.getElementById('mappingSection').innerHTML = html;
+    }
+
     function uploadFile() {
       const fileInput = document.getElementById('excelFile');
       if (!fileInput.files.length) {
@@ -94,52 +102,56 @@
       reader.onload = function (e) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet);
 
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-        if (jsonData.length === 0) {
+        if (json.length === 0) {
           alert("הקובץ ריק או בפורמט לא תקין.");
           return;
         }
 
-        // שליחה להזמנות חדשות (סימולציה)
-        sendToNewOrders(jsonData);
-
-        // תצוגה בטבלה
-        displayOrdersTable(jsonData);
+        headerRow = Object.keys(json[0]);
+        sheetData = json;
+        createMappingUI(headerRow);
+        alert("נא להשלים את מיפוי העמודות ואז ללחוץ שוב על ייבוא הזמנות.");
       };
 
       reader.readAsArrayBuffer(file);
     }
 
-    function sendToNewOrders(orders) {
-      console.log("הזמנות נשלחו לקטגוריית הזמנות חדשות:", orders);
-      localStorage.setItem('newOrders', JSON.stringify(orders));
-    }
+    function sendMappedOrders() {
+      const client = document.getElementById('clientSelector')?.value;
+      if (!client) {
+        alert("נא לבחור את הלקוח לפני השליחה.");
+        return;
+      }
+      const fields = ['id', 'name', 'phone', 'city', 'platform', 'quantity', 'product', 'status', 'shipping'];
 
-    function displayOrdersTable(orders) {
-      let tableHTML = '<table><thead><tr>';
-      const keys = Object.keys(orders[0]);
-
-      keys.forEach(key => {
-        tableHTML += `<th>${key}</th>`;
+      const mapping = {};
+      fields.forEach(field => {
+        mapping[field] = document.getElementById('map_' + field)?.value || "";
       });
-      tableHTML += '</tr></thead><tbody>';
 
-      orders.forEach(order => {
-        tableHTML += '<tr>';
-        keys.forEach(key => {
-          tableHTML += `<td>${order[key] || ''}</td>`;
+      localStorage.setItem(`mapping_${client}`, JSON.stringify(mapping));
+
+      const mapped = sheetData.map(row => {
+        let obj = {};
+        fields.forEach(field => {
+          obj[field] = mapping[field] ? row[mapping[field]] || '' : '';
         });
-        tableHTML += '</tr>';
+        obj.date = new Date().toLocaleDateString('he-IL');
+        return obj;
       });
 
-      tableHTML += '</tbody></table>';
-      document.getElementById('ordersTable').innerHTML = tableHTML;
+      localStorage.setItem('importedOrders', JSON.stringify(mapped));
+      alert("ההזמנות מוּפו בהצלחה ונשלחו לקטגוריית הזמנות חדשות!");
     }
-  </script>
 
+    document.querySelector('button').addEventListener('click', function() {
+      if (sheetData.length && document.getElementById('map_id')) {
+        sendMappedOrders();
+      }
+    });
+  </script>
 </body>
 </html>
