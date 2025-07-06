@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>יבוא הזמנות</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -41,6 +42,30 @@
     button:hover {
       background-color: #2980b9;
     }
+
+    #ordersTable {
+      margin-top: 40px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
   </style>
 </head>
 <body>
@@ -53,6 +78,8 @@
     <button onclick="uploadFile()">ייבוא הזמנות</button>
   </div>
 
+  <div id="ordersTable"></div>
+
   <script>
     function uploadFile() {
       const fileInput = document.getElementById('excelFile');
@@ -60,7 +87,57 @@
         alert("נא לבחור קובץ לפני הייבוא.");
         return;
       }
-      alert("קובץ נטען בהצלחה (הדמו – ללא עיבוד בפועל).");
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        if (jsonData.length === 0) {
+          alert("הקובץ ריק או בפורמט לא תקין.");
+          return;
+        }
+
+        // שליחה להזמנות חדשות (סימולציה)
+        sendToNewOrders(jsonData);
+
+        // תצוגה בטבלה
+        displayOrdersTable(jsonData);
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    function sendToNewOrders(orders) {
+      console.log("הזמנות נשלחו לקטגוריית הזמנות חדשות:", orders);
+      localStorage.setItem('newOrders', JSON.stringify(orders));
+    }
+
+    function displayOrdersTable(orders) {
+      let tableHTML = '<table><thead><tr>';
+      const keys = Object.keys(orders[0]);
+
+      keys.forEach(key => {
+        tableHTML += `<th>${key}</th>`;
+      });
+      tableHTML += '</tr></thead><tbody>';
+
+      orders.forEach(order => {
+        tableHTML += '<tr>';
+        keys.forEach(key => {
+          tableHTML += `<td>${order[key] || ''}</td>`;
+        });
+        tableHTML += '</tr>';
+      });
+
+      tableHTML += '</tbody></table>';
+      document.getElementById('ordersTable').innerHTML = tableHTML;
     }
   </script>
 
