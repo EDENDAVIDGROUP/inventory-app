@@ -11,6 +11,8 @@
         padding: 40px;
         background-color: #f4f4f4;
         direction: rtl;
+        position: relative;
+        min-height: 100vh;
       }
       .container {
         max-width: 800px;
@@ -42,6 +44,15 @@
       button:hover, .download-link:hover {
         background-color: #2c2d3f;
       }
+      .home-button {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background-color: #6c757d;
+      }
+      .home-button:hover {
+        background-color: #5a6268;
+      }
     </style>
   </head>
   <body>
@@ -53,8 +64,9 @@
 
       <input type="file" id="excelFile" accept=".xlsx, .xls" />
       <button onclick="importExcel()">ייבא מוצרים</button>
-      <button onclick="window.location.href='index.html'">חזרה למסך הבית</button>
     </div>
+
+    <button class="home-button" onclick="window.location.href='index.html'">חזרה למסך הבית</button>
 
     <script>
       function importExcel() {
