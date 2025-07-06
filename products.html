@@ -15,7 +15,7 @@
     }
   </style>
 </head>
-<body onload="loadProducts()">
+<body>
   <div class="container mt-5">
     <h2 class="text-center mb-4">ניהול מוצרים</h2>
 
@@ -24,61 +24,52 @@
       <button class="btn btn-outline-primary" onclick="importProducts()">יבוא מוצרים</button>
     </div>
 
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" id="productsTable">
       <thead class="table-dark">
         <tr>
           <th>מק"ט</th>
           <th>שם מוצר</th>
+          <th>מותג</th>
           <th>מחיר עלות</th>
           <th>מחיר מומלץ</th>
-          <th>מותג</th>
-          <th>לקוחות</th>
-          <th>סוג משלוח</th>
+          <th>מלאי</th>
+          <th>קטגוריה</th>
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody id="productTableBody">
-        <!-- מוצרים ייטענו כאן דינמית -->
-      </tbody>
+      <tbody></tbody>
     </table>
-    <div class="text-center">
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="javascript:history.back()" class="btn btn-outline-dark">חזרה לדף קודם</a>
       <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
     </div>
   </div>
 
   <script>
-    function loadProducts() {
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      const tbody = document.getElementById('productTableBody');
+    document.addEventListener("DOMContentLoaded", function () {
+      const products = JSON.parse(localStorage.getItem("products") || "[]");
+      const tbody = document.querySelector("#productsTable tbody");
       tbody.innerHTML = '';
 
-      products.forEach((product, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${product.sku || ''}</td>
-          <td>${product.productName || ''}</td>
-          <td>₪${product.costPrice || ''}</td>
-          <td>₪${product.retailPrice || ''}</td>
-          <td>${product.brand || ''}</td>
-          <td>${product.clients || ''}</td>
-          <td>${product.shippingType || 'לא הוגדר'}</td>
+      products.forEach((p, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${p.sku || ''}</td>
+          <td>${p.productName || ''}</td>
+          <td>${p.brand || ''}</td>
+          <td>₪${p.costPrice || ''}</td>
+          <td>₪${p.retailPrice || ''}</td>
+          <td>${p.stock || ''}</td>
+          <td>${p.category || ''}</td>
           <td>
-            <button class="btn btn-primary btn-sm" onclick="window.location.href='product-details.html?productId=${index}'">ערוך</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteProduct(${index})">מחק</button>
+            <a href="product-details.html?productId=${index}" class="btn btn-sm btn-primary">ערוך</a>
+            <button class="btn btn-sm btn-danger" onclick="deleteProduct(${index})">מחק</button>
           </td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
       });
-    }
-
-    function deleteProduct(index) {
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      if (confirm('האם אתה בטוח שברצונך למחוק את המוצר?')) {
-        products.splice(index, 1);
-        localStorage.setItem('products', JSON.stringify(products));
-        loadProducts();
-      }
-    }
+    });
 
     function addNewProduct() {
       window.location.href = 'product-details.html';
@@ -86,6 +77,15 @@
 
     function importProducts() {
       window.location.href = 'import-products.html';
+    }
+
+    function deleteProduct(index) {
+      const products = JSON.parse(localStorage.getItem("products") || "[]");
+      if (confirm("האם אתה בטוח שברצונך למחוק את המוצר?")) {
+        products.splice(index, 1);
+        localStorage.setItem("products", JSON.stringify(products));
+        location.reload();
+      }
     }
   </script>
 </body>
