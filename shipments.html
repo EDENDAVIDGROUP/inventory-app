@@ -83,6 +83,7 @@
       <h2>רשימת משלוחים</h2>
       <div>
         <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
+        <button class="btn btn-info me-2" onclick="checkChitaStatus()">בדוק סטטוס מצ'יטה</button>
         <button class="btn-generate" onclick="generateLabels(true)">שדר להדפסת מדבקות</button>
         <button class="btn-print" onclick="generateLabels(false)">הדפס מדבקות</button>
       </div>
@@ -94,6 +95,7 @@
         <option value="">כל הסטטוסים</option>
         <option value="ממתין למשלוח">ממתין למשלוח</option>
         <option value="נשלח">נשלח</option>
+        <option value="נמסר">נמסר</option>
       </select>
       <select id="deliveryTypeFilter">
         <option value="">כל סוגי המטען</option>
@@ -114,6 +116,7 @@
           <th>מוצר</th>
           <th>סוג מטען</th>
           <th>סטטוס</th>
+          <th>מס' מעקב</th>
         </tr>
       </thead>
       <tbody id="shipmentTableBody">
@@ -124,30 +127,9 @@
           <td>תל אביב, דיזנגוף 100</td>
           <td>050-1234567</td>
           <td>מצנן ARPO 5500</td>
-          <td>
-            <select>
-              <option>רגיל</option>
-              <option>חריג</option>
-              <option>נקודת איסוף</option>
-            </select>
-          </td>
-          <td>ממתין למשלוח</td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" /></td>
-          <td>1002</td>
-          <td>רות לוי</td>
-          <td>חיפה, שדרות בן גוריון 12</td>
-          <td>052-7654321</td>
-          <td>אוהל 3x3</td>
-          <td>
-            <select>
-              <option>רגיל</option>
-              <option selected>חריג</option>
-              <option>נקודת איסוף</option>
-            </select>
-          </td>
-          <td>נשלח</td>
+          <td><select><option>רגיל</option><option>חריג</option><option>נקודת איסוף</option></select></td>
+          <td><select><option>ממתין למשלוח</option><option>נשלח</option><option>נמסר</option></select></td>
+          <td class="trackingId">-</td>
         </tr>
       </tbody>
     </table>
@@ -161,96 +143,24 @@
       checkboxes.forEach(cb => cb.checked = this.checked);
     });
 
-    const searchInput = document.getElementById("searchInput");
-    const statusFilter = document.getElementById("statusFilter");
-    const deliveryTypeFilter = document.getElementById("deliveryTypeFilter");
-
-    function filterRows() {
-      const search = searchInput.value.toLowerCase();
-      const status = statusFilter.value;
-      const delivery = deliveryTypeFilter.value;
+    function checkChitaStatus() {
       const rows = document.querySelectorAll("#shipmentTableBody tr");
       rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        const rowStatus = row.cells[7].textContent;
-        const rowDelivery = row.cells[6].querySelector("select").value;
-        const matchSearch = text.includes(search);
-        const matchStatus = !status || rowStatus === status;
-        const matchDelivery = !delivery || rowDelivery === delivery;
-        row.style.display = matchSearch && matchStatus && matchDelivery ? "" : "none";
-      });
-    }
-
-    searchInput.addEventListener("input", filterRows);
-    statusFilter.addEventListener("change", filterRows);
-    deliveryTypeFilter.addEventListener("change", filterRows);
-
-    async function sendToChita(orderData) {
-      try {
-        const response = await fetch("https://api.chita.co.il/shipments", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer API_KEY_HERE"
-          },
-          body: JSON.stringify(orderData)
-        });
-        const result = await response.json();
-        return result; // אמור להכיל tracking number, label URL, route וכו'
-      } catch (error) {
-        console.error("שגיאה בשידור לצ'יטה:", error);
-        return null;
-      }
-    }
-
-    async function generateLabels(shouldDownload) {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      const rows = document.querySelectorAll("tbody tr");
-      const barcodeSvg = document.getElementById("barcode");
-      let count = 0;
-
-      for (const row of rows) {
         const checkbox = row.querySelector("input[type='checkbox']");
-        if (!checkbox.checked) continue;
+        if (!checkbox.checked) return;
 
-        const orderId = row.cells[1].textContent;
-        const customerName = row.cells[2].textContent;
-        const address = row.cells[3].textContent;
-        const phone = row.cells[4].textContent;
-        const product = row.cells[5].textContent;
-        const deliveryType = row.cells[6].querySelector("select").value;
+        const trackingIdCell = row.querySelector(".trackingId");
+        const trackingId = trackingIdCell.textContent;
+        if (!trackingId || trackingId === '-') return;
 
-        // שידור לצ'יטה
-        const chitaResponse = await sendToChita({ orderId, customerName, address, phone, product, deliveryType });
-        console.log("תגובה מצ'יטה להזמנה", orderId, chitaResponse);
-
-        JsBarcode(barcodeSvg, orderId, { format: "CODE128", width: 2, height: 40 });
-        const svgData = new XMLSerializer().serializeToString(barcodeSvg);
-        const svg64 = btoa(unescape(encodeURIComponent(svgData)));
-        const image64 = "data:image/svg+xml;base64," + svg64;
-
-        const x = (count % 2) * 105;
-        const y = Math.floor(count / 2) % 4 * 70;
-
-        pdf.setFontSize(10);
-        pdf.text(`לקוח: ${customerName}`, x + 5, y + 10);
-        pdf.text(`כתובת: ${address}`, x + 5, y + 18);
-        pdf.text(`טלפון: ${phone}`, x + 5, y + 26);
-        pdf.text(`מספר הזמנה: ${orderId}`, x + 5, y + 34);
-        pdf.text(`סוג מטען: ${deliveryType}`, x + 5, y + 42);
-        pdf.text(`הערות: ${product}`, x + 5, y + 50);
-        pdf.addImage(image64, "PNG", x + 5, y + 55, 80, 20);
-
-        count++;
-        if (count % 8 === 0) pdf.addPage();
-      }
-
-      if (shouldDownload) {
-        pdf.save("labels.pdf");
-      } else {
-        window.open(pdf.output("bloburl"));
-      }
+        fetch(`https://api.chita.co.il/shipments/status?tracking_id=${trackingId}`)
+          .then(res => res.json())
+          .then(data => {
+            const status = data.status;
+            row.cells[7].querySelector("select").value = status === "Delivered" ? "נמסר" : status;
+          })
+          .catch(err => console.error("שגיאה בקבלת סטטוס מצ'יטה", err));
+      });
     }
   </script>
 </body>
