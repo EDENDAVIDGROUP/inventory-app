@@ -68,6 +68,9 @@
             <option>BOXMASTER</option>
             <option>PRO-TOOLS</option>
             <option>מועדון טוב</option>
+            <option>מחסני חשמל</option>
+            <option>הום סנטר</option>
+            <option>סופר-פארם</option>
           </select>
         </div>
         <div class="col-md-3">
@@ -118,7 +121,38 @@
         </tr>
       </thead>
       <tbody>
-        <!-- כאן יופיעו 20 שורות הדמו שכבר הוזנו -->
+        <!-- 20 הזמנות דמו -->
+        <script>
+          const orders = Array.from({ length: 20 }, (_, i) => ({
+            id: 1001 + i,
+            date: '06/07/2025',
+            customer: `לקוח ${i + 1}`,
+            phone: `050-12345${(67 + i).toString().padStart(2, '0')}`,
+            platform: ['BOXMASTER', 'PRO-TOOLS', 'מועדון טוב', 'מחסני חשמל', 'הום סנטר', 'סופר-פארם'][i % 6],
+            quantity: (i % 5) + 1,
+            product: ['ARPO 5500 מצנן', 'אוהל לינה', 'גנרטור 3000W', 'שולחן פעילות', 'מטבח עץ'][i % 5],
+            status: 'הזמנה חדשה',
+            shipping: ['רגיל', 'חריג', 'נקודת איסוף', 'איסוף עצמי'][i % 4]
+          }));
+          const tbody = document.currentScript.parentElement;
+          orders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><input type="checkbox" class="order-checkbox"></td>
+              <td>${order.date}</td>
+              <td>${order.id}</td>
+              <td>${order.customer}</td>
+              <td>${order.phone}</td>
+              <td>${order.platform}</td>
+              <td>${order.quantity}</td>
+              <td>${order.product}</td>
+              <td><span class="badge bg-warning status">${order.status}</span></td>
+              <td><span class="badge bg-primary">${order.shipping}</span></td>
+              <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a> <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        </script>
       </tbody>
     </table>
   </div>
@@ -160,7 +194,6 @@
       document.getElementById('filterTags').innerHTML = '';
     });
 
-    // Bulk action logic
     document.getElementById('selectAll').addEventListener('change', function () {
       document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = this.checked);
     });
@@ -177,5 +210,4 @@
     }
   </script>
 </body>
-
 </html>
