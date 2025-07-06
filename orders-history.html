@@ -74,7 +74,7 @@
         <div class="col-md-2">
           <label class="form-label">פלטפורמה</label>
           <select class="form-select" id="platformFilter">
-            <option selected>בחר פלטפורמה</option>
+            <option value="">בחר פלטפורמה</option>
             <option>BOXMASTER</option>
             <option>מועדון טוב</option>
             <option>מחסני חשמל</option>
@@ -98,6 +98,7 @@
         <div class="col-md-12 text-end filter-actions">
           <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
           <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
+          <button type="button" class="btn btn-success" onclick="exportTableToCSV('orders.csv')">ייצוא לאקסל</button>
         </div>
       </form>
     </div>
@@ -126,6 +127,8 @@
     const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון', 'משה פרץ', 'נועה קרני'];
 
     const tbody = document.getElementById('ordersBody');
+
+    const allOrders = [];
     for (let i = 0; i < 50; i++) {
       const orderId = `#20${i + 1}`;
       const customer = customers[i % customers.length];
@@ -137,7 +140,13 @@
       date.setDate(date.getDate() - (i + 30));
       const formattedDate = date.toLocaleDateString('he-IL');
 
-      tbody.innerHTML += `
+      allOrders.push({ orderId, customer, phone, statusInternal, statusExternal, platform, formattedDate });
+    }
+
+    function renderOrders(orders) {
+      tbody.innerHTML = '';
+      orders.forEach(({ orderId, customer, phone, statusInternal, statusExternal, platform, formattedDate }) => {
+        tbody.innerHTML += `
         <tr>
           <td>${orderId}</td>
           <td>${customer}</td>
@@ -148,7 +157,10 @@
           <td>${formattedDate}</td>
           <td><a href="order-details.html?id=${orderId}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
         </tr>`;
+      });
     }
+
+    renderOrders(allOrders);
 
     function makeEditable(cell) {
       if (cell.querySelector('input')) return;
@@ -165,12 +177,44 @@
 
     document.getElementById('searchInput').addEventListener('input', function () {
       const query = this.value.toLowerCase();
-      const rows = document.querySelectorAll('#ordersTable tbody tr');
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(query) ? '' : 'none';
-      });
+      renderOrders(allOrders.filter(order => Object.values(order).some(val => val.toLowerCase().includes(query))));
     });
+
+    document.getElementById('filterButton').addEventListener('click', () => {
+      const selectedPlatform = document.getElementById('platformFilter').value;
+      const selectedStatuses = Array.from(document.getElementById('statusFilter').selectedOptions).map(o => o.value);
+      const fromDate = document.getElementById('fromDate').value;
+      const toDate = document.getElementById('toDate').value;
+
+      const filtered = allOrders.filter(order => {
+        const orderDate = new Date(order.formattedDate);
+        return (!selectedPlatform || order.platform === selectedPlatform) &&
+               (selectedStatuses.length === 0 || selectedStatuses.includes(order.statusInternal)) &&
+               (!fromDate || orderDate >= new Date(fromDate)) &&
+               (!toDate || orderDate <= new Date(toDate));
+      });
+
+      renderOrders(filtered);
+    });
+
+    function exportTableToCSV(filename) {
+      const rows = document.querySelectorAll("table tr");
+      let csv = [];
+      for (let row of rows) {
+        const cols = row.querySelectorAll("td, th");
+        const rowData = Array.from(cols).map(col => '"' + col.innerText.replace(/"/g, '""') + '"');
+        csv.push(rowData.join(","));
+      }
+      const csvContent = csv.join("\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.setAttribute("href", URL.createObjectURL(blob));
+      link.setAttribute("download", filename);
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   </script>
 </body>
 </html>
