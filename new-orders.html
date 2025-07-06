@@ -75,7 +75,6 @@
           <select class="form-select" id="shippingSelect">
             <option selected value="">בחר שיטה</option>
             <option>צ'יטה עם מדבקה</option>
-            <option>שליח פרטי</option>
             <option>נקודת איסוף</option>
             <option>איסוף עצמי</option>
             <option>חריג</option>
@@ -109,6 +108,7 @@
           <th>מס' הזמנה</th>
           <th>שם לקוח</th>
           <th>טלפון</th>
+          <th>עיר</th>
           <th>פלטפורמה</th>
           <th>כמות</th>
           <th>מוצר</th>
@@ -124,8 +124,9 @@
   <script>
     const statuses = ['הזמנה חדשה', 'בטיפול', 'הושלמה'];
     const platforms = ['BOXMASTER', 'PRO-TOOLS', 'מועדון טוב'];
-    const shippingTypes = ["צ'יטה עם מדבקה", 'שליח פרטי', 'נקודת איסוף', 'איסוף עצמי', 'חריג'];
+    const shippingTypes = ["צ'יטה עם מדבקה", 'נקודת איסוף', 'איסוף עצמי', 'חריג'];
     const products = ['מצנן ARPO 5500', 'אוהל 3x3', 'גנרטור 2500W', 'שולחן פעילות עץ', 'שוקת מים ניידת'];
+    const cities = ['תל אביב', 'חיפה', 'ירושלים', 'אשדוד', 'באר שבע', 'נתניה', 'הרצליה', 'פתח תקווה'];
 
     const orders = Array.from({ length: 20 }).map((_, i) => {
       return {
@@ -133,6 +134,7 @@
         id: (1001 + i).toString(),
         name: `לקוח ${i + 1}`,
         phone: `05${Math.floor(Math.random() * 90000000 + 10000000)}`,
+        city: cities[i % cities.length],
         platform: platforms[i % platforms.length],
         quantity: Math.ceil(Math.random() * 3),
         product: products[i % products.length],
@@ -152,6 +154,7 @@
           <td>${order.id}</td>
           <td>${order.name}</td>
           <td>${order.phone}</td>
+          <td>${order.city}</td>
           <td>${order.platform}</td>
           <td>${order.quantity}</td>
           <td>${order.product}</td>
