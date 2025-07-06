@@ -57,13 +57,13 @@
     tbody tr {
       background-color: #fff;
     }
-    select {
+    select, input[type="date"] {
       width: 100%;
       padding: 4px;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
-    #searchInput, #statusFilter, #deliveryTypeFilter {
+    #searchInput, #statusFilter, #deliveryTypeFilter, #dateFilter {
       margin-bottom: 10px;
       padding: 8px;
       width: 100%;
@@ -74,6 +74,7 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
+      flex-wrap: wrap;
     }
   </style>
 </head>
@@ -103,6 +104,7 @@
         <option value="חריג">חריג</option>
         <option value="נקודת איסוף">נקודת איסוף</option>
       </select>
+      <input type="date" id="dateFilter" placeholder="סנן לפי תאריך">
     </div>
 
     <table class="table table-bordered text-center">
@@ -117,20 +119,23 @@
           <th>סוג מטען</th>
           <th>סטטוס</th>
           <th>מס' מעקב</th>
+          <th>תאריך</th>
         </tr>
       </thead>
       <tbody id="shipmentTableBody">
+        ${[...Array(10)].map((_, i) => `
         <tr>
           <td><input type="checkbox" /></td>
-          <td>1001</td>
-          <td>דני כהן</td>
-          <td>תל אביב, דיזנגוף 100</td>
-          <td>050-1234567</td>
-          <td>מצנן ARPO 5500</td>
+          <td>10${i + 1}</td>
+          <td>לקוח ${i + 1}</td>
+          <td>עיר כלשהי, רחוב ${i + 1}</td>
+          <td>050-12345${i}</td>
+          <td>מוצר דוגמה ${i + 1}</td>
           <td><select><option>רגיל</option><option>חריג</option><option>נקודת איסוף</option></select></td>
           <td><select><option>ממתין למשלוח</option><option>נשלח</option><option>נמסר</option></select></td>
           <td class="trackingId">-</td>
-        </tr>
+          <td>${new Date(2025, 6, 1 + i).toISOString().slice(0, 10)}</td>
+        </tr>`).join('')}
       </tbody>
     </table>
   </div>
