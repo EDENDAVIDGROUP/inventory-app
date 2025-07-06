@@ -20,6 +20,21 @@
     .btn-group .btn {
       margin-left: 5px;
     }
+    .tag {
+      display: inline-block;
+      background-color: #d1e7dd;
+      color: #0f5132;
+      border-radius: 20px;
+      padding: 5px 10px;
+      margin: 2px;
+    }
+    .tag button {
+      background: none;
+      border: none;
+      margin-right: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -27,11 +42,58 @@
   <div class="container">
     <h2 class="text-center">הזמנות חדשות</h2>
 
-    <div class="mb-3 d-flex justify-content-between">
-      <input type="text" class="form-control w-75" id="searchInput" placeholder="חפש לפי מספר הזמנה, שם לקוח או טלפון...">
-      <button id="handleSelectedBtn" class="btn btn-success ms-3">טפל בהזמנות נבחרות</button>
+    <!-- סינון -->
+    <div class="card p-3 mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label for="dateFrom" class="form-label">מתאריך</label>
+          <input type="date" class="form-control" id="dateFrom">
+        </div>
+        <div class="col-md-3">
+          <label for="dateTo" class="form-label">עד תאריך</label>
+          <input type="date" class="form-control" id="dateTo">
+        </div>
+        <div class="col-md-3">
+          <label for="statusSelect" class="form-label">סטטוס הזמנה</label>
+          <select class="form-select" id="statusSelect" multiple>
+            <option>הזמנה חדשה</option>
+            <option>בטיפול</option>
+            <option>הושלמה</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="platformSelect" class="form-label">פלטפורמה</label>
+          <select class="form-select" id="platformSelect">
+            <option selected disabled>בחר פלטפורמה</option>
+            <option>BOXMASTER</option>
+            <option>PRO-TOOLS</option>
+            <option>מועדון טוב</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="shippingSelect" class="form-label">שיטת שילוח</label>
+          <select class="form-select" id="shippingSelect">
+            <option selected disabled>בחר שיטה</option>
+            <option>צ'יטה עם מדבקה</option>
+            <option>שליח פרטי</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label for="searchInput" class="form-label">חיפוש חופשי</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון...">
+        </div>
+        <div class="col-md-1">
+          <button class="btn btn-outline-secondary" id="resetFilters">איפוס</button>
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100">סנן</button>
+        </div>
+      </div>
+      <!-- תצוגת תגיות בחירות -->
+      <div id="filterTags" class="mt-3"></div>
     </div>
 
+    <!-- טבלת הזמנות - עדיין לא מחוברת לסינון -->
     <table class="table table-bordered table-hover text-center">
       <thead class="table-dark">
         <tr>
@@ -57,7 +119,7 @@
           <td>מצנן ARPO 5500</td>
           <td>2</td>
           <td>BOXMASTER</td>
-          <td><span class="badge bg-warning status">חדשה</span></td>
+          <td><span class="badge bg-warning status">הזמנה חדשה</span></td>
           <td>
             <div class="btn-group">
               <button class="btn btn-sm btn-primary">נווט</button>
@@ -66,13 +128,12 @@
             </div>
           </td>
         </tr>
-        <!-- הזמנות נוספות -->
       </tbody>
     </table>
   </div>
 
   <script>
-    // חיפוש
+    // חיפוש טקסטואלי בסיסי
     document.getElementById('searchInput').addEventListener('input', function () {
       const searchTerm = this.value.toLowerCase();
       const rows = document.querySelectorAll('#ordersTableBody tr');
@@ -82,22 +143,41 @@
       });
     });
 
-    // סימון הכל
-    document.getElementById('selectAll').addEventListener('change', function () {
-      const checkboxes = document.querySelectorAll('.order-checkbox');
-      checkboxes.forEach(cb => cb.checked = this.checked);
-    });
+    // הצגת תגיות פילטרים (UI בלבד, בלי חיבור לטבלה)
+    function updateTags() {
+      const tagContainer = document.getElementById('filterTags');
+      tagContainer.innerHTML = '';
+      const status = Array.from(document.getElementById('statusSelect').selectedOptions).map(o => o.value);
+      const platform = document.getElementById('platformSelect').value;
+      const shipping = document.getElementById('shippingSelect').value;
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
 
-    // טיפול מרובה
-    document.getElementById('handleSelectedBtn').addEventListener('click', function () {
-      const selected = document.querySelectorAll('.order-checkbox:checked');
-      selected.forEach(cb => {
-        const row = cb.closest('tr');
-        const statusSpan = row.querySelector('.status');
-        statusSpan.textContent = 'טופלה';
-        statusSpan.classList.remove('bg-warning');
-        statusSpan.classList.add('bg-success');
-      });
+      status.forEach(s => addTag(s));
+      if (platform && platform !== 'בחר פלטפורמה') addTag(platform);
+      if (shipping && shipping !== 'בחר שיטה') addTag(shipping);
+      if (dateFrom) addTag(`מ: ${dateFrom}`);
+      if (dateTo) addTag(`עד: ${dateTo}`);
+    }
+
+    function addTag(text) {
+      const tagContainer = document.getElementById('filterTags');
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.innerHTML = `<button onclick="this.parentElement.remove()">×</button>${text}`;
+      tagContainer.appendChild(tag);
+    }
+
+    document.querySelector('button.btn-primary').addEventListener('click', updateTags);
+
+    document.getElementById('resetFilters').addEventListener('click', function () {
+      document.getElementById('dateFrom').value = '';
+      document.getElementById('dateTo').value = '';
+      document.getElementById('statusSelect').selectedIndex = -1;
+      document.getElementById('platformSelect').selectedIndex = 0;
+      document.getElementById('shippingSelect').selectedIndex = 0;
+      document.getElementById('searchInput').value = '';
+      document.getElementById('filterTags').innerHTML = '';
     });
   </script>
 </body>
