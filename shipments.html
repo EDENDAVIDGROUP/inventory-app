@@ -104,7 +104,7 @@
         <option value="חריג">חריג</option>
         <option value="נקודת איסוף">נקודת איסוף</option>
       </select>
-      <input type="date" id="dateFilter" placeholder="סנן לפי תאריך">
+      <input type="date" id="dateFilter">
     </div>
 
     <table class="table table-bordered text-center">
@@ -123,19 +123,38 @@
         </tr>
       </thead>
       <tbody id="shipmentTableBody">
-        ${[...Array(10)].map((_, i) => `
-        <tr>
-          <td><input type="checkbox" /></td>
-          <td>10${i + 1}</td>
-          <td>לקוח ${i + 1}</td>
-          <td>עיר כלשהי, רחוב ${i + 1}</td>
-          <td>050-12345${i}</td>
-          <td>מוצר דוגמה ${i + 1}</td>
-          <td><select><option>רגיל</option><option>חריג</option><option>נקודת איסוף</option></select></td>
-          <td><select><option>ממתין למשלוח</option><option>נשלח</option><option>נמסר</option></select></td>
-          <td class="trackingId">-</td>
-          <td>${new Date(2025, 6, 1 + i).toISOString().slice(0, 10)}</td>
-        </tr>`).join('')}
+        <!-- תוכן סטטי של 10 שורות -->
+        <script>
+          const tbody = document.currentScript.parentElement;
+          for (let i = 1; i <= 10; i++) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td><input type="checkbox"></td>
+              <td>10${i}</td>
+              <td>לקוח ${i}</td>
+              <td>עיר כלשהי, רחוב ${i}</td>
+              <td>050-12345${i}</td>
+              <td>מוצר דוגמה ${i}</td>
+              <td>
+                <select>
+                  <option>רגיל</option>
+                  <option>חריג</option>
+                  <option>נקודת איסוף</option>
+                </select>
+              </td>
+              <td>
+                <select>
+                  <option>ממתין למשלוח</option>
+                  <option>נשלח</option>
+                  <option>נמסר</option>
+                </select>
+              </td>
+              <td class="trackingId">-</td>
+              <td>${new Date(2025, 6, i).toISOString().slice(0,10)}</td>
+            `;
+            tbody.appendChild(row);
+          }
+        </script>
       </tbody>
     </table>
   </div>
