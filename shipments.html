@@ -24,6 +24,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .btn-print {
       background-color: #198754;
@@ -41,10 +43,19 @@
       border: none;
       padding: 10px 20px;
       border-radius: 5px;
-      margin-left: 10px;
     }
     .btn-generate:hover {
       background-color: #bb2d3b;
+    }
+    .btn-save {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+    }
+    .btn-save:hover {
+      background-color: #0b5ed7;
     }
     table {
       width: 100%;
@@ -76,6 +87,7 @@
       <div>
         <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
         <button class="btn btn-info me-2" onclick="checkChitaStatus()">בדוק סטטוס מצ'יטה</button>
+        <button class="btn-save me-2" onclick="saveChanges()">שמור שינויים</button>
         <button class="btn-generate" onclick="generateLabels(true)">שדר להדפסת מדבקות</button>
         <button class="btn-print" onclick="generateLabels(false)">הדפס מדבקות</button>
       </div>
@@ -114,38 +126,7 @@
         </tr>
       </thead>
       <tbody id="shipmentTableBody">
-        <!-- תוכן סטטי של 10 שורות -->
-        <script>
-          const tbody = document.currentScript.parentElement;
-          for (let i = 1; i <= 10; i++) {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td><input type="checkbox"></td>
-              <td>10${i}</td>
-              <td>לקוח ${i}</td>
-              <td>עיר כלשהי, רחוב ${i}</td>
-              <td>050-12345${i}</td>
-              <td>מוצר דוגמה ${i}</td>
-              <td>
-                <select>
-                  <option>רגיל</option>
-                  <option>חריג</option>
-                  <option>נקודת איסוף</option>
-                </select>
-              </td>
-              <td>
-                <select>
-                  <option>ממתין למשלוח</option>
-                  <option>נשלח</option>
-                  <option>נמסר</option>
-                </select>
-              </td>
-              <td class="trackingId">-</td>
-              <td>${new Date(2025, 6, i).toISOString().slice(0,10)}</td>
-            `;
-            tbody.appendChild(row);
-          }
-        </script>
+        <!-- שורות דמו יווצרו דרך סקריפט -->
       </tbody>
     </table>
   </div>
@@ -153,6 +134,36 @@
   <svg id="barcode" style="display:none"></svg>
 
   <script>
+    const tbody = document.getElementById("shipmentTableBody");
+    for (let i = 1; i <= 10; i++) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="checkbox"></td>
+        <td>10${i}</td>
+        <td>לקוח ${i}</td>
+        <td>עיר כלשהי, רחוב ${i}</td>
+        <td>050-12345${i}</td>
+        <td>מוצר דוגמה ${i}</td>
+        <td>
+          <select>
+            <option>רגיל</option>
+            <option>חריג</option>
+            <option>נקודת איסוף</option>
+          </select>
+        </td>
+        <td>
+          <select>
+            <option>ממתין למשלוח</option>
+            <option>נשלח</option>
+            <option>נמסר</option>
+          </select>
+        </td>
+        <td class="trackingId">-</td>
+        <td>${new Date(2025, 6, i).toISOString().slice(0,10)}</td>
+      `;
+      tbody.appendChild(row);
+    }
+
     document.getElementById('selectAll').addEventListener('change', function() {
       const checkboxes = document.querySelectorAll("tbody input[type='checkbox']");
       checkboxes.forEach(cb => cb.checked = this.checked);
@@ -176,6 +187,10 @@
           })
           .catch(err => console.error("שגיאה בקבלת סטטוס מצ'יטה", err));
       });
+    }
+
+    function saveChanges() {
+      alert("השינויים נשמרו (סימולציה בלבד - יש לחבר ל‑API בעתיד)");
     }
   </script>
 </body>
