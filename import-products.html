@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>יבוא מוצרים</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -23,7 +24,11 @@
         text-align: center;
         margin-bottom: 30px;
       }
-      button {
+      input[type="file"] {
+        margin-top: 20px;
+        display: block;
+      }
+      button, .download-link {
         margin-top: 20px;
         padding: 10px 20px;
         background-color: #1c1d2f;
@@ -31,8 +36,10 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
       }
-      button:hover {
+      button:hover, .download-link:hover {
         background-color: #2c2d3f;
       }
     </style>
@@ -41,7 +48,36 @@
     <div class="container">
       <h1>יבוא מוצרים</h1>
       <p>כאן תוכל להעלות קובץ אקסל של מוצרים או להתחבר לממשק API.</p>
+
+      <a class="download-link" href="/תבנית_ייבוא_מוצרים.xlsx" download>הורד תבנית אקסל</a>
+
+      <input type="file" id="excelFile" accept=".xlsx, .xls" />
+      <button onclick="importExcel()">ייבא מוצרים</button>
       <button onclick="window.location.href='index.html'">חזרה למסך הבית</button>
     </div>
+
+    <script>
+      function importExcel() {
+        const fileInput = document.getElementById('excelFile');
+        const file = fileInput.files[0];
+        if (!file) {
+          alert('נא לבחור קובץ לפני הייבוא.');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+          localStorage.setItem('importedProducts', JSON.stringify(jsonData));
+          alert('המוצרים נטענו בהצלחה! תוכל לצפות בהם בדף המוצרים.');
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    </script>
   </body>
 </html>
