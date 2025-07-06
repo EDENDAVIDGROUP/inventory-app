@@ -64,19 +64,16 @@
         <div class="col-md-3">
           <label for="platformSelect" class="form-label">פלטפורמה</label>
           <select class="form-select" id="platformSelect">
-            <option selected disabled>בחר פלטפורמה</option>
+            <option selected value="">בחר פלטפורמה</option>
             <option>BOXMASTER</option>
             <option>PRO-TOOLS</option>
             <option>מועדון טוב</option>
-            <option>מחסני חשמל</option>
-            <option>הום סנטר</option>
-            <option>סופר-פארם</option>
           </select>
         </div>
         <div class="col-md-3">
           <label for="shippingSelect" class="form-label">שיטת שילוח</label>
           <select class="form-select" id="shippingSelect">
-            <option selected disabled>בחר שיטה</option>
+            <option selected value="">בחר שיטה</option>
             <option>צ'יטה עם מדבקה</option>
             <option>שליח פרטי</option>
             <option>נקודת איסוף</option>
@@ -92,7 +89,7 @@
           <button class="btn btn-outline-secondary" id="resetFilters">איפוס</button>
         </div>
         <div class="col-md-3">
-          <button class="btn btn-primary w-100" onclick="updateTags()">סנן</button>
+          <button class="btn btn-primary w-100" onclick="applyFilters()">סנן</button>
         </div>
       </div>
       <div id="filterTags" class="mt-3"></div>
@@ -104,7 +101,7 @@
     </div>
 
     <!-- טבלת הזמנות -->
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" id="ordersTable">
       <thead class="table-dark">
         <tr>
           <th><input type="checkbox" id="selectAll"></th>
@@ -120,69 +117,77 @@
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- 20 הזמנות דמו -->
-        <script>
-          const orders = Array.from({ length: 20 }, (_, i) => ({
-            id: 1001 + i,
-            date: '06/07/2025',
-            customer: `לקוח ${i + 1}`,
-            phone: `050-12345${(67 + i).toString().padStart(2, '0')}`,
-            platform: ['BOXMASTER', 'PRO-TOOLS', 'מועדון טוב', 'מחסני חשמל', 'הום סנטר', 'סופר-פארם'][i % 6],
-            quantity: (i % 5) + 1,
-            product: ['ARPO 5500 מצנן', 'אוהל לינה', 'גנרטור 3000W', 'שולחן פעילות', 'מטבח עץ'][i % 5],
-            status: 'הזמנה חדשה',
-            shipping: ['רגיל', 'חריג', 'נקודת איסוף', 'איסוף עצמי'][i % 4]
-          }));
-          const tbody = document.currentScript.parentElement;
-          orders.forEach(order => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td><input type="checkbox" class="order-checkbox"></td>
-              <td>${order.date}</td>
-              <td>${order.id}</td>
-              <td>${order.customer}</td>
-              <td>${order.phone}</td>
-              <td>${order.platform}</td>
-              <td>${order.quantity}</td>
-              <td>${order.product}</td>
-              <td><span class="badge bg-warning status">${order.status}</span></td>
-              <td><span class="badge bg-primary">${order.shipping}</span></td>
-              <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a> <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>
-            `;
-            tbody.appendChild(row);
-          });
-        </script>
+      <tbody id="ordersBody">
+        <!-- הזמנות דמו ייכנסו כאן -->
       </tbody>
     </table>
   </div>
 
   <script>
-    function updateTags() {
-      const tagContainer = document.getElementById('filterTags');
-      tagContainer.innerHTML = '';
+    const orders = [
+      { date: '06/07/2025', id: '1001', name: 'יוסי לוי', phone: '050-1234567', platform: 'BOXMASTER', quantity: 2, product: 'ARPO 5500 מצנן', status: 'הזמנה חדשה', shipping: "צ'יטה עם מדבקה" },
+      { date: '06/07/2025', id: '1002', name: 'נועה ישראלי', phone: '052-9876543', platform: 'PRO-TOOLS', quantity: 1, product: 'אוהל 3X3', status: 'הזמנה חדשה', shipping: 'שליח פרטי' },
+      { date: '06/07/2025', id: '1003', name: 'רן קציר', phone: '054-5678899', platform: 'מועדון טוב', quantity: 3, product: 'גנרטור 2500W', status: 'בטיפול', shipping: 'חריג' },
+      // ... המשך עד 20 רשומות ...
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = '';
+      orders.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><input type="checkbox" class="order-checkbox"></td>
+          <td>${order.date}</td>
+          <td>${order.id}</td>
+          <td>${order.name}</td>
+          <td>${order.phone}</td>
+          <td>${order.platform}</td>
+          <td>${order.quantity}</td>
+          <td>${order.product}</td>
+          <td><span class="badge bg-warning status">${order.status}</span></td>
+          <td><span class="badge bg-primary">${order.shipping}</span></td>
+          <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
+              <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    function applyFilters() {
+      const name = document.getElementById('searchInput').value.trim();
       const status = Array.from(document.getElementById('statusSelect').selectedOptions).map(o => o.value);
       const platform = document.getElementById('platformSelect').value;
       const shipping = document.getElementById('shippingSelect').value;
-      const dateFrom = document.getElementById('dateFrom').value;
-      const dateTo = document.getElementById('dateTo').value;
-      const search = document.getElementById('searchInput').value;
 
-      status.forEach(s => addTag(s));
-      if (platform && platform !== 'בחר פלטפורמה') addTag(platform);
-      if (shipping && shipping !== 'בחר שיטה') addTag(shipping);
-      if (dateFrom) addTag(`מ: ${dateFrom}`);
-      if (dateTo) addTag(`עד: ${dateTo}`);
-      if (search) addTag(`חיפוש: ${search}`);
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = '';
+      orders.filter(order => {
+        return (!name || Object.values(order).some(val => val.includes(name))) &&
+               (!platform || order.platform === platform) &&
+               (!shipping || order.shipping === shipping) &&
+               (status.length === 0 || status.includes(order.status));
+      }).forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><input type="checkbox" class="order-checkbox"></td>
+          <td>${order.date}</td>
+          <td>${order.id}</td>
+          <td>${order.name}</td>
+          <td>${order.phone}</td>
+          <td>${order.platform}</td>
+          <td>${order.quantity}</td>
+          <td>${order.product}</td>
+          <td><span class="badge bg-warning status">${order.status}</span></td>
+          <td><span class="badge bg-primary">${order.shipping}</span></td>
+          <td><a href="order-details.html?order=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
+              <button class="btn btn-outline-secondary btn-sm">ערוך</button></td>`;
+        tbody.appendChild(row);
+      });
     }
 
-    function addTag(text) {
-      const tagContainer = document.getElementById('filterTags');
-      const tag = document.createElement('span');
-      tag.className = 'tag';
-      tag.innerHTML = `<button onclick="this.parentElement.remove()">×</button>${text}`;
-      tagContainer.appendChild(tag);
-    }
+    document.getElementById('selectAll').addEventListener('change', function () {
+      document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = this.checked);
+    });
 
     document.getElementById('resetFilters').addEventListener('click', function () {
       document.getElementById('dateFrom').value = '';
@@ -192,10 +197,7 @@
       document.getElementById('shippingSelect').selectedIndex = 0;
       document.getElementById('searchInput').value = '';
       document.getElementById('filterTags').innerHTML = '';
-    });
-
-    document.getElementById('selectAll').addEventListener('change', function () {
-      document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = this.checked);
+      renderTable();
     });
 
     function handleBulkAction() {
@@ -208,6 +210,9 @@
         statusSpan.classList.add('bg-success');
       });
     }
+
+    window.onload = renderTable;
   </script>
 </body>
+
 </html>
