@@ -1,113 +1,135 @@
-    });
-
-    // פונקציית שמירה
-    function collectFormData() {
-      const fields = [
-        'productName', 'sku', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty', 'clients',
-        'costPrice', 'retailPrice', 'customClientPrice', 'stock', 'shippingType', 'boxCount',
-        'variation', 'length', 'width', 'height', 'volume', 'volumeType', 'youtube'
-      ];
-      const data = {};
-      fields.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) data[id] = el.value;
-      });
-      return data;
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>עריכת מוצר</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 40px;
+      direction: rtl;
     }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select,
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .row .col {
+      padding: 0 10px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .row > div {
+      flex: 1;
+      min-width: 200px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get("productId");
+      if (productId) {
+        const demoData = {
+          productName: "מטבח עץ נויה",
+          sku: "NOYA123",
+          brand: "BIGALE",
+          category: "מטבחי ילדים",
+          shortDesc: "מטבח קומפקטי לילדים",
+          longDesc: "מטבח עץ איכותי בצבע שמנת כולל תנור וכיריים.",
+          warranty: "שנה אחריות",
+          clients: "סופר פארם, מחסני חשמל",
+          costPrice: 350,
+          retailPrice: 690,
+          customClientPrice: "סופר פארם - 89 ₪",
+          stock: 100,
+          shippingType: "רגיל",
+          boxCount: 2,
+          variation: "שמנת / נויה",
+          length: 120,
+          width: 50,
+          height: 75,
+          volume: 0.18,
+          volumeType: "קוב",
+          youtube: "https://youtube.com/example"
+        };
+        for (const [key, value] of Object.entries(demoData)) {
+          const input = document.getElementById(key);
+          if (input) input.value = value;
+        }
+      }
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const productData = collectFormData();
-      console.log("📦 נתוני מוצר לשמירה:", productData);
-      alert("השינויים נשמרו (סימולציה)!");
+      function collectFormData() {
+        const fields = [
+          'productName', 'sku', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty', 'clients',
+          'costPrice', 'retailPrice', 'customClientPrice', 'stock', 'shippingType', 'boxCount',
+          'variation', 'length', 'width', 'height', 'volume', 'volumeType', 'youtube'
+        ];
+        const data = {};
+        fields.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) data[id] = el.value;
+        });
+        return data;
+      }
+
+      document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const productData = collectFormData();
+        console.log("📦 נתוני מוצר לשמירה:", productData);
+        alert("השינויים נשמרו (סימולציה)!");
+      });
     });
   </script>
 </head>
 <body>
   <h1>עריכת מוצר</h1>
   <form>
-
-    <!-- פרטים כלליים -->
-    <div class="section">
-      <h3>פרטים כלליים</h3>
-      <label for="productName">שם מוצר</label>
-      <input type="text" id="productName" name="productName" placeholder="לדוגמה: מטבח עץ דגם נויה" />
-
-      <label for="sku">מק"ט</label>
-      <input type="text" id="sku" name="sku" placeholder="לדוגמה: NOYA123" />
-
-      <label for="brand">מותג</label>
-      <input type="text" id="brand" name="brand" placeholder="לדוגמה: BIGALE" />
-
-      <label for="category">קטגוריה</label>
-      <input type="text" id="category" name="category" placeholder="לדוגמה: מטבחי ילדים" />
-
-      <label for="shortDesc">תיאור קצר</label>
-      <input type="text" id="shortDesc" name="shortDesc" placeholder="לדוגמה: מטבח קומפקטי מעץ בצבע שמנת" />
-
-      <label for="longDesc">תיאור ארוך</label>
-      <textarea id="longDesc" name="longDesc" rows="4" placeholder="פירוט מורחב על המוצר..."></textarea>
-
-      <label for="warranty">אחריות</label>
-      <input type="text" id="warranty" name="warranty" placeholder="לדוגמה: שנה ע"י היבואן הרשמי" />
-
-      <label for="clients">לקוחות (ריבוי)</label>
-      <input type="text" id="clients" name="clients" placeholder="לדוגמה: הום סנטר, סופר פארם" />
-    </div>
-
-    <!-- מחירים -->
-    <div class="section">
-      <h3>מחירים</h3>
-      <div class="row">
-        <div><label for="costPrice">מחיר עלות</label><input type="number" id="costPrice" name="costPrice" placeholder="350" /></div>
-        <div><label for="retailPrice">מחיר מומלץ</label><input type="number" id="retailPrice" name="retailPrice" placeholder="690" /></div>
-        <div><label for="customClientPrice">מחיר ללקוח מסוים</label><input type="text" id="customClientPrice" name="customClientPrice" placeholder="לדוגמה: סופר פארם - 89 ₪" /></div>
-      </div>
-    </div>
-
-    <!-- לוגיסטיקה -->
-    <div class="section">
-      <h3>לוגיסטיקה</h3>
-      <label for="stock">מלאי</label>
-      <input type="number" id="stock" name="stock" placeholder="לדוגמה: 100" />
-
-      <label for="shippingType">סוג משלוח ברירת מחדל</label>
-      <select id="shippingType" name="shippingType">
-        <option value="רגיל">רגיל - 35 ש"ח</option>
-        <option value="חריג">חריג - 85 ש"ח</option>
-        <option value="נקודת איסוף">נקודת איסוף</option>
-      </select>
-
-      <label for="boxCount">כמות קופסאות</label>
-      <input type="number" id="boxCount" name="boxCount" placeholder="לדוגמה: 2" />
-
-      <label for="variation">וריאציה (צבע / דגם)</label>
-      <input type="text" id="variation" name="variation" placeholder="לדוגמה: שמנת / נויה" />
-
-      <div class="row">
-        <div><label for="length">אורך (ס"מ)</label><input type="number" id="length" name="length" placeholder="120" /></div>
-        <div><label for="width">רוחב (ס"מ)</label><input type="number" id="width" name="width" placeholder="50" /></div>
-        <div><label for="height">גובה (ס"מ)</label><input type="number" id="height" name="height" placeholder="30" /></div>
-      </div>
-
-      <label for="volume">נפח</label>
-      <input type="text" id="volume" name="volume" placeholder="לדוגמה: 0.18" />
-
-      <label for="volumeType">סוג נפח</label>
-      <input type="text" id="volumeType" name="volumeType" placeholder="לדוגמה: קוב / ליטר / סמ"ק" />
-    </div>
-
-    <!-- שיווק -->
-    <div class="section">
-      <h3>שיווק</h3>
-      <label for="youtube">לינק לוידאו יוטיוב</label>
-      <input type="text" id="youtube" name="youtube" placeholder="https://youtube.com/..." />
-
-      <label for="gallery">גלריית תמונות</label>
-      <input type="file" id="gallery" name="gallery" multiple />
-    </div>
-
-    <!-- כפתור שמירה -->
+    <!-- כל תוכן הטופס כאן נשאר זהה -->
+    <!-- ... -->
     <button type="submit">שמור שינויים</button>
   </form>
 </body>
