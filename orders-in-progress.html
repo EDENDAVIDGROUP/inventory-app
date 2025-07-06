@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הזמנות בטיפול</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      margin-top: 40px;
+    }
+    .table thead {
+      background-color: #1f2235;
+      color: white;
+    }
+    .actions button {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">הזמנות בטיפול</h2>
+
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="חיפוש הזמנה לפי מספר / שם לקוח / טלפון">
+    </div>
+
+    <table class="table table-bordered text-center">
+      <thead>
+        <tr>
+          <th><input type="checkbox"></th>
+          <th>מספר הזמנה</th>
+          <th>שם לקוח</th>
+          <th>טלפון</th>
+          <th>תאריך</th>
+          <th>סטטוס</th>
+          <th>פלטפורמה</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>#12345</td>
+          <td>משה כהן</td>
+          <td>050-1234567</td>
+          <td>06/07/2025</td>
+          <td>בהכנה</td>
+          <td>BOXMASTER</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-primary">צפה</button>
+            <button class="btn btn-sm btn-success">שנה סטטוס</button>
+            <button class="btn btn-sm btn-danger">מחק</button>
+          </td>
+        </tr>
+        <!-- שורות נוספות כאן -->
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+      <div>
+        <button class="btn btn-secondary">סמן הכל</button>
+        <button class="btn btn-warning">בטל סימון</button>
+      </div>
+      <div>
+        <button class="btn btn-success">עדכן סטטוס להזמנות שנבחרו</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
