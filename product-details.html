@@ -138,7 +138,6 @@
         alert("המוצר נשמר בהצלחה!");
         window.location.href = 'products.html';
       });
-      });
     });
   </script>
 </head>
@@ -221,11 +220,10 @@
       <input type="file" id="gallery" name="gallery" multiple />
     </div>
 
-    <!-- כפתור שמירה -->
-    <button type="submit">שמור שינויים</button>
-      <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 30px;">
+    <!-- כפתורי פעולה -->
+    <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 30px;">
       <button type="submit">שמור שינויים</button>
-      <button type="button" onclick="window.history.back()">חזרה לדף קודם</button>
+      <button type="button" onclick="window.location.href='products.html'">חזרה לדף מוצרים</button>
       <button type="button" onclick="window.location.href='index.html'">מסך הבית</button>
     </div>
   </form>
