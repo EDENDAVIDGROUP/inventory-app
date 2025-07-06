@@ -67,59 +67,58 @@
     button:hover {
       background-color: #0056b3;
     }
+    .hint {
+      color: red;
+      font-size: 12px;
+      display: inline-block;
+      margin-right: 10px;
+    }
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const params = new URLSearchParams(window.location.search);
       const productId = params.get("productId");
       if (productId) {
-        const demoData = {
-          productName: "מטבח עץ נויה",
-          sku: "NOYA123",
-          brand: "BIGALE",
-          category: "מטבחי ילדים",
-          shortDesc: "מטבח קומפקטי לילדים",
-          longDesc: "מטבח עץ איכותי בצבע שמנת כולל תנור וכיריים.",
-          warranty: "שנה אחריות",
-          costPrice: 350,
-          retailPrice: 690,
-          stock: 100,
-          shippingType: "רגיל",
-          boxCount: 2,
-          variation: "שמנת / נויה",
-          length: 120,
-          width: 50,
-          height: 75,
-          volume: 0.18,
-          volumeType: "קוב",
-          youtube: "https://youtube.com/example"
-        };
-        for (const [key, value] of Object.entries(demoData)) {
-          const input = document.getElementById(key);
-          if (input) input.value = value;
+        const demoData = JSON.parse(localStorage.getItem('products') || '[]').find(p => p.sku === productId);
+        if (demoData) {
+          for (const [key, value] of Object.entries(demoData)) {
+            const input = document.getElementById(key);
+            if (input) input.value = value;
+          }
         }
       }
 
       function collectFormData() {
+        const requiredFields = ['productName', 'sku', 'barcode', 'brand', 'category', 'shortDesc', 'warranty', 'retailPrice', 'stock'];
         const fields = [
-          'productName', 'sku', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty',
+          'productName', 'sku', 'barcode', 'brand', 'category', 'shortDesc', 'longDesc', 'warranty',
           'costPrice', 'retailPrice', 'stock', 'shippingType', 'boxCount',
           'variation', 'length', 'width', 'height', 'volume', 'volumeType', 'youtube'
         ];
         const data = {};
-        fields.forEach(id => {
+        for (const id of fields) {
           const el = document.getElementById(id);
-          if (el) data[id] = el.value;
-        });
+          if (requiredFields.includes(id) && (!el || !el.value.trim())) {
+            alert("נא למלא את כל שדות החובה");
+            el.focus();
+            return null;
+          }
+          data[id] = el ? el.value : '';
+        }
+        const gallery = document.getElementById('gallery');
+        if (!gallery || gallery.files.length === 0) {
+          alert("יש להוסיף לפחות תמונה אחת לגלריה");
+          return null;
+        }
         return data;
       }
 
       document.querySelector('form').addEventListener('submit', function (e) {
         e.preventDefault();
         const productData = collectFormData();
+        if (!productData) return;
 
         let products = JSON.parse(localStorage.getItem('products') || '[]');
-        const params = new URLSearchParams(window.location.search);
         const productId = params.get("productId");
 
         if (productId) {
@@ -134,7 +133,6 @@
         }
 
         localStorage.setItem('products', JSON.stringify(products));
-        console.log("📦 מוצר עודכן/נוסף ב-localStorage:", productData);
         alert("המוצר נשמר בהצלחה!");
         window.location.href = 'products.html';
       });
@@ -144,48 +142,49 @@
 <body>
   <h1>עריכת מוצר</h1>
   <form>
-    <!-- פרטים כלליים -->
     <div class="section">
       <h3>פרטים כלליים</h3>
-      <label for="productName">שם מוצר</label>
+      <label for="productName">שם מוצר *</label>
       <input type="text" id="productName" name="productName" />
 
-      <label for="sku">מק"ט</label>
+      <label for="sku">מק"ט *</label>
       <input type="text" id="sku" name="sku" />
 
-      <label for="brand">מותג</label>
+      <label for="barcode">ברקוד *</label>
+      <input type="text" id="barcode" name="barcode" />
+
+      <label for="brand">מותג *</label>
       <input type="text" id="brand" name="brand" />
 
-      <label for="category">קטגוריה</label>
+      <label for="category">קטגוריה *</label>
       <input type="text" id="category" name="category" />
 
-      <label for="shortDesc">תיאור קצר</label>
+      <label for="shortDesc">תיאור קצר *</label>
       <input type="text" id="shortDesc" name="shortDesc" />
 
       <label for="longDesc">תיאור ארוך</label>
       <textarea id="longDesc" name="longDesc" rows="4"></textarea>
 
-      <label for="warranty">אחריות</label>
+      <label for="warranty">אחריות *</label>
       <input type="text" id="warranty" name="warranty" />
     </div>
 
-    <!-- מחירים -->
     <div class="section">
       <h3>מחירים</h3>
       <div class="row">
-        <div><label for="costPrice">מחיר עלות</label><input type="number" id="costPrice" name="costPrice" /></div>
-        <div><label for="retailPrice">מחיר מומלץ</label><input type="number" id="retailPrice" name="retailPrice" /></div>
+        <div><label for="costPrice">מחיר עלות <span class="hint">שדה פנימי - יעזור לדוחות</span></label><input type="number" id="costPrice" name="costPrice" /></div>
+        <div><label for="retailPrice">מחיר מומלץ לפרסום *</label><input type="number" id="retailPrice" name="retailPrice" /></div>
       </div>
     </div>
 
-    <!-- לוגיסטיקה -->
     <div class="section">
       <h3>לוגיסטיקה</h3>
-      <label for="stock">מלאי</label>
+      <label for="stock">מלאי *</label>
       <input type="number" id="stock" name="stock" />
 
-      <label for="shippingType">סוג משלוח</label>
+      <label for="shippingType">סוג משלוח <span class="hint">(יעזור למערכת לעבוד אוטומטית)</span></label>
       <select id="shippingType" name="shippingType">
+        <option value="">בחר סוג משלוח</option>
         <option value="רגיל">רגיל - 35 ש"ח</option>
         <option value="חריג">חריג - 85 ש"ח</option>
         <option value="נקודת איסוף">נקודת איסוף - 10 ש"ח</option>
@@ -210,17 +209,15 @@
       <input type="text" id="volumeType" name="volumeType" />
     </div>
 
-    <!-- שיווק -->
     <div class="section">
       <h3>שיווק</h3>
       <label for="youtube">לינק לוידאו יוטיוב</label>
       <input type="text" id="youtube" name="youtube" />
 
-      <label for="gallery">גלריית תמונות</label>
+      <label for="gallery">גלריית תמונות *</label>
       <input type="file" id="gallery" name="gallery" multiple />
     </div>
 
-    <!-- כפתורי פעולה -->
     <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 30px;">
       <button type="submit">שמור שינויים</button>
       <button type="button" onclick="window.location.href='products.html'">חזרה לדף מוצרים</button>
