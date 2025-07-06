@@ -12,10 +12,6 @@
       direction: rtl;
       padding: 30px;
     }
-    .search-bar, .filter-bar {
-      max-width: 500px;
-      margin: 0 auto 15px;
-    }
     .order-table th, .order-table td {
       vertical-align: middle;
       text-align: center;
@@ -37,19 +33,70 @@
       background-color: #eef;
       text-align: center;
     }
+    .filter-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .filter-section .form-control,
+    .filter-section .form-select {
+      margin-bottom: 10px;
+    }
+    .filter-actions button {
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2 class="text-center mb-4">orders-history</h2>
 
-    <div class="search-bar">
-      <input type="text" class="form-control" id="searchInput" placeholder="חיפוש לפי שם לקוח, טלפון או מספר הזמנה">
-    </div>
-
-    <div class="filter-bar form-check">
-      <input type="checkbox" class="form-check-input" id="dateFilter">
-      <label class="form-check-label" for="dateFilter">הצג הזמנות מה־24 שעות האחרונות בלבד</label>
+    <div class="filter-section">
+      <form class="row g-2 align-items-center">
+        <div class="col-md-2">
+          <label class="form-label">תאריך</label>
+          <input type="date" class="form-control" id="fromDate">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">עד תאריך</label>
+          <input type="date" class="form-control" id="toDate">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">סטטוס הזמנה</label>
+          <select class="form-select" multiple id="statusFilter">
+            <option>הזמנה חדשה</option>
+            <option>בטיפול</option>
+            <option>נשלחה</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">פלטפורמה</label>
+          <select class="form-select" id="platformFilter">
+            <option selected>בחר פלטפורמה</option>
+            <option>BOXMASTER</option>
+            <option>מועדון טוב</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">שיטת שילוח</label>
+          <select class="form-select" id="shippingFilter">
+            <option selected>בחר שיטה</option>
+            <option>רגיל</option>
+            <option>חריג</option>
+            <option>Pickup point</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">חיפוש חופשי</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון, עיר...">
+        </div>
+        <div class="col-md-12 text-end filter-actions">
+          <button type="button" class="btn btn-primary">סנן</button>
+          <button type="reset" class="btn btn-outline-secondary">איפוס</button>
+        </div>
+      </form>
     </div>
 
     <table class="table table-bordered order-table bg-white" id="ordersTable">
@@ -91,42 +138,14 @@
   </div>
 
   <script>
-    const searchInput = document.getElementById('searchInput');
-    const dateFilter = document.getElementById('dateFilter');
-    const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
-
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      Array.from(ordersTable.rows).forEach(row => {
-        const rowText = row.innerText.toLowerCase();
-        row.style.display = rowText.includes(query) ? '' : 'none';
-      });
-    });
-
-    dateFilter.addEventListener('change', () => {
-      const now = new Date();
-      Array.from(ordersTable.rows).forEach(row => {
-        const dateAttr = row.getAttribute('data-date');
-        const orderDate = new Date(dateAttr);
-        const diffHours = (now - orderDate) / (1000 * 60 * 60);
-        row.style.display = dateFilter.checked ? (diffHours <= 24 ? '' : 'none') : '';
-      });
-    });
-
     function makeEditable(cell) {
       if (cell.querySelector('input')) return;
       const oldValue = cell.innerText;
       const input = document.createElement('input');
       input.value = oldValue;
       input.className = 'edit-input';
-      input.onblur = () => {
-        cell.innerText = input.value;
-      };
-      input.onkeydown = e => {
-        if (e.key === 'Enter') {
-          input.blur();
-        }
-      };
+      input.onblur = () => { cell.innerText = input.value; };
+      input.onkeydown = e => { if (e.key === 'Enter') input.blur(); };
       cell.innerText = '';
       cell.appendChild(input);
       input.focus();
