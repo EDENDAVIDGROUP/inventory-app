@@ -128,8 +128,87 @@
 <body>
   <h1>עריכת מוצר</h1>
   <form>
-    <!-- כל תוכן הטופס כאן נשאר זהה -->
-    <!-- ... -->
+    <!-- פרטים כלליים -->
+    <div class="section">
+      <h3>פרטים כלליים</h3>
+      <label for="productName">שם מוצר</label>
+      <input type="text" id="productName" name="productName" />
+
+      <label for="sku">מק"ט</label>
+      <input type="text" id="sku" name="sku" />
+
+      <label for="brand">מותג</label>
+      <input type="text" id="brand" name="brand" />
+
+      <label for="category">קטגוריה</label>
+      <input type="text" id="category" name="category" />
+
+      <label for="shortDesc">תיאור קצר</label>
+      <input type="text" id="shortDesc" name="shortDesc" />
+
+      <label for="longDesc">תיאור ארוך</label>
+      <textarea id="longDesc" name="longDesc" rows="4"></textarea>
+
+      <label for="warranty">אחריות</label>
+      <input type="text" id="warranty" name="warranty" />
+
+      <label for="clients">לקוחות</label>
+      <input type="text" id="clients" name="clients" />
+    </div>
+
+    <!-- מחירים -->
+    <div class="section">
+      <h3>מחירים</h3>
+      <div class="row">
+        <div><label for="costPrice">מחיר עלות</label><input type="number" id="costPrice" name="costPrice" /></div>
+        <div><label for="retailPrice">מחיר מומלץ</label><input type="number" id="retailPrice" name="retailPrice" /></div>
+        <div><label for="customClientPrice">מחיר ללקוח מסוים</label><input type="text" id="customClientPrice" name="customClientPrice" /></div>
+      </div>
+    </div>
+
+    <!-- לוגיסטיקה -->
+    <div class="section">
+      <h3>לוגיסטיקה</h3>
+      <label for="stock">מלאי</label>
+      <input type="number" id="stock" name="stock" />
+
+      <label for="shippingType">סוג משלוח</label>
+      <select id="shippingType" name="shippingType">
+        <option value="רגיל">רגיל - 35 ש"ח</option>
+        <option value="חריג">חריג - 85 ש"ח</option>
+        <option value="נקודת איסוף">נקודת איסוף</option>
+      </select>
+
+      <label for="boxCount">כמות קופסאות</label>
+      <input type="number" id="boxCount" name="boxCount" />
+
+      <label for="variation">וריאציה</label>
+      <input type="text" id="variation" name="variation" />
+
+      <div class="row">
+        <div><label for="length">אורך (ס"מ)</label><input type="number" id="length" name="length" /></div>
+        <div><label for="width">רוחב (ס"מ)</label><input type="number" id="width" name="width" /></div>
+        <div><label for="height">גובה (ס"מ)</label><input type="number" id="height" name="height" /></div>
+      </div>
+
+      <label for="volume">נפח</label>
+      <input type="text" id="volume" name="volume" />
+
+      <label for="volumeType">סוג נפח</label>
+      <input type="text" id="volumeType" name="volumeType" />
+    </div>
+
+    <!-- שיווק -->
+    <div class="section">
+      <h3>שיווק</h3>
+      <label for="youtube">לינק לוידאו יוטיוב</label>
+      <input type="text" id="youtube" name="youtube" />
+
+      <label for="gallery">גלריית תמונות</label>
+      <input type="file" id="gallery" name="gallery" multiple />
+    </div>
+
+    <!-- כפתור שמירה -->
     <button type="submit">שמור שינויים</button>
   </form>
 </body>
