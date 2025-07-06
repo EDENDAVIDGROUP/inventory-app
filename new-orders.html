@@ -113,7 +113,28 @@
   </div>
 
   <script>
-    const orders = JSON.parse(localStorage.getItem('importedOrders')) || [];
+    const demoOrders = Array.from({ length: 20 }, (_, i) => {
+      const cities = ['תל אביב', 'חיפה', 'ירושלים', 'באר שבע', 'אשדוד', 'נתניה', 'רחובות', 'הרצליה'];
+      const platforms = ['BOXMASTER', 'PRO-TOOLS', 'מועדון טוב'];
+      const products = ['מצנן ARPO 5500', 'אוהל 3x3', 'גנרטור 2500W', 'שולחן פעילות עץ'];
+      const shipping = ["צ'יטה עם מדבקה", 'נקודת איסוף', 'איסוף עצמי', 'חריג'];
+
+      return {
+        date: '06/07/2025',
+        id: 1001 + i,
+        name: `לקוח ${i + 1}`,
+        phone: `05${Math.floor(10000000 + Math.random() * 89999999)}`,
+        city: cities[i % cities.length],
+        platform: platforms[i % platforms.length],
+        quantity: 1 + (i % 3),
+        product: products[i % products.length],
+        status: 'הזמנה חדשה',
+        shipping: shipping[i % shipping.length],
+      };
+    });
+
+    const importedOrders = JSON.parse(localStorage.getItem('importedOrders')) || [];
+    const orders = [...demoOrders, ...importedOrders];
 
     function displayOrders(list) {
       const tbody = document.getElementById('ordersBody');
@@ -132,7 +153,7 @@
           <td>${order.quantity || ''}</td>
           <td>${order.product || ''}</td>
           <td><span class="badge bg-warning status">${order.status || 'הזמנה חדשה'}</span></td>
-          <td><span class="badge bg-primary">${order.shipping || 'רגיל'}</span></td>
+          <td><span class="badge bg-primary">${order.shipping || 'צ\'יטה עם מדבקה'}</span></td>
           <td>
             <a href="order-details.html?orderId=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
             <a href="edit-order.html?orderId=${order.id}" class="btn btn-outline-secondary btn-sm">ערוך</a>
@@ -149,8 +170,8 @@
       const shipping = document.getElementById('shippingFilter').value;
 
       const filtered = orders.filter(order => {
-        const searchText = `${order.id || ''} ${order.name || ''} ${order.phone || ''} ${order.city || ''}`.toLowerCase();
-        return (!search || searchText.includes(search)) &&
+        const text = `${order.id} ${order.name} ${order.phone} ${order.city}`.toLowerCase();
+        return (!search || text.includes(search)) &&
                (!platform || order.platform === platform) &&
                (!status || order.status === status) &&
                (!shipping || order.shipping === shipping);
