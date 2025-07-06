@@ -1,91 +1,109 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>היסטוריית הזמנות</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f9f9f9;
-      padding: 30px;
+      background-color: #f4f4f4;
       font-family: Arial, sans-serif;
+      direction: rtl;
+      padding: 30px;
     }
-
-    .search-bar {
-      margin-bottom: 20px;
+    .search-bar, .filter-bar {
+      max-width: 500px;
+      margin: 0 auto 15px;
     }
-
-    .order-card {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    .order-table th, .order-table td {
+      vertical-align: middle;
+      text-align: center;
     }
-
-    .status-internal {
+    .order-table .status-internal {
       font-weight: bold;
+      color: #0d6efd;
     }
-
-    .status-general {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      color: #fff;
-    }
-
-    .delivered {
-      background-color: #28a745;
-    }
-
-    .not-delivered {
-      background-color: #dc3545;
-    }
-
-    .pending {
-      background-color: #ffc107;
-      color: #000;
+    .order-table .status-external {
+      font-weight: bold;
+      color: #198754;
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-    <h2 class="mb-4 text-center">היסטוריית הזמנות (24 שעות אחרונות)</h2>
+    <h2 class="text-center mb-4">היסטוריית הזמנות</h2>
 
-    <input type="text" class="form-control search-bar" placeholder="חפש לפי שם לקוח / טלפון / מספר הזמנה">
-
-    <!-- דוגמה להזמנה -->
-    <div class="order-card">
-      <p><strong>שם לקוח:</strong> יוסי כהן</p>
-      <p><strong>טלפון:</strong> 050‑1234567</p>
-      <p><strong>סטטוס פנימי:</strong> איסוף עצמי</p>
-      <p><strong>סטטוס כללי:</strong> <span class="status-general delivered">נמסר</span></p>
-      <p><strong>מספר הזמנה:</strong> #10945</p>
-      <p><strong>פלטפורמה:</strong> מועדון טוב</p>
+    <div class="search-bar">
+      <input type="text" class="form-control" id="searchInput" placeholder="חיפוש לפי שם לקוח, טלפון או מספר הזמנה">
     </div>
 
-    <div class="order-card">
-      <p><strong>שם לקוח:</strong> דנה לוי</p>
-      <p><strong>טלפון:</strong> 052‑7654321</p>
-      <p><strong>סטטוס פנימי:</strong> יצא למשלוח</p>
-      <p><strong>סטטוס כללי:</strong> <span class="status-general pending">ממתין למסירה</span></p>
-      <p><strong>מספר הזמנה:</strong> #10946</p>
-      <p><strong>פלטפורמה:</strong> API</p>
+    <div class="filter-bar">
+      <label for="dateFilter" class="form-label">הצג הזמנות מה־24 שעות האחרונות בלבד</label>
+      <input type="checkbox" id="dateFilter" class="form-check-input">
     </div>
 
-    <div class="order-card">
-      <p><strong>שם לקוח:</strong> רועי אלמליח</p>
-      <p><strong>טלפון:</strong> 054‑3332211</p>
-      <p><strong>סטטוס פנימי:</strong> הזמנה שגויה</p>
-      <p><strong>סטטוס כללי:</strong> <span class="status-general not-delivered">לא נמסר</span></p>
-      <p><strong>מספר הזמנה:</strong> #10947</p>
-      <p><strong>פלטפורמה:</strong> הזנה ידנית</p>
-    </div>
+    <table class="table table-bordered order-table bg-white" id="ordersTable">
+      <thead class="table-dark">
+        <tr>
+          <th>מספר הזמנה</th>
+          <th>שם לקוח</th>
+          <th>טלפון</th>
+          <th>סטטוס פנימי</th>
+          <th>סטטוס כללי</th>
+          <th>פלטפורמה</th>
+          <th>תאריך הזמנה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-date="2025-07-05">
+          <td>#123456</td>
+          <td>ישראל כהן</td>
+          <td>050-1234567</td>
+          <td class="status-internal">יצא למשלוח</td>
+          <td class="status-external">נמסרה</td>
+          <td>BOXMASTER</td>
+          <td>05/07/2025</td>
+        </tr>
+        <tr data-date="2025-07-04">
+          <td>#123455</td>
+          <td>שרה לוי</td>
+          <td>052-7654321</td>
+          <td class="status-internal">איסוף עצמי</td>
+          <td class="status-external">בהמתנה</td>
+          <td>מועדון טוב</td>
+          <td>04/07/2025</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</body>
 
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const dateFilter = document.getElementById('dateFilter');
+    const ordersTable = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      Array.from(ordersTable.rows).forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+        row.style.display = rowText.includes(query) ? '' : 'none';
+      });
+    });
+
+    dateFilter.addEventListener('change', () => {
+      const now = new Date();
+      Array.from(ordersTable.rows).forEach(row => {
+        const dateAttr = row.getAttribute('data-date');
+        const orderDate = new Date(dateAttr);
+        const diffHours = (now - orderDate) / (1000 * 60 * 60);
+        if (dateFilter.checked) {
+          row.style.display = diffHours <= 24 ? '' : 'none';
+        } else {
+          row.style.display = '';
+        }
+      });
+    });
+  </script>
+</body>
 </html>
