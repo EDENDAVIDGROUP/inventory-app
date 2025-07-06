@@ -113,26 +113,37 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-date="2025-07-05">
-          <td>#123456</td>
-          <td>ישראל כהן</td>
-          <td class="editable" onclick="makeEditable(this)">050-1234567</td>
-          <td class="editable status-internal" onclick="makeEditable(this)">יצא למשלוח</td>
-          <td class="editable status-external" onclick="makeEditable(this)">נמסרה</td>
-          <td class="editable" onclick="makeEditable(this)">BOXMASTER</td>
-          <td>05/07/2025</td>
-          <td><a href="order-details.html?id=123456" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
-        </tr>
-        <tr data-date="2025-07-04">
-          <td>#123455</td>
-          <td>שרה לוי</td>
-          <td class="editable" onclick="makeEditable(this)">052-7654321</td>
-          <td class="editable status-internal" onclick="makeEditable(this)">איסוף עצמי</td>
-          <td class="editable status-external" onclick="makeEditable(this)">בהמתנה</td>
-          <td class="editable" onclick="makeEditable(this)">מועדון טוב</td>
-          <td>04/07/2025</td>
-          <td><a href="order-details.html?id=123455" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
-        </tr>
+        <!-- דמו הזמנות -->
+        <script>
+          const ordersTableBody = document.currentScript.parentElement;
+          const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה'];
+          const platforms = ['BOXMASTER', 'מועדון טוב'];
+          const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון'];
+
+          for (let i = 0; i < 20; i++) {
+            const date = new Date(2025, 6, 1 + i);
+            const formattedDate = date.toLocaleDateString('he-IL');
+            const id = `#1000${i}`;
+            const name = customers[i % customers.length];
+            const phone = `050-12${i}4567`;
+            const statusInternal = statuses[i % statuses.length];
+            const statusExternal = (i % 2 === 0) ? 'נמסרה' : 'בהמתנה';
+            const platform = platforms[i % platforms.length];
+
+            ordersTableBody.innerHTML += `
+              <tr>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td class="editable" onclick="makeEditable(this)">${phone}</td>
+                <td class="editable status-internal" onclick="makeEditable(this)">${statusInternal}</td>
+                <td class="editable status-external" onclick="makeEditable(this)">${statusExternal}</td>
+                <td class="editable" onclick="makeEditable(this)">${platform}</td>
+                <td>${formattedDate}</td>
+                <td><a href="order-details.html?id=${id}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
+              </tr>
+            `;
+          }
+        </script>
       </tbody>
     </table>
   </div>
@@ -150,6 +161,16 @@
       cell.appendChild(input);
       input.focus();
     }
+
+    // חיפוש חופשי
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#ordersTable tbody tr');
+      rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
   </script>
 </body>
 </html>
