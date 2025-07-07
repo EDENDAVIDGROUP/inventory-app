@@ -34,6 +34,7 @@
     <h2>רשימת לקוחות</h2>
     <div class="text-center mb-3">
       <a href="index.html" class="btn btn-outline-secondary">⬅ חזרה לדף הראשי</a>
+      <button id="exportCsv" class="btn btn-outline-success ms-2">ייצוא ל‑CSV</button>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -48,29 +49,16 @@
           <th>סוג אינטגרציה</th>
           <th>אחוז הנחה</th>
           <th>סוג מחיר</th>
+          <th>טלפון</th>
+          <th>אימייל</th>
+          <th>שם לחשבונית</th>
+          <th>ח.פ</th>
+          <th>כתובת</th>
           <th>פעולות</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>הום סנטר</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>אייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>מחסני חשמל</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>סופר פארם</td><td>API (Mirakl)</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>פי1000</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>לאסט פרייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>עלמא סחר</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>פייס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>שלך (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>טוב פלוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>שלך לגמלאי (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>לאומי בונוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>ויזה (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>קיאספי</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>צבר אקספרס</td><td>מחיר ידני (מייל)</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>דרור כלי עבודה</td><td>מחיר ידני (קובץ)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>חן ממליצה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>הייטק זון</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>כל בו אליה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <!-- שורות לקוחות יתווספו דינאמית -->
       </tbody>
     </table>
   </div>
@@ -79,38 +67,21 @@
   <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form>
+        <form id="clientForm">
           <div class="modal-header">
             <h5 class="modal-title" id="clientModalLabel">הוסף / ערוך לקוח</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="סגור"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-3">
-              <label for="clientName" class="form-label">שם לקוח</label>
-              <input type="text" class="form-control" id="clientName" required>
-            </div>
-            <div class="mb-3">
-              <label for="integrationType" class="form-label">סוג אינטגרציה</label>
-              <select class="form-select" id="integrationType" required>
-                <option value="">בחר</option>
-                <option>API</option>
-                <option>קובץ</option>
-                <option>מחיר ידני</option>
-                <option>מחיר ידני (מייל)</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="discount" class="form-label">אחוז הנחה</label>
-              <input type="number" class="form-control" id="discount" min="0" max="100">
-            </div>
-            <div class="mb-3">
-              <label for="priceType" class="form-label">סוג מחיר</label>
-              <select class="form-select" id="priceType" required>
-                <option value="">בחר</option>
-                <option>לפי אחוז</option>
-                <option>מחיר שנקבע מראש</option>
-              </select>
-            </div>
+            <div class="mb-3"><label class="form-label">שם לקוח</label><input type="text" class="form-control" id="clientName" required></div>
+            <div class="mb-3"><label class="form-label">סוג אינטגרציה</label><input type="text" class="form-control" id="integrationType" required></div>
+            <div class="mb-3"><label class="form-label">אחוז הנחה</label><input type="number" class="form-control" id="discount"></div>
+            <div class="mb-3"><label class="form-label">סוג מחיר</label><input type="text" class="form-control" id="priceType" required></div>
+            <div class="mb-3"><label class="form-label">טלפון</label><input type="text" class="form-control" id="phone"></div>
+            <div class="mb-3"><label class="form-label">אימייל</label><input type="email" class="form-control" id="email"></div>
+            <div class="mb-3"><label class="form-label">שם לחשבונית</label><input type="text" class="form-control" id="invoiceName"></div>
+            <div class="mb-3"><label class="form-label">ח.פ</label><input type="text" class="form-control" id="companyId"></div>
+            <div class="mb-3"><label class="form-label">כתובת</label><input type="text" class="form-control" id="address"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
@@ -123,6 +94,7 @@
 
   <script>
     const modal = new bootstrap.Modal(document.getElementById("clientModal"));
+    const form = document.getElementById("clientForm");
     let editedRow = null;
 
     document.getElementById("searchInput").addEventListener("keyup", function () {
@@ -134,75 +106,111 @@
       });
     });
 
-    document.querySelectorAll("#clientsTable tbody tr").forEach(row => {
-      createEditButton(row);
-      createDeleteButton(row);
-    });
-
     function createEditButton(row) {
+      const td = row.children[row.children.length - 1];
+      td.innerHTML = "";
+
+      const ordersLink = document.createElement("a");
+      ordersLink.href = `orders.html?client=${encodeURIComponent(row.children[0].textContent.trim())}`;
+      ordersLink.textContent = "הזמנות";
+      ordersLink.className = "btn btn-sm btn-warning me-1";
+      td.appendChild(ordersLink);
+
       const editBtn = document.createElement("button");
       editBtn.textContent = "עריכה";
-      editBtn.className = "btn btn-sm btn-primary me-2";
+      editBtn.className = "btn btn-sm btn-primary me-1";
       editBtn.addEventListener("click", () => {
         editedRow = row;
         const cells = row.children;
-        document.getElementById("clientModalLabel").textContent = "עריכת לקוח";
         document.getElementById("clientName").value = cells[0].textContent.trim();
         document.getElementById("integrationType").value = cells[1].textContent.trim();
         document.getElementById("discount").value = cells[2].textContent.replace("%", "").trim();
         document.getElementById("priceType").value = cells[3].textContent.trim();
+        document.getElementById("phone").value = cells[4].textContent.trim();
+        document.getElementById("email").value = cells[5].textContent.trim();
+        document.getElementById("invoiceName").value = cells[6].textContent.trim();
+        document.getElementById("companyId").value = cells[7].textContent.trim();
+        document.getElementById("address").value = cells[8].textContent.trim();
         modal.show();
       });
-      row.children[4].appendChild(editBtn);
-    }
+      td.appendChild(editBtn);
 
-    function createDeleteButton(row) {
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "מחיקה";
       deleteBtn.className = "btn btn-sm btn-danger";
       deleteBtn.addEventListener("click", () => {
-        if (confirm("האם אתה בטוח שברצונך למחוק לקוח זה?")) {
+        if (confirm("האם אתה בטוח שברצונך למחוק את הלקוח?")) {
           row.remove();
         }
       });
-      row.children[4].appendChild(deleteBtn);
+      td.appendChild(deleteBtn);
     }
 
-    document.querySelector("#clientModal form").addEventListener("submit", function (e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
-
       const name = document.getElementById("clientName").value.trim();
       const integration = document.getElementById("integrationType").value;
       const discount = document.getElementById("discount").value || "---";
       const priceType = document.getElementById("priceType").value;
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const invoiceName = document.getElementById("invoiceName").value.trim();
+      const companyId = document.getElementById("companyId").value.trim();
+      const address = document.getElementById("address").value.trim();
 
       if (!name || !integration || !priceType) {
-        alert("נא למלא את כל השדות");
+        alert("נא למלא את כל השדות החיוניים");
         return;
       }
 
       if (editedRow) {
-        editedRow.children[0].textContent = name;
-        editedRow.children[1].textContent = integration;
-        editedRow.children[2].textContent = discount + "%";
-        editedRow.children[3].textContent = priceType;
+        const cells = editedRow.children;
+        cells[0].textContent = name;
+        cells[1].textContent = integration;
+        cells[2].textContent = discount + "%";
+        cells[3].textContent = priceType;
+        cells[4].textContent = phone;
+        cells[5].textContent = email;
+        cells[6].textContent = invoiceName;
+        cells[7].textContent = companyId;
+        cells[8].textContent = address;
       } else {
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = `
+        const row = document.createElement("tr");
+        row.innerHTML = `
           <td>${name}</td>
           <td>${integration}</td>
           <td>${discount}%</td>
           <td>${priceType}</td>
-          <td></td>
-        `;
-        document.querySelector("#clientsTable tbody").appendChild(newRow);
-        createEditButton(newRow);
-        createDeleteButton(newRow);
+          <td>${phone}</td>
+          <td>${email}</td>
+          <td>${invoiceName}</td>
+          <td>${companyId}</td>
+          <td>${address}</td>
+          <td></td>`;
+        document.querySelector("#clientsTable tbody").appendChild(row);
+        createEditButton(row);
       }
-
-      this.reset();
+      form.reset();
       modal.hide();
       editedRow = null;
+    });
+
+    document.getElementById("exportCsv").addEventListener("click", function () {
+      const rows = document.querySelectorAll("#clientsTable tr");
+      let csv = "";
+      rows.forEach(row => {
+        const cols = row.querySelectorAll("td, th");
+        const rowData = Array.from(cols).map(col => '"' + col.innerText.replace(/"/g, '""') + '"');
+        csv += rowData.join(",") + "\n";
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "clients.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
   </script>
 </body>
