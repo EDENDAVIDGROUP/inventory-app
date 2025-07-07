@@ -42,6 +42,51 @@
     </div>
     <h2 class="text-center">הזמנות חדשות</h2>
 
+    <!-- כפתור יצירת הזמנה חדשה -->
+    <div class="mb-3 text-end">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#manualOrderModal">יצירת הזמנה חדשה</button>
+    </div>
+
+    <!-- Modal הזנת הזמנה ידנית -->
+    <div class="modal fade" id="manualOrderModal" tabindex="-1" aria-labelledby="manualOrderLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="manualOrderLabel">הזנת הזמנה חדשה</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="manualOrderForm">
+              <div class="mb-2"><input class="form-control" placeholder="שם לקוח" id="manualName" required></div>
+              <div class="mb-2"><input class="form-control" placeholder="טלפון" id="manualPhone" required></div>
+              <div class="mb-2"><input class="form-control" placeholder="עיר" id="manualCity" required></div>
+              <div class="mb-2"><input class="form-control" placeholder="מוצר" id="manualProduct" required></div>
+              <div class="mb-2"><input type="number" class="form-control" placeholder="כמות" id="manualQuantity" min="1" required></div>
+              <div class="mb-2">
+                <select class="form-select" id="manualPlatform">
+                  <option value="">בחר פלטפורמה</option>
+                  <option value="טלפוני">טלפוני</option>
+                  <option value="BOXMASTER">BOXMASTER</option>
+                  <option value="PRO-TOOLS">PRO-TOOLS</option>
+                  <option value="מועדון טוב">מועדון טוב</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <select class="form-select" id="manualShipping">
+                  <option value="">בחר שיטת שילוח</option>
+                  <option value="משלוח">משלוח</option>
+                  <option value="נקודת איסוף">נקודת איסוף</option>
+                  <option value="איסוף עצמי">איסוף עצמי</option>
+                  <option value="חריג">חריג</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">שמור הזמנה</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- סינון -->
     <div class="card p-3 mb-4">
       <div class="row g-3 align-items-end">
@@ -112,9 +157,7 @@
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody id="ordersBody">
-        <!-- יתווסף דינמית -->
-      </tbody>
+      <tbody id="ordersBody"></tbody>
     </table>
   </div>
 
@@ -146,20 +189,20 @@
       const tbody = document.getElementById('ordersBody');
       tbody.innerHTML = '';
 
-      list.forEach((order, i) => {
+      list.forEach(order => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td><input type="checkbox" class="order-checkbox" data-id="${order.id}"></td>
-          <td>${order.date || ''}</td>
-          <td>${order.id || ''}</td>
-          <td>${order.name || ''}</td>
-          <td>${order.phone || ''}</td>
-          <td>${order.city || ''}</td>
-          <td>${order.platform || ''}</td>
-          <td>${order.quantity || ''}</td>
-          <td>${order.product || ''}</td>
-          <td><span class="badge bg-warning status">${order.status || 'הזמנה חדשה'}</span></td>
-          <td><span class="badge bg-primary">${order.shipping || 'משלוח'}</span></td>
+          <td>${order.date}</td>
+          <td>${order.id}</td>
+          <td>${order.name}</td>
+          <td>${order.phone}</td>
+          <td>${order.city}</td>
+          <td>${order.platform}</td>
+          <td>${order.quantity}</td>
+          <td>${order.product}</td>
+          <td><span class="badge bg-warning status">${order.status}</span></td>
+          <td><span class="badge bg-primary">${order.shipping}</span></td>
           <td>
             <a href="order-details.html?orderId=${order.id}" class="btn btn-outline-info btn-sm">צפה</a>
             <a href="edit-order.html?orderId=${order.id}" class="btn btn-outline-secondary btn-sm">ערוך</a>
@@ -172,21 +215,19 @@
     function routeSelected(targetStatus) {
       const checkboxes = document.querySelectorAll('.order-checkbox:checked');
       const idsToRoute = Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
-
       const routedOrders = orders.filter(o => idsToRoute.includes(o.id));
       routedOrders.forEach(order => order.status = targetStatus);
 
-      // שמירה לקבוצה החדשה
       const storageKey = targetStatus === 'בטיפול' ? 'processingOrders'
                         : targetStatus === 'שגויה' ? 'errorOrders'
                         : targetStatus === 'למשלוח' ? 'shippingOrders'
                         : null;
+
       if (storageKey) {
         const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
         localStorage.setItem(storageKey, JSON.stringify([...existing, ...routedOrders]));
       }
 
-      // הסרה מהזמנות חדשות
       orders = orders.filter(o => !idsToRoute.includes(o.id));
       localStorage.setItem('importedOrders', JSON.stringify(orders));
       displayOrders(orders);
@@ -220,13 +261,35 @@
     document.getElementById('selectAll').addEventListener('change', function () {
       document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = this.checked);
     });
-
     document.getElementById('searchInput').addEventListener('input', applyFilters);
     document.getElementById('platformFilter').addEventListener('change', applyFilters);
     document.getElementById('statusFilter').addEventListener('change', applyFilters);
     document.getElementById('shippingFilter').addEventListener('change', applyFilters);
 
+    document.getElementById('manualOrderForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const newOrder = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('he-IL'),
+        name: document.getElementById('manualName').value,
+        phone: document.getElementById('manualPhone').value,
+        city: document.getElementById('manualCity').value,
+        platform: document.getElementById('manualPlatform').value || 'טלפוני',
+        quantity: parseInt(document.getElementById('manualQuantity').value),
+        product: document.getElementById('manualProduct').value,
+        status: 'הזמנה חדשה',
+        shipping: document.getElementById('manualShipping').value || 'משלוח'
+      };
+      orders.unshift(newOrder);
+      localStorage.setItem('importedOrders', JSON.stringify(orders));
+      displayOrders(orders);
+      document.getElementById('manualOrderForm').reset();
+      const modal = bootstrap.Modal.getInstance(document.getElementById('manualOrderModal'));
+      modal.hide();
+    });
+
     displayOrders(orders);
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
