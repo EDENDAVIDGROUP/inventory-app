@@ -36,13 +36,17 @@
     .filter-section .form-select {
       margin-bottom: 10px;
     }
-    .filter-actions button {
-      margin-left: 5px;
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: start;
+      margin-top: 10px;
     }
     .back-home {
       position: fixed;
       bottom: 20px;
       left: 20px;
+      z-index: 1000;
     }
   </style>
 </head>
@@ -75,12 +79,12 @@
           <label class="form-label">עד תאריך</label>
           <input type="date" class="form-control" id="toDate">
         </div>
-        <div class="col-12 text-end filter-actions">
-          <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
-          <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
-          <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
-        </div>
       </form>
+      <div class="filter-actions">
+        <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
+        <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
+        <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
+      </div>
     </div>
 
     <table class="table table-bordered order-table bg-white" id="ordersTable">
