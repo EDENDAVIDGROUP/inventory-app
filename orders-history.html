@@ -16,18 +16,10 @@
       vertical-align: middle;
       text-align: center;
     }
-    .order-table .status-internal {
-      font-weight: bold;
-      color: #0d6efd;
-    }
-    .order-table .status-external {
-      font-weight: bold;
-      color: #198754;
-    }
     .editable {
       cursor: pointer;
     }
-    .edit-input {
+    .edit-select {
       width: 100%;
       border: none;
       background-color: #eef;
@@ -45,7 +37,7 @@
       margin-bottom: 10px;
     }
     .filter-actions button {
-      margin-left: 10px;
+      margin-left: 5px;
     }
     .back-home {
       position: fixed;
@@ -75,18 +67,18 @@
             <option>סופר-פארם</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label class="form-label">תאריך</label>
           <input type="date" class="form-control" id="fromDate">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label class="form-label">עד תאריך</label>
           <input type="date" class="form-control" id="toDate">
         </div>
-        <div class="col-md-2 text-end filter-actions">
+        <div class="col-12 text-end filter-actions">
           <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
           <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
-          <button type="button" class="btn btn-success mt-2" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
+          <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
         </div>
       </form>
     </div>
@@ -97,8 +89,7 @@
           <th>מספר הזמנה</th>
           <th>שם לקוח</th>
           <th>טלפון</th>
-          <th>סטטוס פנימי</th>
-          <th>סטטוס כללי</th>
+          <th>סטטוס</th>
           <th>פלטפורמה</th>
           <th>תאריך הזמנה</th>
           <th>פעולות</th>
@@ -106,13 +97,16 @@
       </thead>
       <tbody id="ordersBody"></tbody>
     </table>
+
+    <div class="text-end">
+      <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
+    </div>
   </div>
 
   <a href="index.html" class="btn btn-secondary back-home">חזרה למסך הבית</a>
 
   <script>
-    const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה'];
-    const externalStatuses = ['נמסרה', 'בהמתנה'];
+    const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה', 'נמסרה', 'בהמתנה', 'הושלמה'];
     const platforms = ['BOXMASTER', 'מועדון טוב', 'מחסני חשמל', 'קונימבו', 'סופר-פארם'];
     const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון', 'משה פרץ', 'נועה קרני'];
 
@@ -124,47 +118,44 @@
       const orderId = `#20${i + 1}`;
       const customer = customers[i % customers.length];
       const phone = `050-1${i}34567`;
-      const statusInternal = statuses[i % statuses.length];
-      const statusExternal = externalStatuses[i % 2];
+      const status = statuses[i % statuses.length];
       const platform = platforms[i % platforms.length];
       const date = new Date();
       date.setDate(date.getDate() - (i + 30));
-      const formattedDate = date.toLocaleDateString('he-IL');
+      const formattedDate = date.toISOString().split('T')[0];
 
-      allOrders.push({ orderId, customer, phone, statusInternal, statusExternal, platform, formattedDate });
+      allOrders.push({ orderId, customer, phone, status, platform, formattedDate });
     }
 
     function renderOrders(orders) {
       filteredOrders = orders;
       tbody.innerHTML = '';
-      orders.forEach(({ orderId, customer, phone, statusInternal, statusExternal, platform, formattedDate }) => {
+      orders.forEach((order, index) => {
         tbody.innerHTML += `
         <tr>
-          <td>${orderId}</td>
-          <td>${customer}</td>
-          <td class="editable" onclick="makeEditable(this)">${phone}</td>
-          <td class="editable status-internal" onclick="makeEditable(this)">${statusInternal}</td>
-          <td class="editable status-external" onclick="makeEditable(this)">${statusExternal}</td>
-          <td class="editable" onclick="makeEditable(this)">${platform}</td>
-          <td>${formattedDate}</td>
-          <td><a href="order-details.html?id=${orderId}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
+          <td>${order.orderId}</td>
+          <td>${order.customer}</td>
+          <td><input class="edit-input" value="${order.phone}" onchange="updateOrder(${index}, 'phone', this.value)"></td>
+          <td>
+            <select class="edit-select" onchange="updateOrder(${index}, 'status', this.value)">
+              ${statuses.map(s => `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+          <td><input class="edit-input" value="${order.platform}" onchange="updateOrder(${index}, 'platform', this.value)"></td>
+          <td>${order.formattedDate}</td>
+          <td><a href="order-details.html?id=${order.orderId}" class="btn btn-sm btn-primary">צפייה / עריכה</a></td>
         </tr>`;
       });
     }
 
     renderOrders(allOrders);
 
-    function makeEditable(cell) {
-      if (cell.querySelector('input')) return;
-      const oldValue = cell.innerText;
-      const input = document.createElement('input');
-      input.value = oldValue;
-      input.className = 'edit-input';
-      input.onblur = () => { cell.innerText = input.value; };
-      input.onkeydown = e => { if (e.key === 'Enter') input.blur(); };
-      cell.innerText = '';
-      cell.appendChild(input);
-      input.focus();
+    function updateOrder(index, field, value) {
+      filteredOrders[index][field] = value;
+    }
+
+    function saveChanges() {
+      alert('השינויים נשמרו (סימולציה בלבד).');
     }
 
     document.getElementById('searchInput').addEventListener('input', function () {
@@ -189,10 +180,10 @@
 
     function exportFilteredToCSV(filename) {
       const rows = [
-        ['מספר הזמנה', 'שם לקוח', 'טלפון', 'סטטוס פנימי', 'סטטוס כללי', 'פלטפורמה', 'תאריך הזמנה']
+        ['מספר הזמנה', 'שם לקוח', 'טלפון', 'סטטוס', 'פלטפורמה', 'תאריך הזמנה']
       ];
       filteredOrders.forEach(order => {
-        rows.push([order.orderId, order.customer, order.phone, order.statusInternal, order.statusExternal, order.platform, order.formattedDate]);
+        rows.push([order.orderId, order.customer, order.phone, order.status, order.platform, order.formattedDate]);
       });
 
       const csv = rows.map(r => r.map(val => '"' + val.replace(/"/g, '""') + '"').join(",")).join("\n");
