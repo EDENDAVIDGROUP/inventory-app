@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>משיכת הזמנות מהמייל</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 40px;
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .email-orders-container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .table th, .table td {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="email-orders-container">
+    <h2 class="mb-4 text-center">📩 משיכת הזמנות אוטומטית מהמייל</h2>
+
+    <div class="d-flex justify-content-between mb-3">
+      <button class="btn btn-primary">🔄 בצע סימולציית משיכה</button>
+      <div>
+        <button class="btn btn-success me-2" onclick="sendToNewOrders()">📤 שלח להזמנות חדשות</button>
+        <button class="btn btn-warning" onclick="sendBulkOrders(150)">📥 הדמיית קובץ Excel עם 150 הזמנות</button>
+      </div>
+    </div>
+
+    <table class="table table-bordered table-striped text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>לקוח</th>
+          <th>סוג קובץ</th>
+          <th>מוצר</th>
+          <th>כמות</th>
+          <th>מחיר</th>
+          <th>כתובת</th>
+          <th>חשבונית</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>מחסני חשמל</td>
+          <td>PDF</td>
+          <td>שולחן פעילות 128</td>
+          <td>1</td>
+          <td>349 ₪</td>
+          <td>רחוב החשמל 4, פתח תקווה</td>
+          <td>הופקה אוטומטית</td>
+        </tr>
+        <tr>
+          <td>מועדון טוב</td>
+          <td>Excel</td>
+          <td>מצנן ARPO 5500</td>
+          <td>2</td>
+          <td>590 ₪</td>
+          <td>שדרות טוביהו 12, באר שבע</td>
+          <td>ממתינה לאיחוד</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="text-muted text-center mt-4">* סימולציה בלבד – בעתיד יתבצע משיכה אוטומטית מהמייל לפי לקוח והפקת חשבוניות בהתאם.</p>
+  </div>
+
+  <script>
+    function sendToNewOrders() {
+      const orders = [
+        {
+          id: "10001",
+          date: "7.7.25",
+          customer: "מחסני חשמל",
+          phone: "03-1234567",
+          total: 349,
+          platform: "PDF",
+          status: "חדש"
+        },
+        {
+          id: "10002",
+          date: "7.7.25",
+          customer: "מועדון טוב",
+          phone: "03-9876543",
+          total: 1180,
+          platform: "Excel",
+          status: "חדש"
+        }
+      ];
+
+      let existing = JSON.parse(localStorage.getItem("newOrders")) || [];
+      existing = existing.concat(orders);
+      localStorage.setItem("newOrders", JSON.stringify(existing));
+
+      alert("ההזמנות נשלחו להזמנות חדשות בהצלחה!");
+    }
+
+    function sendBulkOrders(count) {
+      const bulkOrders = [];
+      for (let i = 1; i <= count; i++) {
+        bulkOrders.push({
+          id: "ALMA-" + String(10000 + i),
+          date: "7.7.25",
+          customer: "עלמא סחר",
+          phone: "03-9999999",
+          total: Math.floor(Math.random() * 400 + 100),
+          platform: "Excel",
+          status: "חדש"
+        });
+      }
+      let existing = JSON.parse(localStorage.getItem("newOrders")) || [];
+      existing = existing.concat(bulkOrders);
+      localStorage.setItem("newOrders", JSON.stringify(existing));
+      alert(count + " הזמנות נשלחו להזמנות חדשות בהצלחה!");
+    }
+  </script>
+</body>
+
+</html>
