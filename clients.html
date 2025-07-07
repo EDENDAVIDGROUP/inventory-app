@@ -146,17 +146,28 @@
 
     clientForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      const name = document.getElementById("name").value;
+      const integration = document.getElementById("integration").value;
+      const priceType = document.getElementById("priceType").value;
+      const discount = priceType === "לפי אחוז" ? document.getElementById("discount").value : "";
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const invoiceName = document.getElementById("invoiceName").value;
+      const companyId = document.getElementById("companyId").value;
+      const address = document.getElementById("address").value;
+
       const client = {
-        name: name.value,
-        integration: integration.value,
-        priceType: priceType.value,
-        discount: priceType.value === "לפי אחוז" ? discount.value : "",
-        phone: phone.value,
-        email: email.value,
-        invoiceName: invoiceName.value,
-        companyId: companyId.value,
-        address: address.value,
+        name,
+        integration,
+        priceType,
+        discount,
+        phone,
+        email,
+        invoiceName,
+        companyId,
+        address
       };
+
       const index = document.getElementById("editIndex").value;
       if (index) {
         clients[index] = client;
@@ -181,15 +192,15 @@
 
     function editClient(index) {
       const client = clients[index];
-      name.value = client.name;
-      integration.value = client.integration;
-      priceType.value = client.priceType;
-      discount.value = client.discount;
-      phone.value = client.phone;
-      email.value = client.email;
-      invoiceName.value = client.invoiceName;
-      companyId.value = client.companyId;
-      address.value = client.address;
+      document.getElementById("name").value = client.name;
+      document.getElementById("integration").value = client.integration;
+      document.getElementById("priceType").value = client.priceType;
+      document.getElementById("discount").value = client.discount;
+      document.getElementById("phone").value = client.phone;
+      document.getElementById("email").value = client.email;
+      document.getElementById("invoiceName").value = client.invoiceName;
+      document.getElementById("companyId").value = client.companyId;
+      document.getElementById("address").value = client.address;
       toggleDiscountField();
       document.getElementById("editIndex").value = index;
       new bootstrap.Modal(document.getElementById("clientModal")).show();
