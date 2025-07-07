@@ -35,8 +35,21 @@
       justify-content: space-between;
       margin-bottom: 20px;
     }
-    .actions {
-      display: none;
+    @media print {
+      .top-actions,
+      .btn,
+      a {
+        display: none !important;
+      }
+      body {
+        padding: 0;
+        background-color: white;
+      }
+      .form-section {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+      }
     }
     .log-section {
       margin-top: 40px;
@@ -70,148 +83,146 @@
   </style>
 </head>
 <body>
-  <div class="form-section">
-    <div class="top-actions">
-      <a href="orders-history.html" class="btn btn-outline-dark">חזרה להיסטוריית הזמנות</a>
-      <div>
-        <button type="submit" form="orderForm" class="btn btn-primary">שמור שינויים</button>
-        <button type="button" class="btn btn-secondary" onclick="window.print()">הדפס הזמנה</button>
-      </div>
-    </div>
-
-    <h2>הזמנה מספר 1001</h2>
-    <form id="orderForm" onsubmit="calculateSummary(); return false;">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label>תאריך הזמנה</label>
-          <input type="text" class="form-control" value="06/07/2025" readonly>
-        </div>
-        <div class="col-md-6">
-          <label>שם לקוח</label>
-          <input type="text" class="form-control" value="יוסי לוי" readonly>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label>טלפון</label>
-          <input type="text" class="form-control" value="050-1234567" readonly>
-        </div>
-        <div class="col-md-6">
-          <label>כתובת</label>
-          <input type="text" class="form-control" value="רחוב הדוגמא 12, תל אביב" readonly>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label>אימייל</label>
-          <input type="email" class="form-control" value="yossi@example.com" readonly>
-        </div>
-        <div class="col-md-6">
-          <label>פלטפורמה</label>
-          <input type="text" class="form-control" value="BOXMASTER" readonly>
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label>סטטוס</label>
-          <select class="form-select">
-            <option>הזמנה חדשה</option>
-            <option>בטיפול</option>
-            <option selected>הושלמה</option>
-            <option>בוטלה</option>
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label>שיטת שילוח</label>
-          <input type="text" class="form-control" value="צ'יטה עם מדבקה" readonly>
-        </div>
-      </div>
-
-      <div class="mb-4">
-        <h5 class="mb-3">פרטי מוצרים</h5>
-        <table class="table table-bordered" id="products-table">
-          <thead>
-            <tr>
-              <th>מוצר</th>
-              <th>כמות</th>
-              <th>מחיר ליחידה</th>
-              <th>סה"כ</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label>מספר מעקב</label>
-          <input type="text" class="form-control" value="CH123456789IL" readonly>
-        </div>
-        <div class="col-md-6">
-          <label>קו חלוקה</label>
-          <input type="text" class="form-control" value="ת"א מרכז - 12" readonly>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label>הערות להזמנה</label>
-        <textarea class="form-control" rows="3" readonly>אין הערות</textarea>
-      </div>
-
-      <div class="summary-section">
-        <h5>סיכום הזמנה</h5>
-        <p id="total-products"></p>
-        <p id="total-shipping"></p>
-        <p id="total-sum"></p>
-      </div>
-    </form>
-
-    <div class="log-section mt-5">
-      <h5>לוג פעילות</h5>
-      <div class="log-entry">06/07/2025 10:01 - ההזמנה נוצרה במערכת.</div>
-      <div class="log-entry">06/07/2025 10:05 - עודכנו פרטי לקוח.</div>
-      <div class="log-entry">06/07/2025 11:00 - שודר לצ'יטה בהצלחה. מספר מעקב: CH123456789IL</div>
-      <div class="log-entry">סטטוס סופי: נמסר ללקוח | שליח: צ'יטה</div>
+<div class="form-section">
+  <div class="top-actions">
+    <a href="orders-history.html" class="btn btn-outline-dark">חזרה להיסטוריית הזמנות</a>
+    <div>
+      <button type="submit" form="orderForm" class="btn btn-primary">שמור שינויים</button>
+      <button type="button" class="btn btn-secondary" onclick="window.print()">הדפס הזמנה</button>
     </div>
   </div>
 
-  <script>
-    const products = [
-      { name: "מצנן ARPO 5500", qty: 2, price: 690 },
-      { name: "אוהל 3x3", qty: 1, price: 850 }
-    ];
-    const shippingPerUnit = 35;
+  <h2>הזמנה מספר 1001</h2>
+  <form id="orderForm" onsubmit="calculateSummary(); return false;">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>תאריך הזמנה</label>
+        <input type="text" class="form-control" value="06/07/2025" readonly>
+      </div>
+      <div class="col-md-6">
+        <label>שם לקוח</label>
+        <input type="text" class="form-control" value="יוסי לוי" readonly>
+      </div>
+    </div>
 
-    function calculateSummary() {
-      const tbody = document.querySelector("#products-table tbody");
-      tbody.innerHTML = "";
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>טלפון</label>
+        <input type="text" class="form-control" value="050-1234567" readonly>
+      </div>
+      <div class="col-md-6">
+        <label>כתובת</label>
+        <input type="text" class="form-control" value="רחוב הדוגמא 12, תל אביב" readonly>
+      </div>
+    </div>
 
-      let totalProducts = 0;
-      let totalShipping = 0;
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>אימייל</label>
+        <input type="email" class="form-control" value="yossi@example.com" readonly>
+      </div>
+      <div class="col-md-6">
+        <label>פלטפורמה</label>
+        <input type="text" class="form-control" value="BOXMASTER" readonly>
+      </div>
+    </div>
 
-      products.forEach(product => {
-        const row = document.createElement("tr");
-        const total = product.qty * product.price;
-        row.innerHTML = `
-          <td>${product.name}</td>
-          <td>${product.qty}</td>
-          <td>${product.price.toLocaleString()} ₪</td>
-          <td>${total.toLocaleString()} ₪</td>
-        `;
-        tbody.appendChild(row);
-        totalProducts += total;
-        totalShipping += product.qty * shippingPerUnit;
-      });
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>סטטוס</label>
+        <select class="form-select">
+          <option>הזמנה חדשה</option>
+          <option>בטיפול</option>
+          <option selected>הושלמה</option>
+          <option>בוטלה</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label>שיטת שילוח</label>
+        <input type="text" class="form-control" value="צ'יטה עם מדבקה" readonly>
+      </div>
+    </div>
 
-      document.getElementById("total-products").innerHTML = `סה"כ מוצרים: <strong>${totalProducts.toLocaleString()} ₪</strong>`;
-      document.getElementById("total-shipping").innerHTML = `משלוח: <strong>${shippingPerUnit.toLocaleString()} ₪</strong> × סה"כ יחידות = <strong>${totalShipping.toLocaleString()} ₪</strong>`;
-      document.getElementById("total-sum").innerHTML = `סה"כ לתשלום כולל: <strong>${(totalProducts + totalShipping).toLocaleString()} ₪</strong>`;
-    }
+    <div class="mb-4">
+      <h5 class="mb-3">פרטי מוצרים</h5>
+      <table class="table table-bordered" id="products-table">
+        <thead>
+          <tr>
+            <th>מוצר</th>
+            <th>כמות</th>
+            <th>מחיר ליחידה</th>
+            <th>סה"כ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-    window.onload = calculateSummary;
-  </script>
-</body>
-</html>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label>מספר מעקב</label>
+        <input type="text" class="form-control" value="CH123456789IL" readonly>
+      </div>
+      <div class="col-md-6">
+        <label>קו חלוקה</label>
+        <input type="text" class="form-control" value="ת"א מרכז - 12" readonly>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>הערות להזמנה</label>
+      <textarea class="form-control" rows="3" readonly>אין הערות</textarea>
+    </div>
+
+    <div class="summary-section">
+      <h5>סיכום הזמנה</h5>
+      <p id="total-products"></p>
+      <p id="total-shipping"></p>
+      <p id="total-sum"></p>
+    </div>
+  </form>
+
+  <div class="log-section mt-5">
+    <h5>לוג פעילות</h5>
+    <div class="log-entry">06/07/2025 10:01 - ההזמנה נוצרה במערכת.</div>
+    <div class="log-entry">06/07/2025 10:05 - עודכנו פרטי לקוח.</div>
+    <div class="log-entry">06/07/2025 11:00 - שודר לצ'יטה בהצלחה. מספר מעקב: CH123456789IL</div>
+    <div class="log-entry">סטטוס סופי: נמסר ללקוח | שליח: צ'יטה</div>
+  </div>
+</div>
+
+<script>
+  const products = [
+    { name: "מצנן ARPO 5500", qty: 2, price: 690 },
+    { name: "אוהל 3x3", qty: 1, price: 850 }
+  ];
+  const shippingPerUnit = 35;
+
+  function calculateSummary() {
+    const tbody = document.querySelector("#products-table tbody");
+    tbody.innerHTML = "";
+
+    let totalProducts = 0;
+    let totalShipping = 0;
+
+    products.forEach(product => {
+      const row = document.createElement("tr");
+      const total = product.qty * product.price;
+      row.innerHTML = `
+        <td>${product.name}</td>
+        <td>${product.qty}</td>
+        <td>${product.price.toLocaleString()} ₪</td>
+        <td>${total.toLocaleString()} ₪</td>
+      `;
+      tbody.appendChild(row);
+      totalProducts += total;
+      totalShipping += product.qty * shippingPerUnit;
+    });
+
+    document.getElementById("total-products").innerHTML = `סה"כ מוצרים: <strong>${totalProducts.toLocaleString()} ₪</strong>`;
+    document.getElementById("total-shipping").innerHTML = `משלוח: <strong>${shippingPerUnit.toLocaleString()} ₪</strong> × סה"כ יחידות = <strong>${totalShipping.toLocaleString()} ₪</strong>`;
+    document.getElementById("total-sum").innerHTML = `סה"כ לתשלום כולל: <strong>${(totalProducts + totalShipping).toLocaleString()} ₪</strong>`;
+  }
+
+  window.onload = calculateSummary;
+</script>
