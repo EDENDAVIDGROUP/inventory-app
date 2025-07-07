@@ -39,12 +39,16 @@
     .filter-actions {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
       justify-content: start;
+      align-items: center;
       margin-top: 10px;
     }
-    .fixed-return-top {
-      display: inline-block;
-      margin-top: 20px;
+    .filter-actions .btn {
+      white-space: nowrap;
+    }
+    .filter-actions .btn-warning {
+      margin-right: auto;
     }
   </style>
 </head>
@@ -82,9 +86,8 @@
         <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
         <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
         <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
-      </div>
-      <div class="fixed-return-top">
-        <a href="index.html" class="btn btn-secondary">חזרה</a>
+        <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
+        <a href="index.html" class="btn btn-secondary ms-auto">חזרה לדף הבית</a>
       </div>
     </div>
 
@@ -102,10 +105,6 @@
       </thead>
       <tbody id="ordersBody"></tbody>
     </table>
-
-    <div class="text-end">
-      <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
-    </div>
   </div>
 
   <script>
