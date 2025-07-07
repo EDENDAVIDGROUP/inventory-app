@@ -62,24 +62,63 @@
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- שורות לקוחות יתווספו דינאמית -->
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
 
-  <!-- מודל הוספה/עריכה -->
-  <!-- (ללא שינוי בחלק זה) -->
+  <!-- מודל הוספה / עריכה -->
+  <div class="modal fade" id="clientModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="clientForm">
+          <div class="modal-header">
+            <h5 class="modal-title">הוסף / ערוך לקוח</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="סגור"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editIndex">
+            <div class="mb-2"><label>שם לקוח</label><input id="name" class="form-control" required></div>
+            <div class="mb-2"><label>סוג אינטגרציה</label>
+              <select id="integration" class="form-select" required>
+                <option value="">בחר</option>
+                <option>API</option>
+                <option>קובץ</option>
+                <option>מחיר ידני</option>
+                <option>מחיר ידני (מייל)</option>
+              </select></div>
+            <div class="mb-2"><label>סוג מחיר</label>
+              <select id="priceType" class="form-select" onchange="toggleDiscountField()" required>
+                <option value="">בחר</option>
+                <option>לפי אחוז</option>
+                <option>מחיר שנקבע מראש</option>
+              </select></div>
+            <div class="mb-2" id="discountField" style="display:none">
+              <label>אחוז הנחה</label><input type="number" id="discount" class="form-control" min="0" max="100">
+            </div>
+            <div class="mb-2"><label>טלפון</label><input id="phone" class="form-control"></div>
+            <div class="mb-2"><label>אימייל</label><input id="email" class="form-control"></div>
+            <div class="mb-2"><label>שם לחשבונית</label><input id="invoiceName" class="form-control"></div>
+            <div class="mb-2"><label>ח.פ</label><input id="companyId" class="form-control"></div>
+            <div class="mb-2"><label>כתובת</label><input id="address" class="form-control"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
+            <button type="submit" class="btn btn-primary">שמור</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <script>
     function toggleDiscountField() {
       const priceType = document.getElementById("priceType").value;
-      const discountField = document.getElementById("discountField");
-      discountField.style.display = priceType === "לפי אחוז" ? "block" : "none";
+      document.getElementById("discountField").style.display = priceType === "לפי אחוז" ? "block" : "none";
     }
 
     const clientForm = document.getElementById("clientForm");
-    const clientsTable = document.getElementById("clientsTable").getElementsByTagName("tbody")[0];
+    const clientsTable = document.querySelector("#clientsTable tbody");
+    const searchInput = document.getElementById("searchInput");
     let clients = JSON.parse(localStorage.getItem("clients")) || [];
 
     function renderClients() {
@@ -100,13 +139,84 @@
             <button class='btn btn-sm btn-primary' onclick='viewClient(${index})'>צפייה</button>
             <button class='btn btn-sm btn-warning' onclick='editClient(${index})'>עריכה</button>
             <button class='btn btn-sm btn-danger' onclick='deleteClient(${index})'>מחיקה</button>
-          </td>
-        `;
+          </td>`;
         clientsTable.appendChild(row);
       });
     }
 
-    // שאר הקוד ללא שינוי (deleteClient, viewClient, editClient וכו')
+    clientForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const client = {
+        name: name.value,
+        integration: integration.value,
+        priceType: priceType.value,
+        discount: priceType.value === "לפי אחוז" ? discount.value : "",
+        phone: phone.value,
+        email: email.value,
+        invoiceName: invoiceName.value,
+        companyId: companyId.value,
+        address: address.value,
+      };
+      const index = document.getElementById("editIndex").value;
+      if (index) {
+        clients[index] = client;
+      } else {
+        clients.push(client);
+      }
+      localStorage.setItem("clients", JSON.stringify(clients));
+      renderClients();
+      clientForm.reset();
+      document.getElementById("editIndex").value = "";
+      toggleDiscountField();
+      bootstrap.Modal.getInstance(document.getElementById("clientModal")).hide();
+    });
+
+    function deleteClient(index) {
+      if (confirm("האם למחוק את הלקוח?")) {
+        clients.splice(index, 1);
+        localStorage.setItem("clients", JSON.stringify(clients));
+        renderClients();
+      }
+    }
+
+    function editClient(index) {
+      const client = clients[index];
+      name.value = client.name;
+      integration.value = client.integration;
+      priceType.value = client.priceType;
+      discount.value = client.discount;
+      phone.value = client.phone;
+      email.value = client.email;
+      invoiceName.value = client.invoiceName;
+      companyId.value = client.companyId;
+      address.value = client.address;
+      toggleDiscountField();
+      document.getElementById("editIndex").value = index;
+      new bootstrap.Modal(document.getElementById("clientModal")).show();
+    }
+
+    function viewClient(index) {
+      alert("כרטיס לקוח (צפייה) ייבנה בהמשך - כעת ניתן לערוך דרך טופס");
+    }
+
+    searchInput.addEventListener("keyup", function () {
+      const value = this.value.toLowerCase();
+      document.querySelectorAll("#clientsTable tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+      });
+    });
+
+    document.getElementById("exportCsv").addEventListener("click", function () {
+      let csv = "שם לקוח,סוג אינטגרציה,אחוז הנחה,סוג מחיר,טלפון,אימייל,שם לחשבונית,ח.פ,כתובת\n";
+      clients.forEach(c => {
+        csv += `${c.name},${c.integration},${c.discount || "---"},${c.priceType},${c.phone},${c.email},${c.invoiceName},${c.companyId},${c.address}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "clients.csv";
+      link.click();
+    });
 
     renderClients();
   </script>
