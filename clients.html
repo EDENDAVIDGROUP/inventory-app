@@ -132,16 +132,15 @@
       });
     });
 
-    // יצירת כפתורי עריכה קיימים
+    // יצירת כפתורי עריכה ומחיקה
     document.querySelectorAll("#clientsTable tbody tr").forEach(row => {
       createEditButton(row);
     });
 
-    // יצירת כפתור עריכה
     function createEditButton(row) {
       const editBtn = document.createElement("button");
       editBtn.textContent = "עריכה";
-      editBtn.className = "btn btn-sm btn-primary";
+      editBtn.className = "btn btn-sm btn-primary me-1";
       editBtn.addEventListener("click", () => {
         editedRow = row;
         const cells = row.children;
@@ -152,7 +151,19 @@
         document.getElementById("priceType").value = cells[3].textContent.trim();
         modal.show();
       });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "מחיקה";
+      deleteBtn.className = "btn btn-sm btn-danger";
+      deleteBtn.addEventListener("click", () => {
+        const clientName = row.children[0].textContent;
+        if (confirm(`האם אתה בטוח שברצונך למחוק את "${clientName}"?`)) {
+          row.remove();
+        }
+      });
+
       row.children[4].appendChild(editBtn);
+      row.children[4].appendChild(deleteBtn);
     }
 
     // הוספה / עדכון שורה
