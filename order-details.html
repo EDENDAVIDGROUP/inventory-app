@@ -92,54 +92,54 @@
     </div>
   </div>
 
-  <h2>הזמנה מספר 1001</h2>
+  <h2 id="order-title">הזמנה מספר</h2>
   <form id="orderForm" onsubmit="calculateSummary(); return false;">
     <div class="row mb-3">
       <div class="col-md-6">
         <label>תאריך הזמנה</label>
-        <input type="text" class="form-control" value="06/07/2025" readonly>
+        <input type="text" id="order-date" class="form-control" readonly>
       </div>
       <div class="col-md-6">
         <label>שם לקוח</label>
-        <input type="text" class="form-control" value="יוסי לוי" readonly>
+        <input type="text" id="order-name" class="form-control" readonly>
       </div>
     </div>
 
     <div class="row mb-3">
       <div class="col-md-6">
         <label>טלפון</label>
-        <input type="text" class="form-control" value="050-1234567" readonly>
+        <input type="text" id="order-phone" class="form-control" readonly>
       </div>
       <div class="col-md-6">
         <label>כתובת</label>
-        <input type="text" class="form-control" value="רחוב הדוגמא 12, תל אביב" readonly>
+        <input type="text" id="order-address" class="form-control" readonly>
       </div>
     </div>
 
     <div class="row mb-3">
       <div class="col-md-6">
         <label>אימייל</label>
-        <input type="email" class="form-control" value="yossi@example.com" readonly>
+        <input type="email" id="order-email" class="form-control" readonly>
       </div>
       <div class="col-md-6">
         <label>פלטפורמה</label>
-        <input type="text" class="form-control" value="BOXMASTER" readonly>
+        <input type="text" id="order-platform" class="form-control" readonly>
       </div>
     </div>
 
     <div class="row mb-3">
       <div class="col-md-6">
         <label>סטטוס</label>
-        <select class="form-select">
+        <select id="order-status" class="form-select">
           <option>הזמנה חדשה</option>
           <option>בטיפול</option>
-          <option selected>הושלמה</option>
+          <option>הושלמה</option>
           <option>בוטלה</option>
         </select>
       </div>
       <div class="col-md-6">
         <label>שיטת שילוח</label>
-        <input type="text" class="form-control" value="צ'יטה עם מדבקה" readonly>
+        <input type="text" id="order-shipping" class="form-control" readonly>
       </div>
     </div>
 
@@ -161,17 +161,17 @@
     <div class="row mb-3">
       <div class="col-md-6">
         <label>מספר מעקב</label>
-        <input type="text" class="form-control" value="CH123456789IL" readonly>
+        <input type="text" id="order-tracking" class="form-control" readonly>
       </div>
       <div class="col-md-6">
         <label>קו חלוקה</label>
-        <input type="text" class="form-control" value="ת"א מרכז - 12" readonly>
+        <input type="text" id="order-route" class="form-control" readonly>
       </div>
     </div>
 
     <div class="mb-3">
       <label>הערות להזמנה</label>
-      <textarea class="form-control" rows="3" readonly>אין הערות</textarea>
+      <textarea id="order-comments" class="form-control" rows="3" readonly></textarea>
     </div>
 
     <div class="summary-section">
@@ -192,22 +192,37 @@
 </div>
 
 <script>
-  const products = [
-    { name: "מצנן ARPO 5500", qty: 2, price: 690 },
-    { name: "אוהל 3x3", qty: 1, price: 850 }
-  ];
-  const shippingPerUnit = 35;
+  async function fetchOrderFromAPI(orderId) {
+    try {
+      const response = await fetch(`/api/orders/${orderId}`); // 🔁 החלף ל־URL האמיתי שלך
+      if (!response.ok) throw new Error("הזמנה לא נמצאה");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      alert(error.message);
+      return null;
+    }
+  }
 
-  function calculateSummary() {
+  function getOrderIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("orderId") || "1001";
+  }
+
+  function renderProducts(products) {
     const tbody = document.querySelector("#products-table tbody");
     tbody.innerHTML = "";
 
     let totalProducts = 0;
     let totalShipping = 0;
+    const shippingPerUnit = 35;
 
     products.forEach(product => {
-      const row = document.createElement("tr");
       const total = product.qty * product.price;
+      totalProducts += total;
+      totalShipping += product.qty * shippingPerUnit;
+
+      const row = document.createElement("tr");
       row.innerHTML = `
         <td>${product.name}</td>
         <td>${product.qty}</td>
@@ -215,14 +230,34 @@
         <td>${total.toLocaleString()} ₪</td>
       `;
       tbody.appendChild(row);
-      totalProducts += total;
-      totalShipping += product.qty * shippingPerUnit;
     });
 
-    document.getElementById("total-products").innerHTML = `סה"כ מוצרים: <strong>${totalProducts.toLocaleString()} ₪</strong>`;
-    document.getElementById("total-shipping").innerHTML = `משלוח: <strong>${shippingPerUnit.toLocaleString()} ₪</strong> × סה"כ יחידות = <strong>${totalShipping.toLocaleString()} ₪</strong>`;
-    document.getElementById("total-sum").innerHTML = `סה"כ לתשלום כולל: <strong>${(totalProducts + totalShipping).toLocaleString()} ₪</strong>`;
+    document.getElementById("total-products").innerHTML = `סה\"כ מוצרים: <strong>${totalProducts.toLocaleString()} ₪</strong>`;
+    document.getElementById("total-shipping").innerHTML = `משלוח: <strong>${shippingPerUnit.toLocaleString()} ₪</strong> × סה\"כ יחידות = <strong>${totalShipping.toLocaleString()} ₪</strong>`;
+    document.getElementById("total-sum").innerHTML = `סה\"כ לתשלום כולל: <strong>${(totalProducts + totalShipping).toLocaleString()} ₪</strong>`;
   }
 
-  window.onload = calculateSummary;
+  function loadOrderDetails(order, orderId) {
+    document.getElementById("order-title").innerText = `הזמנה מספר ${orderId}`;
+    document.getElementById("order-date").value = order.date;
+    document.getElementById("order-name").value = order.name;
+    document.getElementById("order-phone").value = order.phone;
+    document.getElementById("order-address").value = order.address;
+    document.getElementById("order-email").value = order.email;
+    document.getElementById("order-platform").value = order.platform;
+    document.getElementById("order-status").value = order.status;
+    document.getElementById("order-shipping").value = order.shipping;
+    document.getElementById("order-tracking").value = order.tracking;
+    document.getElementById("order-route").value = order.route;
+    document.getElementById("order-comments").value = order.comments;
+    renderProducts(order.products);
+  }
+
+  window.onload = async function () {
+    const orderId = getOrderIdFromURL();
+    const order = await fetchOrderFromAPI(orderId);
+    if (order) loadOrderDetails(order, orderId);
+  }
 </script>
+</body>
+</html>
