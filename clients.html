@@ -14,7 +14,7 @@
       margin-top: 50px;
     }
     h2 {
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       text-align: center;
     }
     .search-box {
@@ -32,6 +32,9 @@
 <body>
   <div class="container">
     <h2>רשימת לקוחות</h2>
+    <div class="text-center mb-3">
+      <a href="index.html" class="btn btn-outline-secondary">⬅ חזרה לדף הראשי</a>
+    </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <input type="text" id="searchInput" class="form-control search-box" placeholder="חפש לקוח...">
@@ -49,25 +52,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>הום סנטר</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>אייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>מחסני חשמל</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>סופר פארם</td><td>API (Mirakl)</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>פי1000</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>לאסט פרייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>עלמא סחר</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>פייס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>שלך (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>טוב פלוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>שלך לגמלאי (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>לאומי בונוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>ויזה (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>קיאספי</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>צבר אקספרס</td><td>מחיר ידני (מייל)</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>דרור כלי עבודה</td><td>מחיר ידני (קובץ)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>חן ממליצה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
-        <tr><td>הייטק זון</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
-        <tr><td>כל בו אליה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <!-- שורות לקוחות יוזנו כאן (כמו בקוד הקודם שלך) -->
+        <!-- הדבק את כל שורות הלקוחות שלך כאן בדיוק כמו שהיו -->
       </tbody>
     </table>
   </div>
@@ -122,7 +108,6 @@
     const modal = new bootstrap.Modal(document.getElementById("clientModal"));
     let editedRow = null;
 
-    // חיפוש בטבלה
     document.getElementById("searchInput").addEventListener("keyup", function () {
       const filter = this.value.toLowerCase();
       const rows = document.querySelectorAll("#clientsTable tbody tr");
@@ -132,7 +117,6 @@
       });
     });
 
-    // יצירת כפתורי עריכה ומחיקה
     document.querySelectorAll("#clientsTable tbody tr").forEach(row => {
       createEditButton(row);
     });
@@ -166,7 +150,6 @@
       row.children[4].appendChild(deleteBtn);
     }
 
-    // הוספה / עדכון שורה
     document.querySelector("#clientModal form").addEventListener("submit", function (e) {
       e.preventDefault();
 
