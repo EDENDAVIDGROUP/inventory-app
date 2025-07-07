@@ -59,6 +59,7 @@
           <th>שם לחשבונית</th>
           <th>ח.פ</th>
           <th>כתובת</th>
+          <th>סוג חשבונית</th>
           <th>פעולות</th>
         </tr>
       </thead>
@@ -100,6 +101,14 @@
             <div class="mb-2"><label>שם לחשבונית</label><input id="invoiceName" class="form-control"></div>
             <div class="mb-2"><label>ח.פ</label><input id="companyId" class="form-control"></div>
             <div class="mb-2"><label>כתובת</label><input id="address" class="form-control"></div>
+            <div class="mb-2"><label>סוג חשבונית</label>
+              <select id="invoiceType" class="form-select">
+                <option value="">בחר</option>
+                <option>חשבונית ללקוח הקצה</option>
+                <option>חשבונית מס מלאה</option>
+                <option>אין חשבונית</option>
+                <option>חשבונית מרוכזת</option>
+              </select></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
@@ -135,6 +144,7 @@
           <td>${client.invoiceName}</td>
           <td>${client.companyId}</td>
           <td>${client.address}</td>
+          <td>${client.invoiceType || "---"}</td>
           <td class="action-buttons">
             <button class='btn btn-sm btn-primary' onclick='viewClient(${index})'>צפייה</button>
             <button class='btn btn-sm btn-warning' onclick='editClient(${index})'>עריכה</button>
@@ -155,6 +165,7 @@
       const invoiceName = document.getElementById("invoiceName").value;
       const companyId = document.getElementById("companyId").value;
       const address = document.getElementById("address").value;
+      const invoiceType = document.getElementById("invoiceType").value;
 
       const client = {
         name,
@@ -165,7 +176,8 @@
         email,
         invoiceName,
         companyId,
-        address
+        address,
+        invoiceType
       };
 
       const index = document.getElementById("editIndex").value;
@@ -201,6 +213,7 @@
       document.getElementById("invoiceName").value = client.invoiceName;
       document.getElementById("companyId").value = client.companyId;
       document.getElementById("address").value = client.address;
+      document.getElementById("invoiceType").value = client.invoiceType;
       toggleDiscountField();
       document.getElementById("editIndex").value = index;
       new bootstrap.Modal(document.getElementById("clientModal")).show();
@@ -218,9 +231,9 @@
     });
 
     document.getElementById("exportCsv").addEventListener("click", function () {
-      let csv = "שם לקוח,סוג אינטגרציה,אחוז הנחה,סוג מחיר,טלפון,אימייל,שם לחשבונית,ח.פ,כתובת\n";
+      let csv = "שם לקוח,סוג אינטגרציה,אחוז הנחה,סוג מחיר,טלפון,אימייל,שם לחשבונית,ח.פ,כתובת,סוג חשבונית\n";
       clients.forEach(c => {
-        csv += `${c.name},${c.integration},${c.discount || "---"},${c.priceType},${c.phone},${c.email},${c.invoiceName},${c.companyId},${c.address}\n`;
+        csv += `${c.name},${c.integration},${c.discount || "---"},${c.priceType},${c.phone},${c.email},${c.invoiceName},${c.companyId},${c.address},${c.invoiceType || "---"}\n`;
       });
       const blob = new Blob([csv], { type: "text/csv" });
       const link = document.createElement("a");
