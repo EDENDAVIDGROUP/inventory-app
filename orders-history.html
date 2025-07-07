@@ -53,6 +53,12 @@
     .excel-icon-button img {
       height: 32px;
     }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1055;
+    }
   </style>
 </head>
 <body>
@@ -119,27 +125,17 @@
     </table>
   </div>
 
+  <div class="toast bg-success text-white" id="saveToast" style="display: none;">
+    <div class="toast-body">
+      ✅ השינויים נשמרו בהצלחה!
+    </div>
+  </div>
+
   <script>
     const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה', 'נמסרה', 'בהמתנה', 'הושלמה'];
-    const platforms = ['BOXMASTER', 'מועדון טוב', 'מחסני חשמל', 'קונימבו', 'סופר-פארם'];
-    const customers = ['דוד לוי', 'שרה לוי', 'יואב כהן', 'רונית אזולאי', 'אבי ברוך', 'מאיה אלון', 'משה פרץ', 'נועה קרני'];
-
+    let allOrders = JSON.parse(localStorage.getItem('ordersHistory')) || [];
     const tbody = document.getElementById('ordersBody');
     let filteredOrders = [];
-
-    const allOrders = [];
-    for (let i = 0; i < 50; i++) {
-      const orderId = `#20${i + 1}`;
-      const customer = customers[i % customers.length];
-      const phone = `050-1${i}34567`;
-      const status = statuses[i % statuses.length];
-      const platform = platforms[i % platforms.length];
-      const date = new Date();
-      date.setDate(date.getDate() - (i + 30));
-      const formattedDate = date.toISOString().split('T')[0];
-
-      allOrders.push({ orderId, customer, phone, status, platform, formattedDate });
-    }
 
     function renderOrders(orders) {
       filteredOrders = orders;
@@ -162,14 +158,25 @@
       });
     }
 
-    renderOrders(allOrders);
-
     function updateOrder(index, field, value) {
       filteredOrders[index][field] = value;
+      filteredOrders[index].lastUpdated = new Date().toISOString();
     }
 
     function saveChanges() {
-      alert('השינויים נשמרו (סימולציה בלבד).');
+      const updatedOrderIds = filteredOrders.map(o => o.orderId);
+      allOrders = allOrders.map(order => {
+        const updatedIndex = updatedOrderIds.indexOf(order.orderId);
+        return updatedIndex !== -1 ? filteredOrders[updatedIndex] : order;
+      });
+      localStorage.setItem('ordersHistory', JSON.stringify(allOrders));
+      showToast();
+    }
+
+    function showToast() {
+      const toast = document.getElementById('saveToast');
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
     }
 
     document.getElementById('searchInput').addEventListener('input', function () {
@@ -209,6 +216,8 @@
       link.click();
       document.body.removeChild(link);
     }
+
+    renderOrders(allOrders);
   </script>
 </body>
 </html>
