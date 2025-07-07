@@ -52,139 +52,25 @@
         </tr>
       </thead>
       <tbody>
-        <!-- שורות לקוחות יוזנו כאן (כמו בקוד הקודם שלך) -->
-        <!-- הדבק את כל שורות הלקוחות שלך כאן בדיוק כמו שהיו -->
+        <tr><td>הום סנטר</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>אייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>מחסני חשמל</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>סופר פארם</td><td>API (Mirakl)</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>פי1000</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>לאסט פרייס</td><td>קובץ</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>עלמא סחר</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>פייס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>שלך (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>טוב פלוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>שלך לגמלאי (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>לאומי בונוס (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>ויזה (דולצה ויטה)</td><td>מחיר ידני</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>קיאספי</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>צבר אקספרס</td><td>מחיר ידני (מייל)</td><td>20%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>דרור כלי עבודה</td><td>מחיר ידני (קובץ)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>חן ממליצה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
+        <tr><td>הייטק זון</td><td>קובץ</td><td>15%</td><td>לפי אחוז</td><td></td></tr>
+        <tr><td>כל בו אליה</td><td>מחיר ידני (מייל)</td><td>---</td><td>מחיר שנקבע מראש</td><td></td></tr>
       </tbody>
     </table>
   </div>
-
-  <!-- מודל הוספה/עריכה -->
-  <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form>
-          <div class="modal-header">
-            <h5 class="modal-title" id="clientModalLabel">הוסף / ערוך לקוח</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="סגור"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="clientName" class="form-label">שם לקוח</label>
-              <input type="text" class="form-control" id="clientName" required>
-            </div>
-            <div class="mb-3">
-              <label for="integrationType" class="form-label">סוג אינטגרציה</label>
-              <select class="form-select" id="integrationType" required>
-                <option value="">בחר</option>
-                <option>API</option>
-                <option>קובץ</option>
-                <option>מחיר ידני</option>
-                <option>מחיר ידני (מייל)</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="discount" class="form-label">אחוז הנחה</label>
-              <input type="number" class="form-control" id="discount" min="0" max="100">
-            </div>
-            <div class="mb-3">
-              <label for="priceType" class="form-label">סוג מחיר</label>
-              <select class="form-select" id="priceType" required>
-                <option value="">בחר</option>
-                <option>לפי אחוז</option>
-                <option>מחיר שנקבע מראש</option>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ביטול</button>
-            <button type="submit" class="btn btn-primary">שמור</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const modal = new bootstrap.Modal(document.getElementById("clientModal"));
-    let editedRow = null;
-
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-      const filter = this.value.toLowerCase();
-      const rows = document.querySelectorAll("#clientsTable tbody tr");
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? "" : "none";
-      });
-    });
-
-    document.querySelectorAll("#clientsTable tbody tr").forEach(row => {
-      createEditButton(row);
-    });
-
-    function createEditButton(row) {
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "עריכה";
-      editBtn.className = "btn btn-sm btn-primary me-1";
-      editBtn.addEventListener("click", () => {
-        editedRow = row;
-        const cells = row.children;
-        document.getElementById("clientModalLabel").textContent = "עריכת לקוח";
-        document.getElementById("clientName").value = cells[0].textContent.trim();
-        document.getElementById("integrationType").value = cells[1].textContent.trim();
-        document.getElementById("discount").value = cells[2].textContent.replace("%", "").trim();
-        document.getElementById("priceType").value = cells[3].textContent.trim();
-        modal.show();
-      });
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "מחיקה";
-      deleteBtn.className = "btn btn-sm btn-danger";
-      deleteBtn.addEventListener("click", () => {
-        const clientName = row.children[0].textContent;
-        if (confirm(`האם אתה בטוח שברצונך למחוק את "${clientName}"?`)) {
-          row.remove();
-        }
-      });
-
-      row.children[4].appendChild(editBtn);
-      row.children[4].appendChild(deleteBtn);
-    }
-
-    document.querySelector("#clientModal form").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("clientName").value.trim();
-      const integration = document.getElementById("integrationType").value;
-      const discount = document.getElementById("discount").value || "---";
-      const priceType = document.getElementById("priceType").value;
-
-      if (!name || !integration || !priceType) {
-        alert("נא למלא את כל השדות");
-        return;
-      }
-
-      if (editedRow) {
-        editedRow.children[0].textContent = name;
-        editedRow.children[1].textContent = integration;
-        editedRow.children[2].textContent = discount + "%";
-        editedRow.children[3].textContent = priceType;
-      } else {
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = `
-          <td>${name}</td>
-          <td>${integration}</td>
-          <td>${discount}%</td>
-          <td>${priceType}</td>
-          <td></td>
-        `;
-        document.querySelector("#clientsTable tbody").appendChild(newRow);
-        createEditButton(newRow);
-      }
-
-      this.reset();
-      modal.hide();
-      editedRow = null;
-    });
-  </script>
-</body>
-</html>
