@@ -42,11 +42,9 @@
       justify-content: start;
       margin-top: 10px;
     }
-    .fixed-bottom-right {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 1000;
+    .fixed-return-top {
+      display: inline-block;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -85,6 +83,9 @@
         <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
         <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
       </div>
+      <div class="fixed-return-top">
+        <a href="index.html" class="btn btn-secondary">חזרה</a>
+      </div>
     </div>
 
     <table class="table table-bordered order-table bg-white" id="ordersTable">
@@ -106,8 +107,6 @@
       <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
     </div>
   </div>
-
-  <a href="index.html" class="btn btn-secondary fixed-bottom-right">חזרה למסך הבית</a>
 
   <script>
     const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה', 'נמסרה', 'בהמתנה', 'הושלמה'];
