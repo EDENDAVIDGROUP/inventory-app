@@ -47,13 +47,40 @@
     .filter-actions .btn {
       white-space: nowrap;
     }
-    .filter-actions .btn-warning {
-      margin-right: auto;
+    .top-bar-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .top-bar-actions .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    .excel-icon-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .excel-icon-button img {
+      height: 32px;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="top-bar-actions">
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
+        <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
+        <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
+        <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
+      </div>
+      <button class="excel-icon-button" onclick="exportFilteredToCSV('orders-history.csv')">
+        <img src="https://cdn-icons-png.flaticon.com/512/888/888879.png" alt="Excel Icon" title="ייצוא לאקסל">
+      </button>
+    </div>
+
     <h2 class="text-center mb-4">orders-history</h2>
 
     <div class="filter-section">
@@ -82,13 +109,6 @@
           <input type="date" class="form-control" id="toDate">
         </div>
       </form>
-      <div class="filter-actions">
-        <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
-        <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
-        <button type="button" class="btn btn-success" onclick="exportFilteredToCSV('orders-history.csv')">ייצוא לאקסל</button>
-        <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
-        <a href="index.html" class="btn btn-secondary ms-auto">חזרה לדף הבית</a>
-      </div>
     </div>
 
     <table class="table table-bordered order-table bg-white" id="ordersTable">
