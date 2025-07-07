@@ -74,9 +74,28 @@
           </div>
           <div class="modal-body">
             <div class="mb-3"><label class="form-label">שם לקוח</label><input type="text" class="form-control" id="clientName" required></div>
-            <div class="mb-3"><label class="form-label">סוג אינטגרציה</label><input type="text" class="form-control" id="integrationType" required></div>
-            <div class="mb-3"><label class="form-label">אחוז הנחה</label><input type="number" class="form-control" id="discount"></div>
-            <div class="mb-3"><label class="form-label">סוג מחיר</label><input type="text" class="form-control" id="priceType" required></div>
+            <div class="mb-3">
+              <label class="form-label">סוג אינטגרציה</label>
+              <select class="form-select" id="integrationType" required>
+                <option value="">בחר</option>
+                <option>API (Mirakl)</option>
+                <option>קובץ</option>
+                <option>מחיר ידני</option>
+                <option>מחיר ידני (מייל)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">סוג מחיר</label>
+              <select class="form-select" id="priceType" required onchange="toggleDiscountField()">
+                <option value="">בחר</option>
+                <option>לפי אחוז</option>
+                <option>מחיר שנקבע מראש</option>
+              </select>
+            </div>
+            <div class="mb-3" id="discountField">
+              <label class="form-label">אחוז הנחה</label>
+              <input type="number" class="form-control" id="discount">
+            </div>
             <div class="mb-3"><label class="form-label">טלפון</label><input type="text" class="form-control" id="phone"></div>
             <div class="mb-3"><label class="form-label">אימייל</label><input type="email" class="form-control" id="email"></div>
             <div class="mb-3"><label class="form-label">שם לחשבונית</label><input type="text" class="form-control" id="invoiceName"></div>
@@ -93,125 +112,16 @@
   </div>
 
   <script>
-    const modal = new bootstrap.Modal(document.getElementById("clientModal"));
-    const form = document.getElementById("clientForm");
-    let editedRow = null;
-
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-      const filter = this.value.toLowerCase();
-      const rows = document.querySelectorAll("#clientsTable tbody tr");
-      rows.forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(filter) ? "" : "none";
-      });
-    });
-
-    function createEditButton(row) {
-      const td = row.children[row.children.length - 1];
-      td.innerHTML = "";
-
-      const ordersLink = document.createElement("a");
-      ordersLink.href = `orders.html?client=${encodeURIComponent(row.children[0].textContent.trim())}`;
-      ordersLink.textContent = "הזמנות";
-      ordersLink.className = "btn btn-sm btn-warning me-1";
-      td.appendChild(ordersLink);
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "עריכה";
-      editBtn.className = "btn btn-sm btn-primary me-1";
-      editBtn.addEventListener("click", () => {
-        editedRow = row;
-        const cells = row.children;
-        document.getElementById("clientName").value = cells[0].textContent.trim();
-        document.getElementById("integrationType").value = cells[1].textContent.trim();
-        document.getElementById("discount").value = cells[2].textContent.replace("%", "").trim();
-        document.getElementById("priceType").value = cells[3].textContent.trim();
-        document.getElementById("phone").value = cells[4].textContent.trim();
-        document.getElementById("email").value = cells[5].textContent.trim();
-        document.getElementById("invoiceName").value = cells[6].textContent.trim();
-        document.getElementById("companyId").value = cells[7].textContent.trim();
-        document.getElementById("address").value = cells[8].textContent.trim();
-        modal.show();
-      });
-      td.appendChild(editBtn);
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "מחיקה";
-      deleteBtn.className = "btn btn-sm btn-danger";
-      deleteBtn.addEventListener("click", () => {
-        if (confirm("האם אתה בטוח שברצונך למחוק את הלקוח?")) {
-          row.remove();
-        }
-      });
-      td.appendChild(deleteBtn);
-    }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const name = document.getElementById("clientName").value.trim();
-      const integration = document.getElementById("integrationType").value;
-      const discount = document.getElementById("discount").value || "---";
+    function toggleDiscountField() {
       const priceType = document.getElementById("priceType").value;
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const invoiceName = document.getElementById("invoiceName").value.trim();
-      const companyId = document.getElementById("companyId").value.trim();
-      const address = document.getElementById("address").value.trim();
-
-      if (!name || !integration || !priceType) {
-        alert("נא למלא את כל השדות החיוניים");
-        return;
-      }
-
-      if (editedRow) {
-        const cells = editedRow.children;
-        cells[0].textContent = name;
-        cells[1].textContent = integration;
-        cells[2].textContent = discount + "%";
-        cells[3].textContent = priceType;
-        cells[4].textContent = phone;
-        cells[5].textContent = email;
-        cells[6].textContent = invoiceName;
-        cells[7].textContent = companyId;
-        cells[8].textContent = address;
+      const discountField = document.getElementById("discountField");
+      if (priceType === "לפי אחוז") {
+        discountField.style.display = "block";
       } else {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${name}</td>
-          <td>${integration}</td>
-          <td>${discount}%</td>
-          <td>${priceType}</td>
-          <td>${phone}</td>
-          <td>${email}</td>
-          <td>${invoiceName}</td>
-          <td>${companyId}</td>
-          <td>${address}</td>
-          <td></td>`;
-        document.querySelector("#clientsTable tbody").appendChild(row);
-        createEditButton(row);
+        discountField.style.display = "none";
+        document.getElementById("discount").value = "";
       }
-      form.reset();
-      modal.hide();
-      editedRow = null;
-    });
-
-    document.getElementById("exportCsv").addEventListener("click", function () {
-      const rows = document.querySelectorAll("#clientsTable tr");
-      let csv = "";
-      rows.forEach(row => {
-        const cols = row.querySelectorAll("td, th");
-        const rowData = Array.from(cols).map(col => '"' + col.innerText.replace(/"/g, '""') + '"');
-        csv += rowData.join(",") + "\n";
-      });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", "clients.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+    }
   </script>
 </body>
 </html>
