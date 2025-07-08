@@ -70,18 +70,25 @@
         </div>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">כתובת</label>
-        <input type="text" class="form-control" id="address">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">כתובת</label>
+          <input type="text" class="form-control" id="address">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">מייל</label>
+          <input type="email" class="form-control" id="email">
+        </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">פלטפורמה</label>
           <select id="platform" class="form-select">
-            <option>API</option>
-            <option>Excel</option>
-            <option>דוא"ל</option>
+            <option>מחסני חשמל</option>
+            <option>בוקסמאסטר</option>
+            <option>סופר-פארם</option>
+            <option>מועדון טוב</option>
             <option>טלפוני</option>
             <option>לא מזוהה</option>
           </select>
@@ -118,7 +125,7 @@
         <button type="button" class="btn btn-primary" onclick="saveErrorOrder()">שמור שינויים</button>
         <button type="button" class="btn btn-success" onclick="markAsFixed()">הזמנה תקינה - העבר להזמנות חדשות</button>
         <button type="button" class="btn btn-outline-secondary" onclick="window.print()">הדפסה</button>
-        <a href="orders-errors.html" class="btn btn-secondary">חזור לרשימה</a>
+        <a href="orders-errors.html" class="btn btn-secondary">חזרה להזמנות שגויות</a>
       </div>
     </form>
   </div>
@@ -136,6 +143,7 @@
       document.getElementById("customerName").value = order.customer || "";
       document.getElementById("phone").value = order.phone || "";
       document.getElementById("address").value = order.address || "";
+      document.getElementById("email").value = order.email || "";
       document.getElementById("platform").value = order.platform || "לא מזוהה";
       document.getElementById("uploadedBy").value = order.uploadedBy || "";
       document.getElementById("errorNote").value = order.error || "";
@@ -166,6 +174,7 @@
         customer: document.getElementById("customerName").value,
         phone: document.getElementById("phone").value,
         address: document.getElementById("address").value,
+        email: document.getElementById("email").value,
         platform: document.getElementById("platform").value,
         date: document.getElementById("orderDate").value,
         status: "שגיאה"
