@@ -45,8 +45,9 @@
       <i class="fa-solid fa-file-excel"></i> ייצוא לאקסל
     </button>
 
-    <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-between mb-3">
       <a href="index.html" class="btn btn-outline-dark">חזרה לדף הבית</a>
+      <button class="btn btn-primary" onclick="moveSelectedToNewOrders()">העבר להזמנה חדשה</button>
     </div>
 
     <div class="filters">
@@ -74,10 +75,17 @@
       <table class="table table-bordered text-center">
         <thead class="table-danger">
           <tr>
+            <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
             <th>מספר הזמנה</th>
             <th>שם לקוח</th>
             <th>טלפון</th>
-            <th>פלטפורמה</th>
+            <th>מייל</th>
+            <th>כתובת</th>
+            <th>שם לקוח עסקי</th>
+            <th>מק"ט</th>
+            <th>שם מוצר</th>
+            <th>כמות</th>
+            <th>מחיר</th>
             <th>סוג שגיאה</th>
             <th>תאריך</th>
             <th>סטטוס</th>
@@ -85,55 +93,7 @@
           </tr>
         </thead>
         <tbody id="errorOrdersTable">
-          <tr>
-            <td>10001</td>
-            <td>דני ישראלי</td>
-            <td></td>
-            <td>API</td>
-            <td>חסר טלפון</td>
-            <td>2025-07-07</td>
-            <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <a href="edit-error-order.html?orderId=10001" class="btn btn-sm btn-outline-primary">בדיקה</a>
-            </td>
-          </tr>
-          <tr>
-            <td>10002</td>
-            <td>שרה כהן</td>
-            <td>050123456</td>
-            <td>Excel</td>
-            <td>טלפון לא תקין</td>
-            <td>2025-07-06</td>
-            <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <a href="edit-error-order.html?orderId=10002" class="btn btn-sm btn-outline-primary">בדיקה</a>
-            </td>
-          </tr>
-          <tr>
-            <td>10003</td>
-            <td>יואב לוי</td>
-            <td>0523456789</td>
-            <td>API</td>
-            <td>חסר מייל</td>
-            <td>2025-07-06</td>
-            <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <a href="edit-error-order.html?orderId=10003" class="btn btn-sm btn-outline-primary">בדיקה</a>
-            </td>
-          </tr>
-          <tr>
-            <td>10004</td>
-            <td>נעמי שמש</td>
-            <td>0507891234</td>
-            <td>דוא"ל</td>
-            <td>קריאת הזמנה לא תקינה</td>
-            <td>2025-07-05</td>
-            <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <a href="edit-error-order.html?orderId=10004" class="btn btn-sm btn-outline-primary">בדיקה</a>
-            </td>
-          </tr>
-          <!-- שאר ההזמנות כמו בדוגמה הקודמת... -->
+          <!-- נתוני הזמנות יוזנו כאן דינמית -->
         </tbody>
       </table>
     </div>
@@ -147,20 +107,14 @@
       const rows = document.querySelectorAll('#errorOrdersTable tr');
 
       rows.forEach(row => {
-        const orderId = row.children[0].textContent;
-        const customer = row.children[1].textContent;
-        const phone = row.children[2].textContent;
-        const date = row.children[5].textContent;
+        const content = row.textContent.toLowerCase();
+        const date = row.children[12].textContent;
 
-        const matchesSearch = search === '' || (orderId + customer + phone).toLowerCase().includes(search);
+        const matchesSearch = search === '' || content.includes(search);
         const matchesDateFrom = !dateFrom || date >= dateFrom;
         const matchesDateTo = !dateTo || date <= dateTo;
 
-        if (matchesSearch && matchesDateFrom && matchesDateTo) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+        row.style.display = matchesSearch && matchesDateFrom && matchesDateTo ? '' : 'none';
       });
     }
 
@@ -171,13 +125,28 @@
       filterTable();
     }
 
+    function toggleSelectAll(checkbox) {
+      const checkboxes = document.querySelectorAll("#errorOrdersTable input[type='checkbox']");
+      checkboxes.forEach(cb => cb.checked = checkbox.checked);
+    }
+
+    function moveSelectedToNewOrders() {
+      const selectedRows = document.querySelectorAll("#errorOrdersTable input[type='checkbox']:checked");
+      if (selectedRows.length === 0) {
+        alert("בחר לפחות שורה אחת להעברה");
+        return;
+      }
+      alert("ההזמנות סומנו להעברה להזמנות חדשות (דמו בלבד)");
+      // כאן תבוא לוגיקה להעברת ההזמנות בפועל
+    }
+
     function exportToExcel() {
-      let csv = "מספר הזמנה,שם לקוח,טלפון,פלטפורמה,סוג שגיאה,תאריך,סטטוס\n";
+      let csv = "מספר הזמנה,שם לקוח,טלפון,מייל,כתובת,שם לקוח עסקי,מק"ט,שם מוצר,כמות,מחיר,סוג שגיאה,תאריך,סטטוס\n";
       const rows = document.querySelectorAll("#errorOrdersTable tr");
       rows.forEach(row => {
         const cols = row.querySelectorAll("td");
         let rowData = [];
-        for (let i = 0; i < 7; i++) {
+        for (let i = 1; i <= 13; i++) {
           rowData.push(cols[i].textContent.trim());
         }
         csv += rowData.join(",") + "\n";
