@@ -31,9 +31,7 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
     .export-btn {
-      position: absolute;
-      right: 30px;
-      top: 30px;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -41,13 +39,14 @@
   <div class="container-fluid position-relative">
     <h2 class="mb-4 text-center">הזמנות שגויות</h2>
 
-    <button class="btn btn-success export-btn" onclick="exportToExcel()">
-      <i class="fa-solid fa-file-excel"></i> ייצוא לאקסל
-    </button>
-
     <div class="d-flex justify-content-between mb-3">
       <a href="index.html" class="btn btn-outline-dark">חזרה לדף הבית</a>
-      <button class="btn btn-primary" onclick="moveSelectedToNewOrders()">העבר להזמנה חדשה</button>
+      <div>
+        <button class="btn btn-success export-btn" onclick="exportToExcel()">
+          <i class="fa-solid fa-file-excel"></i> ייצוא לאקסל
+        </button>
+        <button class="btn btn-primary" onclick="moveSelectedToNewOrders()">העבר להזמנה חדשה</button>
+      </div>
     </div>
 
     <div class="filters">
@@ -92,72 +91,42 @@
             <th>פעולות</th>
           </tr>
         </thead>
-        <tbody id="errorOrdersTable">
-          <!-- נתוני הזמנות יוזנו כאן דינמית -->
-        </tbody>
+        <tbody id="errorOrdersTable"></tbody>
       </table>
     </div>
   </div>
 
   <script>
-    function filterTable() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const dateFrom = document.getElementById('dateFrom').value;
-      const dateTo = document.getElementById('dateTo').value;
-      const rows = document.querySelectorAll('#errorOrdersTable tr');
-
-      rows.forEach(row => {
-        const content = row.textContent.toLowerCase();
-        const date = row.children[12].textContent;
-
-        const matchesSearch = search === '' || content.includes(search);
-        const matchesDateFrom = !dateFrom || date >= dateFrom;
-        const matchesDateTo = !dateTo || date <= dateTo;
-
-        row.style.display = matchesSearch && matchesDateFrom && matchesDateTo ? '' : 'none';
-      });
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('dateFrom').value = '';
-      document.getElementById('dateTo').value = '';
-      filterTable();
-    }
-
-    function toggleSelectAll(checkbox) {
-      const checkboxes = document.querySelectorAll("#errorOrdersTable input[type='checkbox']");
-      checkboxes.forEach(cb => cb.checked = checkbox.checked);
-    }
-
     function moveSelectedToNewOrders() {
-      const selectedRows = document.querySelectorAll("#errorOrdersTable input[type='checkbox']:checked");
-      if (selectedRows.length === 0) {
-        alert("בחר לפחות שורה אחת להעברה");
-        return;
-      }
-      alert("ההזמנות סומנו להעברה להזמנות חדשות (דמו בלבד)");
-      // כאן תבוא לוגיקה להעברת ההזמנות בפועל
-    }
-
-    function exportToExcel() {
-      let csv = "מספר הזמנה,שם לקוח,טלפון,מייל,כתובת,שם לקוח עסקי,מק"ט,שם מוצר,כמות,מחיר,סוג שגיאה,תאריך,סטטוס\n";
-      const rows = document.querySelectorAll("#errorOrdersTable tr");
-      rows.forEach(row => {
-        const cols = row.querySelectorAll("td");
-        let rowData = [];
-        for (let i = 1; i <= 13; i++) {
-          rowData.push(cols[i].textContent.trim());
+      const selectedRows = document.querySelectorAll("#errorOrdersTable tr");
+      const newOrders = JSON.parse(localStorage.getItem("newOrders") || "[]");
+      selectedRows.forEach(row => {
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox && checkbox.checked) {
+          const cols = row.querySelectorAll("td");
+          const newOrder = {
+            id: cols[1].textContent.trim(),
+            name: cols[2].textContent.trim(),
+            phone: cols[3].textContent.trim(),
+            email: cols[4].textContent.trim(),
+            address: cols[5].textContent.trim(),
+            company: cols[6].textContent.trim(),
+            sku: cols[7].textContent.trim(),
+            product: cols[8].textContent.trim(),
+            qty: cols[9].textContent.trim(),
+            price: cols[10].textContent.trim(),
+            date: cols[12].textContent.trim(),
+            status: "חדש"
+          };
+          newOrders.push(newOrder);
+          row.remove();
         }
-        csv += rowData.join(",") + "\n";
       });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "orders-errors.csv";
-      link.click();
+      localStorage.setItem("newOrders", JSON.stringify(newOrders));
+      alert("ההזמנות הועברו להזמנות חדשות בהצלחה ✅");
     }
   </script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
