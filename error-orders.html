@@ -38,6 +38,7 @@
       padding: 4px 8px;
       border-radius: 5px;
       display: inline-block;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -84,13 +85,6 @@
             <th>מספר הזמנה</th>
             <th>שם לקוח</th>
             <th>טלפון</th>
-            <th>מייל</th>
-            <th>כתובת</th>
-            <th>שם לקוח עסקי</th>
-            <th>מק"ט</th>
-            <th>שם מוצר</th>
-            <th>כמות</th>
-            <th>מחיר</th>
             <th>סוג שגיאה</th>
             <th>תאריך</th>
             <th>סטטוס</th>
@@ -98,7 +92,7 @@
           </tr>
         </thead>
         <tbody id="errorOrdersTable">
-          <!-- שורות יוזנו כאן על ידי JavaScript -->
+          <!-- יוזן על ידי JavaScript -->
         </tbody>
       </table>
     </div>
@@ -106,45 +100,25 @@
 
   <script>
     const demoData = [
-      {
-        id: "10010", name: "דוד לוי", phone: "", email: "david@example.com", address: "רח' הארזים 15",
-        company: "מחסני חשמל", sku: "MK123", product: "מצנן ARPO", qty: 2, price: 350,
-        error: "חסר טלפון", date: "2025-07-08"
-      },
-      {
-        id: "10011", name: "רונית כהן", phone: "0520001111", email: "", address: "רח' העצמאות 45",
-        company: "פרוטולס", sku: "MK456", product: "אוהל לינה 4 אנשים", qty: 1, price: 520,
-        error: "חסר מייל", date: "2025-07-08"
-      },
-      {
-        id: "10012", name: "אורי ישראלי", phone: "0501234567", email: "uri@gmail.com", address: "",
-        company: "Boxmaster", sku: "MK789", product: "גנרטור 2200W", qty: 1, price: 800,
-        error: "חסרה כתובת", date: "2025-07-08"
-      }
+      { id: "10001", name: "דני ישראלי", phone: "", error: "חסר טלפון", date: "2025-07-07" },
+      { id: "10002", name: "שרה כהן", phone: "050123456", error: "טלפון לא תקין", date: "2025-07-06" },
+      { id: "10003", name: "יואב לוי", phone: "0523456789", error: "חסר מייל", date: "2025-07-06" }
     ];
 
     function renderTable() {
       const tbody = document.getElementById("errorOrdersTable");
       tbody.innerHTML = "";
-      demoData.forEach((order, index) => {
+      demoData.forEach(order => {
         const row = `
           <tr>
             <td><input type="checkbox"></td>
             <td>${order.id}</td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.name}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.phone}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.email}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.address}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.company}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.sku}"></td>
-            <td><input type="text" class="form-control form-control-sm" value="${order.product}"></td>
-            <td><input type="number" class="form-control form-control-sm" value="${order.qty}"></td>
-            <td><input type="number" class="form-control form-control-sm" value="${order.price}"></td>
+            <td>${order.name}</td>
+            <td>${order.phone}</td>
             <td><span class="error-type">${order.error}</span></td>
             <td>${order.date}</td>
             <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <button class="btn btn-sm btn-success" onclick="saveRow(this)">שמור</button>
+            <td>
               <a href="edit-error-order.html?orderId=${order.id}" class="btn btn-sm btn-outline-primary">בדיקה</a>
             </td>
           </tr>
@@ -153,11 +127,49 @@
       });
     }
 
-    function saveRow(button) {
-      const row = button.closest("tr");
-      const inputs = row.querySelectorAll("input[type='text'], input[type='number']");
-      inputs.forEach(input => input.classList.add("border-success"));
-      alert("השינויים נשמרו ✅");
+    function exportToExcel() {
+      let csv = '\uFEFFמספר הזמנה,שם לקוח,טלפון,סוג שגיאה,תאריך,סטטוס\n';
+      const rows = document.querySelectorAll("#errorOrdersTable tr");
+      rows.forEach(row => {
+        const cols = row.querySelectorAll("td");
+        let rowData = [];
+        for (let i = 1; i <= 6; i++) {
+          rowData.push(cols[i].textContent.trim());
+        }
+        csv += rowData.join(",") + "\n";
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "orders-errors.csv";
+      link.click();
+    }
+
+    function filterTable() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const dateFrom = document.getElementById('dateFrom').value;
+      const dateTo = document.getElementById('dateTo').value;
+      const rows = document.querySelectorAll('#errorOrdersTable tr');
+
+      rows.forEach(row => {
+        const orderId = row.children[1].textContent;
+        const customer = row.children[2].textContent;
+        const phone = row.children[3].textContent;
+        const date = row.children[5].textContent;
+
+        const matchesSearch = search === '' || (orderId + customer + phone).toLowerCase().includes(search);
+        const matchesDateFrom = !dateFrom || date >= dateFrom;
+        const matchesDateTo = !dateTo || date <= dateTo;
+
+        row.style.display = (matchesSearch && matchesDateFrom && matchesDateTo) ? '' : 'none';
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('dateFrom').value = '';
+      document.getElementById('dateTo').value = '';
+      filterTable();
     }
 
     renderTable();
