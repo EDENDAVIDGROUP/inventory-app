@@ -23,9 +23,6 @@
     .actions button {
       margin-left: 5px;
     }
-    .modal-body input {
-      margin-bottom: 10px;
-    }
     .filters {
       background: white;
       padding: 20px;
@@ -40,7 +37,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="loadErrorOrders()">
   <div class="container-fluid position-relative">
     <h2 class="mb-4 text-center">הזמנות שגויות</h2>
 
@@ -81,61 +78,50 @@
             <th>שם לקוח</th>
             <th>טלפון</th>
             <th>פלטפורמה</th>
-            <th>שגיאה</th>
+            <th>סוג שגיאה</th>
             <th>תאריך</th>
             <th>סטטוס</th>
             <th>פעולות</th>
           </tr>
         </thead>
         <tbody id="errorOrdersTable">
-          <tr>
-            <td>56789</td>
-            <td>יוסי כהן</td>
-            <td></td>
-            <td>API</td>
-            <td>חסר טלפון</td>
-            <td>2025-07-06</td>
-            <td><span class="badge bg-danger">שגיאה</span></td>
-            <td class="actions">
-              <a href="edit-error-order.html?orderId=56789" class="btn btn-sm btn-outline-primary">ערוך</a>
-              <button class="btn btn-sm btn-outline-success" onclick="retryOrder('56789')">נסה שוב</button>
-            </td>
-          </tr>
+          <!-- הזמנות יוזנו כאן דינאמית -->
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    function retryOrder(orderId) {
-      const tableRows = document.querySelectorAll('#errorOrdersTable tr');
-      tableRows.forEach(row => {
-        if (row.children[0].textContent === orderId) {
-          const phone = row.children[2].textContent;
-          if (!phone || phone.trim().length < 9) {
-            alert('עדיין חסר טלפון תקין');
-            return;
-          }
-          const orderData = {
-            id: row.children[0].textContent,
-            customer: row.children[1].textContent,
-            phone: row.children[2].textContent,
-            platform: row.children[3].textContent,
-            date: row.children[5].textContent
-          };
+    async function loadErrorOrders() {
+      try {
+        const res = await fetch('/api/orders?status=error');
+        const orders = await res.json();
+        const table = document.getElementById('errorOrdersTable');
+        table.innerHTML = '';
 
-          const existing = JSON.parse(localStorage.getItem('newOrders') || '[]');
-          existing.push(orderData);
-          localStorage.setItem('newOrders', JSON.stringify(existing));
-
-          row.remove();
-          alert('ההזמנה תוקנה ונשלחה להזמנות חדשות');
-        }
-      });
+        orders.forEach(order => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.customer}</td>
+            <td>${order.phone || ''}</td>
+            <td>${order.platform}</td>
+            <td>${order.errorType || ''}</td>
+            <td>${order.date}</td>
+            <td><span class="badge bg-danger">שגיאה</span></td>
+            <td class="actions">
+              <a href="edit-error-order.html?orderId=${order.id}" class="btn btn-sm btn-outline-primary">בדיקה</a>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+      } catch (error) {
+        alert('שגיאה בטעינת ההזמנות');
+      }
     }
 
     function exportToExcel() {
-      let csv = "מספר הזמנה,שם לקוח,טלפון,פלטפורמה,שגיאה,תאריך,סטטוס\n";
+      let csv = "מספר הזמנה,שם לקוח,טלפון,פלטפורמה,סוג שגיאה,תאריך,סטטוס\n";
       const rows = document.querySelectorAll("#errorOrdersTable tr");
       rows.forEach(row => {
         const cols = row.querySelectorAll("td");
