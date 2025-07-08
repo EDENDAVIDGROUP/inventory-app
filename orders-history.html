@@ -134,6 +134,20 @@
   <script>
     const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה', 'נמסרה', 'בהמתנה', 'הושלמה'];
     let allOrders = JSON.parse(localStorage.getItem('ordersHistory')) || [];
+
+    if (allOrders.length === 0) {
+      const demoOrder = {
+        orderId: "99999",
+        customer: "דוגמה לקוח",
+        phone: "050-0000000",
+        status: "הזמנה חדשה",
+        platform: "מחסני חשמל",
+        formattedDate: new Date().toLocaleDateString("he-IL")
+      };
+      allOrders.push(demoOrder);
+      localStorage.setItem('ordersHistory', JSON.stringify(allOrders));
+    }
+
     const tbody = document.getElementById('ordersBody');
     let filteredOrders = [];
 
