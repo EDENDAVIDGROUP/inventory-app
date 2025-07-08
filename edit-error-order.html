@@ -34,6 +34,11 @@
     .products-table {
       margin-top: 30px;
     }
+    @media print {
+      .text-center.mt-4 {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -175,11 +180,9 @@
     function markAsFixed() {
       if (!order) return;
 
-      // הסרת ההזמנה מהרשימה השגויה
       const updatedErrors = orders.filter(o => o.id !== order.id);
       localStorage.setItem("errorOrders", JSON.stringify(updatedErrors));
 
-      // הוספה להזמנות חדשות
       const newOrders = JSON.parse(localStorage.getItem("newOrders") || "[]");
       newOrders.push({ ...order, status: "חדשה" });
       localStorage.setItem("newOrders", JSON.stringify(newOrders));
