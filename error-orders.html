@@ -59,15 +59,6 @@
           <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון..." oninput="filterTable()">
         </div>
         <div class="col-md-2">
-          <label>פלטפורמה</label>
-          <select class="form-select" id="platformFilter" onchange="filterTable()">
-            <option value="">בחר פלטפורמה</option>
-            <option>API</option>
-            <option>Excel</option>
-            <option>דוא"ל</option>
-          </select>
-        </div>
-        <div class="col-md-2">
           <label>תאריך</label>
           <input type="date" class="form-control" id="dateFrom" onchange="filterTable()">
         </div>
@@ -75,7 +66,7 @@
           <label>עד תאריך</label>
           <input type="date" class="form-control" id="dateTo" onchange="filterTable()">
         </div>
-        <div class="col-md-3 d-flex justify-content-end">
+        <div class="col-md-5 d-flex justify-content-end">
           <button class="btn btn-primary me-2" onclick="filterTable()">סנן</button>
           <button class="btn btn-outline-secondary" onclick="resetFilters()">איפוס</button>
         </div>
@@ -106,7 +97,7 @@
             <td>2025-07-06</td>
             <td><span class="badge bg-danger">שגיאה</span></td>
             <td class="actions">
-              <button class="btn btn-sm btn-outline-primary" onclick="openEditModal('56789')">ערוך</button>
+              <a href="edit-error-order.html?orderId=56789" class="btn btn-sm btn-outline-primary">ערוך</a>
               <button class="btn btn-sm btn-outline-success" onclick="retryOrder('56789')">נסה שוב</button>
             </td>
           </tr>
@@ -115,47 +106,7 @@
     </div>
   </div>
 
-  <!-- Modal for editing order -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">עריכת הזמנה</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <input type="text" class="form-control" id="editPhone" placeholder="מספר טלפון חדש">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">סגור</button>
-          <button type="button" class="btn btn-primary" onclick="saveEdit()">שמור</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    function openEditModal(orderId) {
-      document.getElementById('editModal').setAttribute('data-order-id', orderId);
-      const modal = new bootstrap.Modal(document.getElementById('editModal'));
-      modal.show();
-    }
-
-    function saveEdit() {
-      const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-      const orderId = document.getElementById('editModal').getAttribute('data-order-id');
-      const newPhone = document.getElementById('editPhone').value;
-      const tableRows = document.querySelectorAll('#errorOrdersTable tr');
-      tableRows.forEach(row => {
-        if (row.children[0].textContent === orderId) {
-          row.children[2].textContent = newPhone;
-          row.children[4].textContent = '-';
-          row.children[6].innerHTML = '<span class="badge bg-warning text-dark">ממתין לשידור</span>';
-        }
-      });
-      modal.hide();
-    }
-
     function retryOrder(orderId) {
       const tableRows = document.querySelectorAll('#errorOrdersTable tr');
       tableRows.forEach(row => {
@@ -203,7 +154,6 @@
 
     function filterTable() {
       const search = document.getElementById('searchInput').value.toLowerCase();
-      const platform = document.getElementById('platformFilter').value;
       const dateFrom = document.getElementById('dateFrom').value;
       const dateTo = document.getElementById('dateTo').value;
       const rows = document.querySelectorAll('#errorOrdersTable tr');
@@ -212,15 +162,13 @@
         const orderId = row.children[0].textContent;
         const customer = row.children[1].textContent;
         const phone = row.children[2].textContent;
-        const platformVal = row.children[3].textContent;
         const date = row.children[5].textContent;
 
         const matchesSearch = search === '' || (orderId + customer + phone).toLowerCase().includes(search);
-        const matchesPlatform = platform === '' || platform === platformVal;
         const matchesDateFrom = !dateFrom || date >= dateFrom;
         const matchesDateTo = !dateTo || date <= dateTo;
 
-        if (matchesSearch && matchesPlatform && matchesDateFrom && matchesDateTo) {
+        if (matchesSearch && matchesDateFrom && matchesDateTo) {
           row.style.display = '';
         } else {
           row.style.display = 'none';
@@ -230,7 +178,6 @@
 
     function resetFilters() {
       document.getElementById('searchInput').value = '';
-      document.getElementById('platformFilter').value = '';
       document.getElementById('dateFrom').value = '';
       document.getElementById('dateTo').value = '';
       filterTable();
