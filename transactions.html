@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ניהול עסקאות</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+    .status-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .status-sent { background-color: #d1e7dd; color: #0f5132; }
+    .status-pending { background-color: #fff3cd; color: #664d03; }
+    .status-failed { background-color: #f8d7da; color: #842029; }
+    .filter-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .excel-icon-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .excel-icon-button img {
+      height: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">ניהול עסקאות</h2>
+      <div>
+        <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
+        <button class="excel-icon-button" onclick="exportToExcel('transactions.csv')">
+          <img src="https://cdn-icons-png.flaticon.com/512/732/732220.png" alt="Excel Icon" title="ייצוא לאקסל">
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-section row g-2 align-items-center">
+      <div class="col-md-4">
+        <label class="form-label">סנן לפי לקוח</label>
+        <input type="text" class="form-control" id="filterCustomer" placeholder="שם לקוח">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">סטטוס</label>
+        <select class="form-select" id="filterStatus">
+          <option value="">הכל</option>
+          <option value="שודר">שודר</option>
+          <option value="ממתין">ממתין</option>
+          <option value="נכשל">נכשל</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">תאריך שידור</label>
+        <input type="date" class="form-control" id="filterDate">
+      </div>
+    </div>
+
+    <table class="table table-bordered bg-white">
+      <thead class="table-dark">
+        <tr>
+          <th>מספר עסקה</th>
+          <th>מוצר</th>
+          <th>לקוח</th>
+          <th>אינטגרציה</th>
+          <th>תאריך שידור</th>
+          <th>סטטוס</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody id="transactionsTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const transactions = [
+      {
+        id: 'T001',
+        product: 'מצנן ARPO 5500',
+        customer: 'BOXMASTER',
+        integration: 'API',
+        date: '2025-07-08',
+        status: 'שודר',
+        log: 'POST /api/transactions\nResponse: 200 OK'
+      },
+      {
+        id: 'T002',
+        product: 'אוהל לוגיסטי 4X4',
+        customer: 'מועדון טוב',
+        integration: 'Email',
+        date: '2025-07-06',
+        status: 'נכשל',
+        log: 'Email sent to orders@modontov.co.il\nError: Attachment missing'
+      },
+      {
+        id: 'T003',
+        product: 'מטבח עץ לילדים',
+        customer: 'סופר-פארם',
+        integration: 'Mirakl',
+        date: '2025-07-07',
+        status: 'ממתין',
+        log: 'Waiting for API confirmation from Mirakl...'
+      }
+    ];
+
+    function renderTransactions() {
+      const customerFilter = document.getElementById('filterCustomer').value;
+      const statusFilter = document.getElementById('filterStatus').value;
+      const dateFilter = document.getElementById('filterDate').value;
+
+      const tbody = document.getElementById('transactionsTable');
+      tbody.innerHTML = '';
+
+      transactions.filter(tx => {
+        return (!customerFilter || tx.customer.includes(customerFilter)) &&
+               (!statusFilter || tx.status === statusFilter) &&
+               (!dateFilter || tx.date === dateFilter);
+      }).forEach((tx, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${tx.id}</td>
+            <td>${tx.product}</td>
+            <td>${tx.customer}</td>
+            <td>${tx.integration}</td>
+            <td>${tx.date}</td>
+            <td><span class="status-tag ${tx.status === 'שודר' ? 'status-sent' : tx.status === 'נכשל' ? 'status-failed' : 'status-pending'}">${tx.status}</span></td>
+            <td><button class="btn btn-sm btn-outline-primary" onclick="showLog(${index})">הצג לוג</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function showLog(index) {
+      alert("📄 לוג העסקה:\n" + transactions[index].log);
+    }
+
+    document.getElementById('filterCustomer').addEventListener('input', renderTransactions);
+    document.getElementById('filterStatus').addEventListener('change', renderTransactions);
+    document.getElementById('filterDate').addEventListener('change', renderTransactions);
+
+    function exportToExcel(filename) {
+      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס'];
+      const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status]);
+      const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    renderTransactions();
+  </script>
+</body>
+</html>
