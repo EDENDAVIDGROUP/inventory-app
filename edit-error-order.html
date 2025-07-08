@@ -16,11 +16,23 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 700px;
+      max-width: 900px;
       margin: auto;
     }
     .form-label {
       font-weight: bold;
+    }
+    .alert-error {
+      background-color: #ffe5e5;
+      border: 1px solid #ff4d4d;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #b30000;
+      font-weight: bold;
+    }
+    .products-table {
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -28,33 +40,79 @@
   <div class="edit-container">
     <h2 class="mb-4 text-center">עריכת הזמנה שגויה</h2>
 
+    <div id="errorMessage" class="alert-error d-none"></div>
+
     <form id="errorOrderForm">
-      <div class="mb-3">
-        <label class="form-label">מספר הזמנה</label>
-        <input type="text" class="form-control" id="orderId" disabled>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">מספר הזמנה</label>
+          <input type="text" class="form-control" id="orderId" disabled>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">תאריך הזמנה</label>
+          <input type="text" class="form-control" id="orderDate" disabled>
+        </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label">שם לקוח</label>
-        <input type="text" class="form-control" id="customerName">
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">שם לקוח</label>
+          <input type="text" class="form-control" id="customerName">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">טלפון</label>
+          <input type="text" class="form-control" id="phone">
+        </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label">טלפון</label>
-        <input type="text" class="form-control" id="phone">
-      </div>
+
       <div class="mb-3">
         <label class="form-label">כתובת</label>
         <input type="text" class="form-control" id="address">
       </div>
-      <div class="mb-3">
-        <label class="form-label">פלטפורמה</label>
-        <input type="text" class="form-control" id="platform" disabled>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">פלטפורמה</label>
+          <select id="platform" class="form-select">
+            <option>API</option>
+            <option>Excel</option>
+            <option>דוא"ל</option>
+            <option>טלפוני</option>
+            <option>לא מזוהה</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">שם משתמש מעלה</label>
+          <input type="text" class="form-control" id="uploadedBy" disabled>
+        </div>
       </div>
+
       <div class="mb-3">
-        <label class="form-label">הערת שגיאה</label>
-        <textarea class="form-control" id="errorNote" rows="3"></textarea>
+        <label class="form-label">סוג שגיאה</label>
+        <input type="text" class="form-control" id="errorNote" disabled>
       </div>
-      <div class="text-center">
+
+      <div class="products-table">
+        <h5 class="mb-3">מוצרים בהזמנה</h5>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>מק"ט</th>
+              <th>שם מוצר</th>
+              <th>כמות</th>
+              <th>מחיר</th>
+            </tr>
+          </thead>
+          <tbody id="productsTable">
+            <!-- שורות דינאמיות -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-center mt-4">
         <button type="button" class="btn btn-primary" onclick="saveErrorOrder()">שמור שינויים</button>
+        <button type="button" class="btn btn-success" onclick="markAsFixed()">הזמנה תקינה - העבר להזמנות חדשות</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="window.print()">הדפסה</button>
         <a href="orders-errors.html" class="btn btn-secondary">חזור לרשימה</a>
       </div>
     </form>
@@ -69,22 +127,42 @@
 
     if (order) {
       document.getElementById("orderId").value = order.id;
+      document.getElementById("orderDate").value = order.date || "";
       document.getElementById("customerName").value = order.customer || "";
       document.getElementById("phone").value = order.phone || "";
       document.getElementById("address").value = order.address || "";
-      document.getElementById("platform").value = order.platform || "";
+      document.getElementById("platform").value = order.platform || "לא מזוהה";
+      document.getElementById("uploadedBy").value = order.uploadedBy || "";
       document.getElementById("errorNote").value = order.error || "";
+
+      if (order.error) {
+        document.getElementById("errorMessage").textContent = `⚠️ שגיאה: ${order.error}`;
+        document.getElementById("errorMessage").classList.remove("d-none");
+      }
+
+      if (order.products && Array.isArray(order.products)) {
+        const tbody = document.getElementById("productsTable");
+        order.products.forEach(p => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${p.sku || "-"}</td>
+            <td>${p.name || ""}</td>
+            <td>${p.qty || 1}</td>
+            <td>${p.price || 0}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
     }
 
     function saveErrorOrder() {
       const updated = {
-        id: document.getElementById("orderId").value,
+        ...order,
         customer: document.getElementById("customerName").value,
         phone: document.getElementById("phone").value,
         address: document.getElementById("address").value,
         platform: document.getElementById("platform").value,
-        error: document.getElementById("errorNote").value,
-        date: order.date || new Date().toISOString().split("T")[0],
+        date: document.getElementById("orderDate").value,
         status: "שגיאה"
       };
 
@@ -92,6 +170,22 @@
       localStorage.setItem("errorOrders", JSON.stringify(updatedList));
       alert("השינויים נשמרו בהצלחה");
       window.location.href = "orders-errors.html";
+    }
+
+    function markAsFixed() {
+      if (!order) return;
+
+      // הסרת ההזמנה מהרשימה השגויה
+      const updatedErrors = orders.filter(o => o.id !== order.id);
+      localStorage.setItem("errorOrders", JSON.stringify(updatedErrors));
+
+      // הוספה להזמנות חדשות
+      const newOrders = JSON.parse(localStorage.getItem("newOrders") || "[]");
+      newOrders.push({ ...order, status: "חדשה" });
+      localStorage.setItem("newOrders", JSON.stringify(newOrders));
+
+      alert("ההזמנה תוקנה ונשלחה להזמנות חדשות");
+      window.location.href = "new-orders.html";
     }
   </script>
 </body>
