@@ -34,6 +34,10 @@
     .products-table {
       margin-top: 30px;
     }
+    .total-summary {
+      margin-top: 15px;
+      font-weight: bold;
+    }
     @media print {
       .text-center.mt-4 {
         display: none;
@@ -93,10 +97,6 @@
             <option>לא מזוהה</option>
           </select>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">שם משתמש מעלה</label>
-          <input type="text" class="form-control" id="uploadedBy" disabled>
-        </div>
       </div>
 
       <div class="mb-3">
@@ -119,13 +119,14 @@
             <!-- שורות דינאמיות -->
           </tbody>
         </table>
+        <div class="total-summary" id="totalSummary"></div>
       </div>
 
       <div class="text-center mt-4">
         <button type="button" class="btn btn-primary" onclick="saveErrorOrder()">שמור שינויים</button>
         <button type="button" class="btn btn-success" onclick="markAsFixed()">הזמנה תקינה - העבר להזמנות חדשות</button>
         <button type="button" class="btn btn-outline-secondary" onclick="window.print()">הדפסה</button>
-        <a href="orders-errors.html" class="btn btn-secondary">חזרה להזמנות שגויות</a>
+        <a href="error-orders.html" class="btn btn-secondary">חזרה להזמנות שגויות</a>
       </div>
     </form>
   </div>
@@ -145,7 +146,6 @@
       document.getElementById("address").value = order.address || "";
       document.getElementById("email").value = order.email || "";
       document.getElementById("platform").value = order.platform || "לא מזוהה";
-      document.getElementById("uploadedBy").value = order.uploadedBy || "";
       document.getElementById("errorNote").value = order.error || "";
 
       if (order.error) {
@@ -155,16 +155,26 @@
 
       if (order.products && Array.isArray(order.products)) {
         const tbody = document.getElementById("productsTable");
+        let totalQty = 0;
+        let totalPrice = 0;
+
         order.products.forEach(p => {
+          const qty = Number(p.qty || 1);
+          const price = Number(p.price || 0);
+          totalQty += qty;
+          totalPrice += price * qty;
+
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${p.sku || "-"}</td>
             <td>${p.name || ""}</td>
-            <td>${p.qty || 1}</td>
-            <td>${p.price || 0}</td>
+            <td>${qty}</td>
+            <td>${price}</td>
           `;
           tbody.appendChild(row);
         });
+
+        document.getElementById("totalSummary").textContent = `סה"כ כמות: ${totalQty}, סה"כ לתשלום: ₪${totalPrice.toFixed(2)}`;
       }
     }
 
@@ -183,7 +193,7 @@
       const updatedList = orders.map(o => o.id === updated.id ? updated : o);
       localStorage.setItem("errorOrders", JSON.stringify(updatedList));
       alert("השינויים נשמרו בהצלחה");
-      window.location.href = "orders-errors.html";
+      window.location.href = "error-orders.html";
     }
 
     function markAsFixed() {
