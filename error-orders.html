@@ -85,6 +85,7 @@
             <th>מספר הזמנה</th>
             <th>שם לקוח</th>
             <th>טלפון</th>
+            <th>מקור</th>
             <th>סוג שגיאה</th>
             <th>תאריך</th>
             <th>סטטוס</th>
@@ -100,9 +101,9 @@
 
   <script>
     const demoData = [
-      { id: "10001", name: "דני ישראלי", phone: "", error: "חסר טלפון", date: "2025-07-07" },
-      { id: "10002", name: "שרה כהן", phone: "050123456", error: "טלפון לא תקין", date: "2025-07-06" },
-      { id: "10003", name: "יואב לוי", phone: "0523456789", error: "חסר מייל", date: "2025-07-06" }
+      { id: "10001", name: "דני ישראלי", phone: "", source: "API", error: "חסר טלפון", date: "2025-07-07" },
+      { id: "10002", name: "שרה כהן", phone: "050123456", source: "Excel", error: "טלפון לא תקין", date: "2025-07-06" },
+      { id: "10003", name: "יואב לוי", phone: "0523456789", source: "Email", error: "חסר מייל", date: "2025-07-06" }
     ];
 
     function renderTable() {
@@ -115,6 +116,7 @@
             <td>${order.id}</td>
             <td>${order.name}</td>
             <td>${order.phone}</td>
+            <td>${order.source}</td>
             <td><span class="error-type">${order.error}</span></td>
             <td>${order.date}</td>
             <td><span class="badge bg-danger">שגיאה</span></td>
@@ -128,12 +130,12 @@
     }
 
     function exportToExcel() {
-      let csv = '\uFEFFמספר הזמנה,שם לקוח,טלפון,סוג שגיאה,תאריך,סטטוס\n';
+      let csv = '\uFEFFמספר הזמנה,שם לקוח,טלפון,מקור,סוג שגיאה,תאריך,סטטוס\n';
       const rows = document.querySelectorAll("#errorOrdersTable tr");
       rows.forEach(row => {
         const cols = row.querySelectorAll("td");
         let rowData = [];
-        for (let i = 1; i <= 6; i++) {
+        for (let i = 1; i <= 7; i++) {
           rowData.push(cols[i].textContent.trim());
         }
         csv += rowData.join(",") + "\n";
@@ -155,7 +157,7 @@
         const orderId = row.children[1].textContent;
         const customer = row.children[2].textContent;
         const phone = row.children[3].textContent;
-        const date = row.children[5].textContent;
+        const date = row.children[6].textContent;
 
         const matchesSearch = search === '' || (orderId + customer + phone).toLowerCase().includes(search);
         const matchesDateFrom = !dateFrom || date >= dateFrom;
