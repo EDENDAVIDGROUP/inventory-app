@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הנהלת חשבונות</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+    .filter-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">הנהלת חשבונות</h2>
+      <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
+    </div>
+
+    <div class="filter-section row g-2 align-items-center">
+      <div class="col-md-4">
+        <label class="form-label">שם לקוח</label>
+        <input type="text" class="form-control" id="filterCustomer" placeholder="לדוגמה: BOXMASTER">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">תאריך</label>
+        <input type="date" class="form-control" id="filterDate">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">מספר הזמנה</label>
+        <input type="text" class="form-control" id="filterOrderId" placeholder="לדוגמה: 12345">
+      </div>
+    </div>
+
+    <table class="table table-bordered bg-white">
+      <thead class="table-dark">
+        <tr>
+          <th>מסמך</th>
+          <th>מספר מסמך</th>
+          <th>לקוח</th>
+          <th>מספר הזמנה</th>
+          <th>מזהה עסקה</th>
+          <th>תאריך</th>
+          <th>סטטוס</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody id="accountingTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const documents = [
+      {
+        type: 'חשבונית מס',
+        number: 'INV-1001',
+        customer: 'BOXMASTER',
+        orderId: '12345',
+        dealId: 'T001',
+        date: '2025-07-09',
+        status: 'שולם',
+        link: '#' // לצפייה / הורדה
+      },
+      {
+        type: 'תעודת משלוח',
+        number: 'DL-0034',
+        customer: 'סופר-פארם',
+        orderId: '98765',
+        dealId: 'T003',
+        date: '2025-07-08',
+        status: 'נשלח',
+        link: '#'
+      }
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById('accountingTable');
+      const customerFilter = document.getElementById('filterCustomer').value;
+      const dateFilter = document.getElementById('filterDate').value;
+      const orderIdFilter = document.getElementById('filterOrderId').value;
+
+      tbody.innerHTML = '';
+
+      documents.filter(doc => {
+        return (!customerFilter || doc.customer.includes(customerFilter)) &&
+               (!dateFilter || doc.date === dateFilter) &&
+               (!orderIdFilter || doc.orderId.includes(orderIdFilter));
+      }).forEach(doc => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${doc.type}</td>
+            <td>${doc.number}</td>
+            <td>${doc.customer}</td>
+            <td>${doc.orderId}</td>
+            <td>${doc.dealId}</td>
+            <td>${doc.date}</td>
+            <td>${doc.status}</td>
+            <td>
+              <a href="${doc.link}" class="btn btn-sm btn-outline-primary" target="_blank">צפייה</a>
+              <a href="${doc.link}" class="btn btn-sm btn-outline-success" download>הורדה</a>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    document.getElementById('filterCustomer').addEventListener('input', renderTable);
+    document.getElementById('filterDate').addEventListener('change', renderTable);
+    document.getElementById('filterOrderId').addEventListener('input', renderTable);
+
+    renderTable();
+  </script>
+</body>
+</html>
