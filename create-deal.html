@@ -34,10 +34,20 @@
     <h2 class="text-center mb-4">יצירת עסקה חדשה</h2>
     <form id="dealForm">
       <div class="mb-3">
+        <label for="dealId" class="form-label">מספר עסקה (אוטומטי)</label>
+        <input type="text" class="form-control" id="dealId" readonly>
+      </div>
+
+      <div class="mb-3">
         <label for="product" class="form-label">בחר מוצר</label>
         <select class="form-select" id="product" required onchange="populateProductDetails()">
           <option value="">-- בחר מוצר --</option>
         </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="sku" class="form-label">מק"ט</label>
+        <input type="text" class="form-control" id="sku" readonly>
       </div>
 
       <div class="mb-3">
@@ -57,18 +67,45 @@
         <input type="text" class="form-control" id="integration" readonly>
       </div>
 
+      <div class="mb-3">
+        <label for="status" class="form-label">סטטוס עסקה</label>
+        <select class="form-select" id="status">
+          <option value="ממתין">ממתין</option>
+          <option value="שודר">שודר</option>
+          <option value="נכשל">נכשל</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="date" class="form-label">תאריך שידור</label>
+        <input type="date" class="form-control" id="date">
+      </div>
+
+      <div class="mb-3">
+        <label for="notes" class="form-label">הערות לעסקה</label>
+        <textarea class="form-control" id="notes" rows="2" placeholder="לוג פנימי או סיבת שינוי"></textarea>
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="sendEmail">
+        <label class="form-check-label" for="sendEmail">לשלוח גם מייל ללקוח</label>
+      </div>
+
       <div class="btn-actions">
         <a href="deals.html" class="btn btn-secondary">ביטול</a>
-        <button type="submit" class="btn btn-primary">שמור עסקה</button>
+        <div>
+          <button type="button" class="btn btn-outline-info me-2" onclick="previewDeal()">תצוגה מקדימה</button>
+          <button type="submit" class="btn btn-primary">שמור עסקה</button>
+        </div>
       </div>
     </form>
   </div>
 
   <script>
     const products = [
-      { name: 'מצנן ARPO 5500', price: 1450 },
-      { name: 'אוהל לוגיסטי 4X4', price: 890 },
-      { name: 'מטבח עץ לילדים', price: 399 }
+      { name: 'מצנן ARPO 5500', price: 1450, sku: 'P001' },
+      { name: 'אוהל לוגיסטי 4X4', price: 890, sku: 'P002' },
+      { name: 'מטבח עץ לילדים', price: 399, sku: 'P003' }
     ];
 
     const customers = [
@@ -82,8 +119,10 @@
       const product = products.find(p => p.name === selected);
       if (product) {
         document.getElementById('price').value = product.price;
+        document.getElementById('sku').value = product.sku;
       } else {
         document.getElementById('price').value = '';
+        document.getElementById('sku').value = '';
       }
     }
 
@@ -112,18 +151,93 @@
       });
     }
 
-    document.getElementById('dealForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    function generateDealId() {
+      const id = 'T' + Math.floor(Math.random() * 900 + 100);
+      document.getElementById('dealId').value = id;
+    }
+
+    function previewDeal() {
       const product = document.getElementById('product').value;
       const customer = document.getElementById('customer').value;
       const integration = document.getElementById('integration').value;
       const price = document.getElementById('price').value;
+      const dealId = document.getElementById('dealId').value;
+      const sku = document.getElementById('sku').value;
+      const status = document.getElementById('status').value;
+      const date = document.getElementById('date').value;
+      const notes = document.getElementById('notes').value;
+      const emailFlag = document.getElementById('sendEmail').checked;
 
-      alert(`✅ עסקה נשמרה:\nמוצר: ${product}\nלקוח: ${customer}\nאינטגרציה: ${integration}\nמחיר לפרסום: ₪${price}`);
+      alert(`📄 תצוגת עסקה:
+מספר: ${dealId}
+מוצר: ${product} (מק"ט: ${sku})
+לקוח: ${customer}
+אינטגרציה: ${integration}
+מחיר לפרסום: ₪${price}
+סטטוס: ${status}
+תאריך: ${date}
+הערות: ${notes}
+שלח מייל: ${emailFlag ? 'כן' : 'לא'}`);
+    }
+
+    document.getElementById('dealForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const product = document.getElementById('product').value;
+      const customer = document.getElementById('customer').value;
+      const integration = document.getElementById('integration').value;
+      const price = document.getElementById('price').value;
+      const dealId = document.getElementById('dealId').value;
+      const sku = document.getElementById('sku').value;
+      const status = document.getElementById('status').value;
+      const date = document.getElementById('date').value;
+      const notes = document.getElementById('notes').value;
+      const emailFlag = document.getElementById('sendEmail').checked;
+
+      let log = '';
+      if (integration === 'API') {
+        log = '📡 שידור ל-API... הצלחה!';
+      } else if (integration === 'Email') {
+        log = '📧 שליחת מייל ללקוח... הצלחה!';
+      } else if (integration === 'Mirakl') {
+        log = '📦 שליחה למערכת Mirakl... ממתין לאישור';
+      } else {
+        log = '⚠️ אינטגרציה לא ידועה';
+      }
+
+      const deal = {
+        id: dealId,
+        product,
+        customer,
+        integration,
+        price,
+        date,
+        status,
+        log
+      };
+
+      const stored = JSON.parse(localStorage.getItem('transactions') || '[]');
+      stored.push(deal);
+      localStorage.setItem('transactions', JSON.stringify(stored));
+
+      alert(`✅ עסקה נשמרה!
+מספר: ${dealId}
+מוצר: ${product} (מק"ט: ${sku})
+לקוח: ${customer}
+מחיר: ₪${price}
+סטטוס: ${status}
+תאריך: ${date}
+הערות: ${notes}
+שלח מייל: ${emailFlag ? 'כן' : 'לא'}
+
+${log}`);
+
       window.location.href = 'deals.html';
     });
 
     populateDropdowns();
+    generateDealId();
+    document.getElementById('date').valueAsDate = new Date();
   </script>
 </body>
 </html>
