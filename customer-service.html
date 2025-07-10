@@ -23,20 +23,12 @@
       margin-bottom: 20px;
     }
     .filter-section .form-control, .filter-section .form-select {
-      font-size: 0.85rem;
-      padding: 6px;
+      font-size: 0.75rem;
+      padding: 4px;
     }
     .status-tag {
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      display: inline-block;
+      display: none;
     }
-    .status-חדש { background-color: #d1e7dd; color: #0f5132; }
-    .status-בטיפול { background-color: #fff3cd; color: #664d03; }
-    .status-מענה { background-color: #cfe2ff; color: #084298; }
-    .status-סגור { background-color: #e2e3e5; color: #41464b; }
     .floating-save {
       position: fixed;
       top: 20px;
@@ -107,8 +99,7 @@
           <th>תאריך</th>
           <th>שם פונה</th>
           <th>אימייל</th>
-          <th>מספר הזמנה</th>
-          <th>שם לקוח</th>
+          <th>שיוך פלטפורמה</th>
           <th>סטטוס</th>
           <th>פעולות</th>
         </tr>
@@ -125,7 +116,6 @@
         sender: 'שירה כהן',
         customer: '',
         email: 'shira@gmail.com',
-        subject: 'איפה ההזמנה שלי?',
         orderId: '123456',
         status: 'חדש',
         content: 'שלחתי הזמנה לפני יומיים ועדיין לא קיבלתי מספר מעקב. אפשר עדכון?'
@@ -135,7 +125,6 @@
         sender: 'רות לוי',
         customer: 'מועדון טוב',
         email: 'orders@modontov.co.il',
-        subject: 'הזמנה תקולה',
         orderId: '987654',
         status: 'בטיפול',
         content: 'אחד המוצרים הגיע שבור. אבקש לטפל בהחזר או החלפה.'
@@ -168,15 +157,13 @@
             <td>${msg.date}</td>
             <td>${msg.sender}</td>
             <td>${msg.email}</td>
-            <td>${msg.orderId}</td>
             <td>
-              <input type="text" class="form-control form-control-sm" value="${msg.customer}" onchange="assignCustomer(${index}, this.value)" placeholder="שייך ללקוח...">
+              <input type="text" class="form-control form-control-sm" value="${msg.customer}" onchange="assignCustomer(${index}, this.value)" placeholder="שייך לפלטפורמה...">
             </td>
             <td>
               <select class="form-select form-select-sm" onchange="updateStatus(${index}, this.value)">
                 ${statuses.map(s => `<option value="${s}" ${s === msg.status ? 'selected' : ''}>${s}</option>`).join('')}
               </select>
-              <div class="status-tag status-${msg.status}">${msg.status}</div>
             </td>
             <td>
               <button class="btn btn-sm btn-outline-primary" onclick="viewMessage(${index})">כניסה לפנייה</button>
@@ -201,8 +188,8 @@
     }
 
     function exportToExcel() {
-      const headers = ['תאריך', 'שם פונה', 'אימייל', 'מספר הזמנה', 'שם לקוח', 'סטטוס'];
-      const rows = messages.map(msg => [msg.date, msg.sender, msg.email, msg.orderId, msg.customer, msg.status]);
+      const headers = ['תאריך', 'שם פונה', 'אימייל', 'שיוך פלטפורמה', 'סטטוס'];
+      const rows = messages.map(msg => [msg.date, msg.sender, msg.email, msg.customer, msg.status]);
       const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
