@@ -33,9 +33,28 @@
     .status-בטיפול { background-color: #fff3cd; color: #664d03; }
     .status-מענה { background-color: #cfe2ff; color: #084298; }
     .status-סגור { background-color: #e2e3e5; color: #41464b; }
+    .floating-save {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      background-color: #198754;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+  <button class="floating-save" onclick="saveChanges()" title="שמור שינויים">💾</button>
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="mb-0">שירות לקוחות</h2>
@@ -46,23 +65,26 @@
     </div>
 
     <div class="filter-section row g-2 align-items-center">
-      <div class="col-md-2">
+      <div class="col-md-3">
+        <label class="form-label">שם פונה</label>
+        <input type="text" class="form-control" id="filterSender">
+      </div>
+      <div class="col-md-3">
         <label class="form-label">שם לקוח</label>
-        <input type="text" class="form-control" id="filterCustomer" placeholder="לדוגמה: BOXMASTER">
+        <input type="text" class="form-control" id="filterCustomer">
       </div>
-      <div class="col-md-2">
+      <div class="col-md-3">
         <label class="form-label">אימייל</label>
-        <input type="text" class="form-control" id="filterEmail" placeholder="support@example.com">
+        <input type="text" class="form-control" id="filterEmail">
       </div>
-      <div class="col-md-2">
-        <label class="form-label">נושא</label>
-        <input type="text" class="form-control" id="filterSubject" placeholder="לדוגמה: איפה ההזמנה שלי?">
+      <div class="col-md-3">
+        <label class="form-label">טווח תאריכים</label>
+        <div class="d-flex">
+          <input type="date" class="form-control me-1" id="filterStartDate">
+          <input type="date" class="form-control" id="filterEndDate">
+        </div>
       </div>
-      <div class="col-md-2">
-        <label class="form-label">תאריך</label>
-        <input type="date" class="form-control" id="filterDate">
-      </div>
-      <div class="col-md-2">
+      <div class="col-md-3 mt-2">
         <label class="form-label">סטטוס</label>
         <select class="form-select" id="filterStatus">
           <option value="">הכל</option>
@@ -78,10 +100,10 @@
       <thead class="table-dark">
         <tr>
           <th>תאריך</th>
-          <th>שם לקוח</th>
+          <th>שם פונה</th>
           <th>אימייל</th>
-          <th>נושא</th>
           <th>מספר הזמנה</th>
+          <th>שם לקוח</th>
           <th>סטטוס</th>
           <th>פעולות</th>
         </tr>
@@ -95,8 +117,9 @@
     const messages = [
       {
         date: '2025-07-10',
-        customer: 'BOXMASTER',
-        email: 'support@boxmaster.co.il',
+        sender: 'שירה כהן',
+        customer: '',
+        email: 'shira@gmail.com',
         subject: 'איפה ההזמנה שלי?',
         orderId: '123456',
         status: 'חדש',
@@ -104,6 +127,7 @@
       },
       {
         date: '2025-07-09',
+        sender: 'רות לוי',
         customer: 'מועדון טוב',
         email: 'orders@modontov.co.il',
         subject: 'הזמנה תקולה',
@@ -114,28 +138,35 @@
     ];
 
     function renderMessages() {
+      const senderFilter = document.getElementById('filterSender').value;
       const customerFilter = document.getElementById('filterCustomer').value;
       const emailFilter = document.getElementById('filterEmail').value;
-      const subjectFilter = document.getElementById('filterSubject').value;
-      const dateFilter = document.getElementById('filterDate').value;
+      const startDate = document.getElementById('filterStartDate').value;
+      const endDate = document.getElementById('filterEndDate').value;
       const statusFilter = document.getElementById('filterStatus').value;
       const tbody = document.getElementById('messagesTable');
       tbody.innerHTML = '';
 
       messages.filter(msg => {
-        return (!customerFilter || msg.customer.includes(customerFilter)) &&
+        const msgDate = new Date(msg.date);
+        const from = startDate ? new Date(startDate) : null;
+        const to = endDate ? new Date(endDate) : null;
+        return (!senderFilter || msg.sender.includes(senderFilter)) &&
+               (!customerFilter || msg.customer.includes(customerFilter)) &&
                (!emailFilter || msg.email.includes(emailFilter)) &&
-               (!subjectFilter || msg.subject.includes(subjectFilter)) &&
-               (!dateFilter || msg.date === dateFilter) &&
+               (!from || msgDate >= from) &&
+               (!to || msgDate <= to) &&
                (!statusFilter || msg.status === statusFilter);
       }).forEach((msg, index) => {
         tbody.innerHTML += `
           <tr>
             <td>${msg.date}</td>
-            <td>${msg.customer}</td>
+            <td>${msg.sender}</td>
             <td>${msg.email}</td>
-            <td>${msg.subject}</td>
             <td>${msg.orderId}</td>
+            <td>
+              <input type="text" class="form-control form-control-sm" value="${msg.customer}" onchange="assignCustomer(${index}, this.value)" placeholder="שייך ללקוח...">
+            </td>
             <td>
               <select class="form-select form-select-sm" onchange="updateStatus(${index}, this.value)">
                 ${statuses.map(s => `<option value="${s}" ${s === msg.status ? 'selected' : ''}>${s}</option>`).join('')}
@@ -143,8 +174,7 @@
               <div class="status-tag status-${msg.status}">${msg.status}</div>
             </td>
             <td>
-              <button class="btn btn-sm btn-outline-primary" onclick="viewMessage(${index})">צפייה</button>
-              <button class="btn btn-sm btn-outline-success" onclick="replyMessage(${index})">השב</button>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewMessage(${index})">כניסה לפנייה</button>
             </td>
           </tr>
         `;
@@ -156,22 +186,18 @@
       renderMessages();
     }
 
+    function assignCustomer(index, newCustomer) {
+      messages[index].customer = newCustomer;
+      renderMessages();
+    }
+
     function viewMessage(index) {
       alert("📬 הודעה:\n" + messages[index].content);
     }
 
-    function replyMessage(index) {
-      const reply = prompt("✉️ כתוב תגובה ללקוח: " + messages[index].customer);
-      if (reply) {
-        alert("✅ תגובתך נשמרה ונשלחה (אם מחובר ל‑Gmail):\n" + reply);
-        messages[index].status = 'מענה';
-        renderMessages();
-      }
-    }
-
     function exportToExcel() {
-      const headers = ['תאריך', 'שם לקוח', 'אימייל', 'נושא', 'מספר הזמנה', 'סטטוס'];
-      const rows = messages.map(msg => [msg.date, msg.customer, msg.email, msg.subject, msg.orderId, msg.status]);
+      const headers = ['תאריך', 'שם פונה', 'אימייל', 'מספר הזמנה', 'שם לקוח', 'סטטוס'];
+      const rows = messages.map(msg => [msg.date, msg.sender, msg.email, msg.orderId, msg.customer, msg.status]);
       const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
@@ -182,10 +208,15 @@
       document.body.removeChild(link);
     }
 
+    function saveChanges() {
+      alert('💾 כל השינויים נשמרו (סימולציה בלבד).');
+    }
+
+    document.getElementById('filterSender').addEventListener('input', renderMessages);
     document.getElementById('filterCustomer').addEventListener('input', renderMessages);
     document.getElementById('filterEmail').addEventListener('input', renderMessages);
-    document.getElementById('filterSubject').addEventListener('input', renderMessages);
-    document.getElementById('filterDate').addEventListener('change', renderMessages);
+    document.getElementById('filterStartDate').addEventListener('change', renderMessages);
+    document.getElementById('filterEndDate').addEventListener('change', renderMessages);
     document.getElementById('filterStatus').addEventListener('change', renderMessages);
 
     renderMessages();
