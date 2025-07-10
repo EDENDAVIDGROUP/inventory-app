@@ -22,6 +22,10 @@
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
+    .filter-section .form-control, .filter-section .form-select {
+      font-size: 0.85rem;
+      padding: 6px;
+    }
     .status-tag {
       padding: 5px 10px;
       border-radius: 20px;
@@ -65,26 +69,27 @@
     </div>
 
     <div class="filter-section row g-2 align-items-center">
-      <div class="col-md-3">
-        <label class="form-label">שם פונה</label>
-        <input type="text" class="form-control" id="filterSender">
+      <div class="col-md-2">
+        <label class="form-label">מתאריך</label>
+        <input type="date" class="form-control" id="filterStartDate">
       </div>
-      <div class="col-md-3">
-        <label class="form-label">שם לקוח</label>
-        <input type="text" class="form-control" id="filterCustomer">
+      <div class="col-md-2">
+        <label class="form-label">עד תאריך</label>
+        <input type="date" class="form-control" id="filterEndDate">
       </div>
-      <div class="col-md-3">
+      <div class="col-md-2">
         <label class="form-label">אימייל</label>
         <input type="text" class="form-control" id="filterEmail">
       </div>
-      <div class="col-md-3">
-        <label class="form-label">טווח תאריכים</label>
-        <div class="d-flex">
-          <input type="date" class="form-control me-1" id="filterStartDate">
-          <input type="date" class="form-control" id="filterEndDate">
-        </div>
+      <div class="col-md-2">
+        <label class="form-label">שם לקוח</label>
+        <input type="text" class="form-control" id="filterCustomer">
       </div>
-      <div class="col-md-3 mt-2">
+      <div class="col-md-2">
+        <label class="form-label">שם פונה</label>
+        <input type="text" class="form-control" id="filterSender">
+      </div>
+      <div class="col-md-2">
         <label class="form-label">סטטוס</label>
         <select class="form-select" id="filterStatus">
           <option value="">הכל</option>
