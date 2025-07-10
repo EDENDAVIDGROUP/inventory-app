@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שירות לקוחות</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .table th, .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+    .filter-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .status-tag {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .status-חדש { background-color: #d1e7dd; color: #0f5132; }
+    .status-בטיפול { background-color: #fff3cd; color: #664d03; }
+    .status-מענה { background-color: #cfe2ff; color: #084298; }
+    .status-סגור { background-color: #e2e3e5; color: #41464b; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">שירות לקוחות</h2>
+      <div>
+        <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
+        <button class="btn btn-success ms-2" onclick="exportToExcel()">ייצוא לאקסל</button>
+      </div>
+    </div>
+
+    <div class="filter-section row g-2 align-items-center">
+      <div class="col-md-2">
+        <label class="form-label">שם לקוח</label>
+        <input type="text" class="form-control" id="filterCustomer" placeholder="לדוגמה: BOXMASTER">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">אימייל</label>
+        <input type="text" class="form-control" id="filterEmail" placeholder="support@example.com">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">נושא</label>
+        <input type="text" class="form-control" id="filterSubject" placeholder="לדוגמה: איפה ההזמנה שלי?">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">תאריך</label>
+        <input type="date" class="form-control" id="filterDate">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">סטטוס</label>
+        <select class="form-select" id="filterStatus">
+          <option value="">הכל</option>
+          <option value="חדש">חדש</option>
+          <option value="בטיפול">בטיפול</option>
+          <option value="מענה">מענה</option>
+          <option value="סגור">סגור</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="table table-bordered bg-white">
+      <thead class="table-dark">
+        <tr>
+          <th>תאריך</th>
+          <th>שם לקוח</th>
+          <th>אימייל</th>
+          <th>נושא</th>
+          <th>מספר הזמנה</th>
+          <th>סטטוס</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody id="messagesTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const statuses = ['חדש', 'בטיפול', 'מענה', 'סגור'];
+    const messages = [
+      {
+        date: '2025-07-10',
+        customer: 'BOXMASTER',
+        email: 'support@boxmaster.co.il',
+        subject: 'איפה ההזמנה שלי?',
+        orderId: '123456',
+        status: 'חדש',
+        content: 'שלחתי הזמנה לפני יומיים ועדיין לא קיבלתי מספר מעקב. אפשר עדכון?'
+      },
+      {
+        date: '2025-07-09',
+        customer: 'מועדון טוב',
+        email: 'orders@modontov.co.il',
+        subject: 'הזמנה תקולה',
+        orderId: '987654',
+        status: 'בטיפול',
+        content: 'אחד המוצרים הגיע שבור. אבקש לטפל בהחזר או החלפה.'
+      }
+    ];
+
+    function renderMessages() {
+      const customerFilter = document.getElementById('filterCustomer').value;
+      const emailFilter = document.getElementById('filterEmail').value;
+      const subjectFilter = document.getElementById('filterSubject').value;
+      const dateFilter = document.getElementById('filterDate').value;
+      const statusFilter = document.getElementById('filterStatus').value;
+      const tbody = document.getElementById('messagesTable');
+      tbody.innerHTML = '';
+
+      messages.filter(msg => {
+        return (!customerFilter || msg.customer.includes(customerFilter)) &&
+               (!emailFilter || msg.email.includes(emailFilter)) &&
+               (!subjectFilter || msg.subject.includes(subjectFilter)) &&
+               (!dateFilter || msg.date === dateFilter) &&
+               (!statusFilter || msg.status === statusFilter);
+      }).forEach((msg, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${msg.date}</td>
+            <td>${msg.customer}</td>
+            <td>${msg.email}</td>
+            <td>${msg.subject}</td>
+            <td>${msg.orderId}</td>
+            <td>
+              <select class="form-select form-select-sm" onchange="updateStatus(${index}, this.value)">
+                ${statuses.map(s => `<option value="${s}" ${s === msg.status ? 'selected' : ''}>${s}</option>`).join('')}
+              </select>
+              <div class="status-tag status-${msg.status}">${msg.status}</div>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewMessage(${index})">צפייה</button>
+              <button class="btn btn-sm btn-outline-success" onclick="replyMessage(${index})">השב</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function updateStatus(index, newStatus) {
+      messages[index].status = newStatus;
+      renderMessages();
+    }
+
+    function viewMessage(index) {
+      alert("📬 הודעה:\n" + messages[index].content);
+    }
+
+    function replyMessage(index) {
+      const reply = prompt("✉️ כתוב תגובה ללקוח: " + messages[index].customer);
+      if (reply) {
+        alert("✅ תגובתך נשמרה ונשלחה (אם מחובר ל‑Gmail):\n" + reply);
+        messages[index].status = 'מענה';
+        renderMessages();
+      }
+    }
+
+    function exportToExcel() {
+      const headers = ['תאריך', 'שם לקוח', 'אימייל', 'נושא', 'מספר הזמנה', 'סטטוס'];
+      const rows = messages.map(msg => [msg.date, msg.customer, msg.email, msg.subject, msg.orderId, msg.status]);
+      const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'customer-messages.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    document.getElementById('filterCustomer').addEventListener('input', renderMessages);
+    document.getElementById('filterEmail').addEventListener('input', renderMessages);
+    document.getElementById('filterSubject').addEventListener('input', renderMessages);
+    document.getElementById('filterDate').addEventListener('change', renderMessages);
+    document.getElementById('filterStatus').addEventListener('change', renderMessages);
+
+    renderMessages();
+  </script>
+</body>
+</html>
