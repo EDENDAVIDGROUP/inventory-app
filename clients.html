@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8" />
   <title>רשימת לקוחות</title>
@@ -26,11 +27,6 @@
     }
     .btn {
       font-size: 0.9rem;
-    }
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
     }
   </style>
 </head>
@@ -145,10 +141,8 @@
           <td>${client.companyId}</td>
           <td>${client.address}</td>
           <td>${client.invoiceType || "---"}</td>
-          <td class="action-buttons">
-            <button class='btn btn-sm btn-primary' onclick='viewClient(${index})'>צפייה</button>
-            <button class='btn btn-sm btn-warning' onclick='editClient(${index})'>עריכה</button>
-            <button class='btn btn-sm btn-danger' onclick='deleteClient(${index})'>מחיקה</button>
+          <td>
+            <a class='btn btn-sm btn-info' href='client-card.html?clientId=${index}'>כרטיס לקוח</a>
           </td>`;
         clientsTable.appendChild(row);
       });
@@ -193,35 +187,6 @@
       toggleDiscountField();
       bootstrap.Modal.getInstance(document.getElementById("clientModal")).hide();
     });
-
-    function deleteClient(index) {
-      if (confirm("האם למחוק את הלקוח?")) {
-        clients.splice(index, 1);
-        localStorage.setItem("clients", JSON.stringify(clients));
-        renderClients();
-      }
-    }
-
-    function editClient(index) {
-      const client = clients[index];
-      document.getElementById("name").value = client.name;
-      document.getElementById("integration").value = client.integration;
-      document.getElementById("priceType").value = client.priceType;
-      document.getElementById("discount").value = client.discount;
-      document.getElementById("phone").value = client.phone;
-      document.getElementById("email").value = client.email;
-      document.getElementById("invoiceName").value = client.invoiceName;
-      document.getElementById("companyId").value = client.companyId;
-      document.getElementById("address").value = client.address;
-      document.getElementById("invoiceType").value = client.invoiceType;
-      toggleDiscountField();
-      document.getElementById("editIndex").value = index;
-      new bootstrap.Modal(document.getElementById("clientModal")).show();
-    }
-
-    function viewClient(index) {
-      alert("כרטיס לקוח (צפייה) ייבנה בהמשך - כעת ניתן לערוך דרך טופס");
-    }
 
     searchInput.addEventListener("keyup", function () {
       const value = this.value.toLowerCase();
