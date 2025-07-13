@@ -3,46 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ניהול עסקאות</title>
+  <title>לוג עסקה</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f9f9f9;
       font-family: Arial, sans-serif;
-      padding-top: 70px;
-    }
-    .table th, .table td {
-      vertical-align: middle;
-      text-align: center;
-    }
-    .status-tag {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      display: inline-block;
-    }
-    .status-sent { background-color: #d1e7dd; color: #0f5132; }
-    .status-pending { background-color: #fff3cd; color: #664d03; }
-    .status-failed { background-color: #f8d7da; color: #842029; }
-    .target-received { background-color: #cfe2ff; color: #084298; }
-    .target-done { background-color: #d1e7dd; color: #0f5132; }
-    .target-error { background-color: #f8d7da; color: #842029; }
-    .filter-section {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .excel-icon-button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .excel-icon-button img {
-      height: 32px;
+      background-color: #f8f9fa;
+      padding-top: 80px;
     }
     .fixed-toolbar {
       position: fixed;
@@ -66,6 +33,28 @@
     .fixed-toolbar button:hover {
       color: #0d6efd;
     }
+    .log-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .log-pre {
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 5px;
+      direction: ltr;
+      overflow-x: auto;
+    }
+    .badge-status {
+      font-size: 0.85rem;
+      border-radius: 20px;
+      padding: 5px 12px;
+    }
+    .badge-sent { background-color: #d1e7dd; color: #0f5132; }
+    .badge-pending { background-color: #fff3cd; color: #664d03; }
+    .badge-failed { background-color: #f8d7da; color: #842029; }
+    .badge-target { background-color: #cfe2ff; color: #084298; }
   </style>
 </head>
 <body>
@@ -73,54 +62,39 @@
     <button onclick="location.href='index.html'" title="דף הבית">🏠</button>
     <button onclick="window.history.back()" title="חזור לעמוד קודם">↩️</button>
     <button onclick="saveChanges()" title="שמור שינויים">💾</button>
-    <button onclick="exportToExcel('transactions.csv')" title="ייצוא לאקסל">🟩</button>
-    <button onclick="printPage()" title="הדפסה">🖨️</button>
+    <button onclick="exportToExcel('log.csv')" title="ייצוא לאקסל">🟩</button>
+    <button onclick="window.print()" title="הדפסה">🖨️</button>
   </div>
 
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">ניהול עסקאות</h2>
-      <div>
-        <a href="create-deal.html" class="btn btn-success me-2">+ יצירת עסקה חדשה</a>
-        <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
-      </div>
-    </div>
+    <div class="log-box">
+      <h2 class="mb-4">לוג עסקה</h2>
+      <dl class="row">
+        <dt class="col-sm-3">מספר עסקה:</dt>
+        <dd class="col-sm-9" id="log-id">-</dd>
 
-    <div class="filter-section row g-2 align-items-center">
-      <div class="col-md-4">
-        <label class="form-label">סנן לפי לקוח</label>
-        <input type="text" class="form-control" id="filterCustomer" placeholder="שם לקוח">
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">סטטוס</label>
-        <select class="form-select" id="filterStatus">
-          <option value="">הכל</option>
-          <option value="שודר">שודר</option>
-          <option value="ממתין">ממתין</option>
-          <option value="נכשל">נכשל</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">תאריך שידור</label>
-        <input type="date" class="form-control" id="filterDate">
-      </div>
-    </div>
+        <dt class="col-sm-3">מוצר:</dt>
+        <dd class="col-sm-9" id="log-product">-</dd>
 
-    <table class="table table-bordered bg-white">
-      <thead class="table-dark">
-        <tr>
-          <th>מספר עסקה</th>
-          <th>מוצר</th>
-          <th>לקוח</th>
-          <th>אינטגרציה</th>
-          <th>תאריך שידור</th>
-          <th>סטטוס</th>
-          <th>סטטוס יעד</th>
-          <th>פעולות</th>
-        </tr>
-      </thead>
-      <tbody id="transactionsTable"></tbody>
-    </table>
+        <dt class="col-sm-3">לקוח:</dt>
+        <dd class="col-sm-9" id="log-customer">-</dd>
+
+        <dt class="col-sm-3">אינטגרציה:</dt>
+        <dd class="col-sm-9" id="log-integration">-</dd>
+
+        <dt class="col-sm-3">תאריך שידור:</dt>
+        <dd class="col-sm-9" id="log-date">-</dd>
+
+        <dt class="col-sm-3">סטטוס:</dt>
+        <dd class="col-sm-9"><span id="log-status" class="badge badge-status">-</span></dd>
+
+        <dt class="col-sm-3">סטטוס יעד:</dt>
+        <dd class="col-sm-9"><span id="log-target-status" class="badge badge-status">-</span></dd>
+      </dl>
+
+      <h5 class="mt-4">פלט לוג:</h5>
+      <pre class="log-pre" id="log-details">-</pre>
+    </div>
   </div>
 
   <script>
@@ -157,59 +131,37 @@
       }
     ];
 
-    function renderTransactions() {
-      const customerFilter = document.getElementById('filterCustomer').value;
-      const statusFilter = document.getElementById('filterStatus').value;
-      const dateFilter = document.getElementById('filterDate').value;
+    const params = new URLSearchParams(window.location.search);
+    const dealId = params.get('dealId');
+    const deal = transactions.find(t => t.id === dealId);
 
-      const tbody = document.getElementById('transactionsTable');
-      tbody.innerHTML = '';
+    if (deal) {
+      document.getElementById('log-id').textContent = deal.id;
+      document.getElementById('log-product').textContent = deal.product;
+      document.getElementById('log-customer').textContent = deal.customer;
+      document.getElementById('log-integration').textContent = deal.integration;
+      document.getElementById('log-date').textContent = deal.date;
+      document.getElementById('log-status').textContent = deal.status;
+      document.getElementById('log-target-status').textContent = deal.targetStatus;
+      document.getElementById('log-details').textContent = deal.log;
 
-      transactions.filter(tx => {
-        return (!customerFilter || tx.customer.includes(customerFilter)) &&
-               (!statusFilter || tx.status === statusFilter) &&
-               (!dateFilter || tx.date === dateFilter);
-      }).forEach((tx, index) => {
-        const targetClass = tx.targetStatus === 'התקבל' ? 'target-received'
-                            : tx.targetStatus === 'בוצע' ? 'target-done'
-                            : tx.targetStatus === 'שגיאה' ? 'target-error'
-                            : 'status-pending';
-
-        tbody.innerHTML += `
-          <tr>
-            <td>${tx.id}</td>
-            <td>${tx.product}</td>
-            <td>${tx.customer}</td>
-            <td>${tx.integration}</td>
-            <td>${tx.date}</td>
-            <td><span class="status-tag ${tx.status === 'שודר' ? 'status-sent' : tx.status === 'נכשל' ? 'status-failed' : 'status-pending'}">${tx.status}</span></td>
-            <td><span class="status-tag ${targetClass}">${tx.targetStatus}</span></td>
-            <td><button class="btn btn-sm btn-outline-primary" onclick="showLog(${index})">הצג לוג</button></td>
-          </tr>
-        `;
-      });
-    }
-
-    function showLog(index) {
-      alert("📄 לוג העסקה:\n" + transactions[index].log);
+      document.getElementById('log-status').classList.add(
+        deal.status === 'שודר' ? 'badge-sent' : deal.status === 'נכשל' ? 'badge-failed' : 'badge-pending'
+      );
+      document.getElementById('log-target-status').classList.add('badge-target');
+    } else {
+      document.querySelector('.log-box').innerHTML = '<div class="alert alert-danger">לא נמצאה עסקה עם מזהה ' + dealId + '</div>';
     }
 
     function saveChanges() {
-      alert("💾 שמירת שינויים (דמו בלבד)");
+      alert('💾 אין שינויים לשמירה בדף זה (דמו בלבד)');
     }
-
-    function printPage() {
-      window.print();
-    }
-
-    document.getElementById('filterCustomer').addEventListener('input', renderTransactions);
-    document.getElementById('filterStatus').addEventListener('change', renderTransactions);
-    document.getElementById('filterDate').addEventListener('change', renderTransactions);
 
     function exportToExcel(filename) {
-      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
-      const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
-      const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+      if (!dealId || !deal) return;
+      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך', 'סטטוס', 'סטטוס יעד', 'לוג'];
+      const row = [deal.id, deal.product, deal.customer, deal.integration, deal.date, deal.status, deal.targetStatus, deal.log];
+      const csv = [headers, row].map(r => r.join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -218,8 +170,6 @@
       link.click();
       document.body.removeChild(link);
     }
-
-    renderTransactions();
   </script>
 </body>
 </html>
