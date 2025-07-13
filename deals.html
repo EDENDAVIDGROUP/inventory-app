@@ -184,7 +184,7 @@
             <td>${tx.date}</td>
             <td><span class="status-tag ${tx.status === 'שודר' ? 'status-sent' : tx.status === 'נכשל' ? 'status-failed' : 'status-pending'}">${tx.status}</span></td>
             <td><span class="status-tag ${targetClass}">${tx.targetStatus}</span></td>
-            <td><button class="btn btn-sm btn-outline-primary" onclick="showLog(${index})">הצג לוג</button></td>
+<td><a href="deal-log.html?dealId=${tx.id}" class="btn btn-sm btn-outline-primary">הצג לוג</a></td>
           </tr>
         `;
       });
