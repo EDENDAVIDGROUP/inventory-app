@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>הזמנות בטיפול</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     body {
       background-color: #f5f5f5;
@@ -17,23 +18,36 @@
       background-color: #1f2235;
       color: white;
     }
-    .actions button {
+    .actions button, .actions a {
       margin-left: 5px;
+    }
+    .action-bar {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
     }
   </style>
 </head>
-<body>
+<body onload="loadInProgressOrders()">
   <div class="container">
     <h2 class="text-center mb-4">הזמנות בטיפול</h2>
 
-    <div class="mb-3">
-      <input type="text" class="form-control" placeholder="חיפוש הזמנה לפי מספר / שם לקוח / טלפון">
+    <div class="action-bar">
+      <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 300px;">
+      <div>
+        <button class="btn btn-success" onclick="exportToExcel()">📤 יצוא לאקסל</button>
+        <button class="btn btn-primary" onclick="routeToShipments()">🚚 ניתוב למשלוחים</button>
+        <button class="btn btn-info" onclick="printPage()">🖨️ הדפס</button>
+        <button class="btn btn-secondary" onclick="location.href='index.html'">🏠 חזרה לדף הבית</button>
+      </div>
     </div>
 
     <table class="table table-bordered text-center">
       <thead>
         <tr>
-          <th><input type="checkbox"></th>
+          <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
           <th>מספר הזמנה</th>
           <th>שם לקוח</th>
           <th>טלפון</th>
@@ -43,34 +57,148 @@
           <th>פעולות</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td>#12345</td>
-          <td>משה כהן</td>
-          <td>050-1234567</td>
-          <td>06/07/2025</td>
-          <td>בהכנה</td>
-          <td>BOXMASTER</td>
-          <td class="actions">
-            <button class="btn btn-sm btn-primary">צפה</button>
-            <button class="btn btn-sm btn-success">שנה סטטוס</button>
-            <button class="btn btn-sm btn-danger">מחק</button>
-          </td>
-        </tr>
-        <!-- שורות נוספות כאן -->
+      <tbody id="ordersTableBody">
+        <!-- תוכן דינאמי ייכנס כאן -->
       </tbody>
     </table>
 
     <div class="d-flex justify-content-between mt-4">
       <div>
-        <button class="btn btn-secondary">סמן הכל</button>
-        <button class="btn btn-warning">בטל סימון</button>
+        <button class="btn btn-secondary" onclick="toggleAllCheckboxes(true)">סמן הכל</button>
+        <button class="btn btn-warning" onclick="toggleAllCheckboxes(false)">בטל סימון</button>
       </div>
       <div>
-        <button class="btn btn-success">עדכן סטטוס להזמנות שנבחרו</button>
+        <select id="bulkStatus" class="form-select d-inline-block w-auto">
+          <option value="">בחר סטטוס</option>
+          <option value="בטיפול">בטיפול</option>
+          <option value="שודר לנהג חברה">שודר לנהג חברה</option>
+          <option value="שודר לבלדר">שודר לבלדר</option>
+          <option value="לא טופל">לא טופל</option>
+        </select>
+        <button class="btn btn-success" onclick="updateStatusForSelected()">עדכן סטטוס להזמנות שנבחרו</button>
       </div>
     </div>
   </div>
+
+  <script>
+    let allOrders = [];
+
+    function loadInProgressOrders() {
+      allOrders = JSON.parse(localStorage.getItem('inProgressOrders') || '[]');
+      renderOrders(allOrders);
+    }
+
+    function renderOrders(orders) {
+      const tbody = document.getElementById('ordersTableBody');
+      tbody.innerHTML = '';
+
+      orders.forEach(order => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td><input type="checkbox" class="row-check" data-id="${order.orderId}"></td>
+          <td>#${order.orderId}</td>
+          <td>${order.customerName}</td>
+          <td>${order.phone}</td>
+          <td>${order.date}</td>
+          <td>${order.status}</td>
+          <td>${order.platform}</td>
+          <td class="actions">
+            <a href="edit-orders-in-progress.html?orderId=${order.orderId}" class="btn btn-sm btn-primary">טפל בהזמנה</a>
+            <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.orderId}')">מחק</button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function deleteOrder(orderId) {
+      allOrders = allOrders.filter(o => o.orderId !== orderId);
+      localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
+      renderOrders(allOrders);
+    }
+
+    function toggleSelectAll(source) {
+      document.querySelectorAll('.row-check').forEach(cb => cb.checked = source.checked);
+    }
+
+    function toggleAllCheckboxes(state) {
+      document.querySelectorAll('.row-check').forEach(cb => cb.checked = state);
+    }
+
+    function updateStatusForSelected() {
+      const newStatus = document.getElementById('bulkStatus').value;
+      if (!newStatus) return alert('יש לבחור סטטוס');
+
+      document.querySelectorAll('.row-check:checked').forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        const order = allOrders.find(o => o.orderId === id);
+        if (order) order.status = newStatus;
+      });
+
+      localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
+      renderOrders(allOrders);
+    }
+
+    function exportToExcel() {
+      const exportData = allOrders.map(order => ({
+        "מספר הזמנה": order.orderId,
+        "שם לקוח": order.customerName,
+        "טלפון": order.phone,
+        "תאריך": order.date,
+        "סטטוס": order.status,
+        "פלטפורמה": order.platform
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'הזמנות בטיפול');
+      XLSX.writeFile(wb, 'in-progress-orders.xlsx');
+    }
+
+    function printPage() {
+      window.print();
+    }
+
+    function routeToShipments() {
+      const selectedIds = Array.from(document.querySelectorAll('.row-check:checked')).map(cb => cb.getAttribute('data-id'));
+      if (selectedIds.length === 0) return alert('יש לבחור לפחות הזמנה אחת לניתוב');
+
+      let shipments = JSON.parse(localStorage.getItem('shipmentOrders') || '[]');
+      let updatedOrders = [];
+
+      allOrders = allOrders.filter(order => {
+        if (selectedIds.includes(order.orderId)) {
+          shipments.push({
+            orderId: order.orderId,
+            customerName: order.customerName,
+            phone: order.phone,
+            address: order.address,
+            platform: order.platform,
+            date: order.date,
+            status: 'ממתין לשידור'
+          });
+          return false; // remove from inProgress
+        }
+        return true;
+      });
+
+      localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
+      localStorage.setItem('shipmentOrders', JSON.stringify(shipments));
+      renderOrders(allOrders);
+      alert('ההזמנות נשלחו לקטגוריית משלוחים בהצלחה');
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const value = this.value.toLowerCase();
+      const filtered = allOrders.filter(order =>
+        order.orderId.toLowerCase().includes(value) ||
+        order.customerName.toLowerCase().includes(value) ||
+        order.phone.toLowerCase().includes(value)
+      );
+      renderOrders(filtered);
+    });
+  </script>
 </body>
 </html>
