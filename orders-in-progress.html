@@ -23,10 +23,6 @@
     }
     .action-bar {
       margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
     }
     .filters {
       display: flex;
@@ -34,15 +30,22 @@
       align-items: center;
       flex-wrap: wrap;
     }
+    .filters input,
+    .filters select,
+    .filters button {
+      max-height: 38px;
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
   </style>
 </head>
 <body onload="loadInProgressOrders()">
   <div class="container">
     <h2 class="text-center mb-4">הזמנות בטיפול</h2>
 
-    <div class="action-bar">
+    <div class="action-bar d-flex flex-wrap justify-content-between align-items-center">
       <div class="filters">
-        <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 300px;">
+        <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 200px;">
         <input type="date" id="fromDate" class="form-control">
         <input type="date" id="toDate" class="form-control">
         <select id="bulkStatus" class="form-select">
@@ -55,7 +58,7 @@
         <button class="btn btn-outline-dark" onclick="applyFilters()">סנן</button>
         <button class="btn btn-outline-secondary" onclick="clearFilters()">איפוס</button>
       </div>
-      <div>
+      <div class="mt-2 mt-sm-0">
         <button class="btn btn-success" onclick="exportToExcel()">📤 יצוא לאקסל</button>
         <button class="btn btn-primary" onclick="routeToShipments()">נתב למשלוחים</button>
         <button class="btn btn-info" onclick="printSelectedOrders()">🖨️ הדפס</button>
