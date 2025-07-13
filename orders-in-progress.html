@@ -28,6 +28,12 @@
       gap: 10px;
       justify-content: space-between;
     }
+    .filters {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body onload="loadInProgressOrders()">
@@ -35,11 +41,24 @@
     <h2 class="text-center mb-4">הזמנות בטיפול</h2>
 
     <div class="action-bar">
-      <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 300px;">
+      <div class="filters">
+        <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 300px;">
+        <input type="date" id="fromDate" class="form-control">
+        <input type="date" id="toDate" class="form-control">
+        <select id="bulkStatus" class="form-select">
+          <option value="">סינון לפי סטטוס</option>
+          <option value="בטיפול">בטיפול</option>
+          <option value="שודר לנהג חברה">שודר לנהג חברה</option>
+          <option value="שודר לבלדר">שודר לבלדר</option>
+          <option value="לא טופל">לא טופל</option>
+        </select>
+        <button class="btn btn-outline-dark" onclick="applyFilters()">סנן</button>
+        <button class="btn btn-outline-secondary" onclick="clearFilters()">איפוס</button>
+      </div>
       <div>
         <button class="btn btn-success" onclick="exportToExcel()">📤 יצוא לאקסל</button>
-        <button class="btn btn-primary" onclick="routeToShipments()">🚚 ניתוב למשלוחים</button>
-        <button class="btn btn-info" onclick="printPage()">🖨️ הדפס</button>
+        <button class="btn btn-primary" onclick="routeToShipments()">נתב למשלוחים</button>
+        <button class="btn btn-info" onclick="printSelectedOrders()">🖨️ הדפס</button>
         <button class="btn btn-secondary" onclick="location.href='index.html'">🏠 חזרה לדף הבית</button>
       </div>
     </div>
@@ -67,16 +86,6 @@
         <button class="btn btn-secondary" onclick="toggleAllCheckboxes(true)">סמן הכל</button>
         <button class="btn btn-warning" onclick="toggleAllCheckboxes(false)">בטל סימון</button>
       </div>
-      <div>
-        <select id="bulkStatus" class="form-select d-inline-block w-auto">
-          <option value="">בחר סטטוס</option>
-          <option value="בטיפול">בטיפול</option>
-          <option value="שודר לנהג חברה">שודר לנהג חברה</option>
-          <option value="שודר לבלדר">שודר לבלדר</option>
-          <option value="לא טופל">לא טופל</option>
-        </select>
-        <button class="btn btn-success" onclick="updateStatusForSelected()">עדכן סטטוס להזמנות שנבחרו</button>
-      </div>
     </div>
   </div>
 
@@ -93,7 +102,7 @@
           altPhone: '',
           address: 'רחוב ההדגמה 1, תל אביב',
           platform: 'DemoPlatform',
-          date: new Date().toLocaleDateString('he-IL'),
+          date: new Date().toISOString().split('T')[0],
           status: 'בטיפול',
           notes: 'נוצר לצורך בדיקה'
         };
@@ -120,18 +129,11 @@
           <td>${order.platform}</td>
           <td class="actions">
             <a href="edit-orders-in-progress.html?orderId=${order.orderId}" class="btn btn-sm btn-primary">טפל בהזמנה</a>
-            <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.orderId}')">מחק</button>
           </td>
         `;
 
         tbody.appendChild(row);
       });
-    }
-
-    function deleteOrder(orderId) {
-      allOrders = allOrders.filter(o => o.orderId !== orderId);
-      localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
-      renderOrders(allOrders);
     }
 
     function toggleSelectAll(source) {
@@ -140,20 +142,6 @@
 
     function toggleAllCheckboxes(state) {
       document.querySelectorAll('.row-check').forEach(cb => cb.checked = state);
-    }
-
-    function updateStatusForSelected() {
-      const newStatus = document.getElementById('bulkStatus').value;
-      if (!newStatus) return alert('יש לבחור סטטוס');
-
-      document.querySelectorAll('.row-check:checked').forEach(cb => {
-        const id = cb.getAttribute('data-id');
-        const order = allOrders.find(o => o.orderId === id);
-        if (order) order.status = newStatus;
-      });
-
-      localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
-      renderOrders(allOrders);
     }
 
     function exportToExcel() {
@@ -172,8 +160,31 @@
       XLSX.writeFile(wb, 'in-progress-orders.xlsx');
     }
 
-    function printPage() {
-      window.print();
+    function printSelectedOrders() {
+      const selected = allOrders.filter(order => {
+        return document.querySelector(`.row-check[data-id="${order.orderId}"]`)?.checked;
+      });
+      if (selected.length === 0) return alert('בחר לפחות הזמנה אחת להדפסה');
+
+      const newWin = window.open('', '', 'width=800,height=600');
+      newWin.document.write('<html><head><title>הדפסת הזמנות</title></head><body dir="rtl">');
+      selected.forEach(order => {
+        newWin.document.write(`
+          <div style="margin-bottom:30px;border-bottom:1px solid #ccc;padding-bottom:15px;">
+            <h3>הזמנה #${order.orderId}</h3>
+            <p><strong>שם לקוח:</strong> ${order.customerName}</p>
+            <p><strong>טלפון:</strong> ${order.phone}</p>
+            <p><strong>כתובת:</strong> ${order.address}</p>
+            <p><strong>פלטפורמה:</strong> ${order.platform}</p>
+            <p><strong>סטטוס:</strong> ${order.status}</p>
+            <p><strong>תאריך:</strong> ${order.date}</p>
+            <p><strong>הערות:</strong> ${order.notes || ''}</p>
+          </div>
+        `);
+      });
+      newWin.document.write('</body></html>');
+      newWin.document.close();
+      newWin.print();
     }
 
     function routeToShipments() {
@@ -181,8 +192,6 @@
       if (selectedIds.length === 0) return alert('יש לבחור לפחות הזמנה אחת לניתוב');
 
       let shipments = JSON.parse(localStorage.getItem('shipmentOrders') || '[]');
-      let updatedOrders = [];
-
       allOrders = allOrders.filter(order => {
         if (selectedIds.includes(order.orderId)) {
           shipments.push({
@@ -194,7 +203,7 @@
             date: order.date,
             status: 'ממתין לשידור'
           });
-          return false; // remove from inProgress
+          return false;
         }
         return true;
       });
@@ -205,15 +214,29 @@
       alert('ההזמנות נשלחו לקטגוריית משלוחים בהצלחה');
     }
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-      const value = this.value.toLowerCase();
-      const filtered = allOrders.filter(order =>
-        order.orderId.toLowerCase().includes(value) ||
-        order.customerName.toLowerCase().includes(value) ||
-        order.phone.toLowerCase().includes(value)
-      );
+    function applyFilters() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const from = document.getElementById('fromDate').value;
+      const to = document.getElementById('toDate').value;
+      const status = document.getElementById('bulkStatus').value;
+
+      const filtered = allOrders.filter(order => {
+        const matchText = order.orderId.toLowerCase().includes(search) || order.customerName.toLowerCase().includes(search) || order.phone.toLowerCase().includes(search);
+        const matchStatus = status ? order.status === status : true;
+        const matchDate = (!from || order.date >= from) && (!to || order.date <= to);
+        return matchText && matchStatus && matchDate;
+      });
+
       renderOrders(filtered);
-    });
+    }
+
+    function clearFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('fromDate').value = '';
+      document.getElementById('toDate').value = '';
+      document.getElementById('bulkStatus').value = '';
+      renderOrders(allOrders);
+    }
   </script>
 </body>
 </html>
