@@ -1,190 +1,213 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>הגדרות מערכת</title>
+  <title>כרטיס לקוח</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #f8f9fa;
       font-family: Arial, sans-serif;
+      padding: 30px;
     }
-    .tab-content {
-      margin-top: 20px;
+    h2 {
+      margin-bottom: 20px;
     }
-    .form-check {
-      margin-bottom: 10px;
-    }
-    .save-btn-container {
-      text-align: center;
+    .section-title {
       margin-top: 30px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .form-section {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .log-box {
+      background: #f1f1f1;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
-
 <body>
-  <div class="container mt-5">
-    <h2 class="text-center mb-4">הגדרות מערכת</h2>
+  <div class="container">
+    <div class="top-actions">
+      <a href="index.html" class="btn btn-outline-dark">🏠 דף הבית</a>
+      <a href="clients.html" class="btn btn-outline-secondary">↩ חזרה לרשימת לקוחות</a>
+      <button class="btn btn-outline-primary" onclick="window.print()">🖨️ הדפס</button>
+    </div>
 
-    <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">כללי</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="invoices-tab" data-bs-toggle="tab" data-bs-target="#invoices" type="button" role="tab">חשבוניות</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">שידור הזמנות</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="integrations-tab" data-bs-toggle="tab" data-bs-target="#integrations" type="button" role="tab">אינטגרציות</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="emails-tab" data-bs-toggle="tab" data-bs-target="#emails" type="button" role="tab">מיילים והתראות</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="backup-tab" data-bs-toggle="tab" data-bs-target="#backup" type="button" role="tab">גיבוי ותחזוקה</button>
-      </li>
-    </ul>
+    <h2 id="clientTitle">כרטיס לקוח</h2>
 
-    <form class="tab-content" id="settingsTabsContent">
-      <!-- כל הטפסים כאן נשמרים בטופס אחד -->
-      <div class="tab-pane fade show active" id="general" role="tabpanel">
-        <div class="mt-3">
-          <div class="mb-3">
-            <label class="form-label">עלות משלוח ברירת מחדל (₪)</label>
-            <input type="number" class="form-control" name="default_shipping" value="35">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">מטבע ברירת מחדל</label>
-            <select class="form-select" name="default_currency">
-              <option selected>₪</option>
-              <option>$</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">תאריך התחלה לדוחות חודשיים</label>
-            <input type="date" class="form-control" name="report_start_date">
-          </div>
+    <div class="form-section">
+      <div class="section-title">פרטי עבודה מול הלקוח</div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label>סוג חיבור להזמנות</label>
+          <select id="orderMethod" class="form-select">
+            <option>API</option>
+            <option>אקסל במייל</option>
+            <option>PDF במייל</option>
+            <option>מחיר ידני</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>סוג מחיר</label>
+          <select id="priceType" class="form-select" onchange="toggleDiscount()">
+            <option>מחיר סופי</option>
+            <option>מחיר לצרכן - גזור ממנו עמלה</option>
+          </select>
         </div>
       </div>
-
-      <div class="tab-pane fade" id="invoices" role="tabpanel">
-        <div class="mt-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="auto_invoice_api" checked>
-            <label class="form-check-label">הפקת חשבונית אוטומטית ללקוחות API</label>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">לקוחות עם חשבונית מרוכזת</label>
-            <textarea class="form-control" rows="2" name="group_invoice_clients">מועדון טוב, דולצה ויטה</textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">תזמון הפקת חשבוניות</label>
-            <select class="form-select" name="invoice_schedule">
-              <option>אוטומטי מדי יום</option>
-              <option>ידני</option>
-              <option>סוף חודש</option>
-            </select>
-          </div>
+      <div class="row mb-3" id="discountSection" style="display:none">
+        <div class="col-md-6">
+          <label>אחוז עמלה (%)</label>
+          <input type="number" id="discountPercent" class="form-control">
         </div>
       </div>
-
-      <div class="tab-pane fade" id="orders" role="tabpanel">
-        <div class="mt-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="auto_send_chita">
-            <label class="form-check-label">שלח אוטומטית לצ'יטה</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="auto_label">
-            <label class="form-check-label">הפקת מדבקה אוטומטית להזמנה</label>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">טמפלט מדבקה</label>
-            <input type="file" class="form-control" name="label_template">
-          </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label>האם המחיר כולל משלוח?</label>
+          <select id="includesShipping" class="form-select">
+            <option>כן</option>
+            <option>לא – להוסיף עלות</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>האם לשדר אוטומטית לצ'יטה?</label>
+          <select id="autoSendShipping" class="form-select">
+            <option>לא</option>
+            <option>כן</option>
+          </select>
         </div>
       </div>
+    </div>
 
-      <div class="tab-pane fade" id="integrations" role="tabpanel">
-        <div class="mt-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="enable_api" checked>
-            <label class="form-check-label">API</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="enable_excel" checked>
-            <label class="form-check-label">קובץ אקסל</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="enable_mirakl" checked>
-            <label class="form-check-label">Mirakl</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="enable_manual">
-            <label class="form-check-label">מחיר ידני</label>
-          </div>
-          <div class="mb-3 mt-3">
-            <label class="form-label">אימייל ברירת מחדל להזמנות</label>
-            <input type="email" class="form-control" name="default_order_email" placeholder="example@domain.com">
-          </div>
+    <div class="form-section mt-4">
+      <div class="section-title">הגדרות הנהלת חשבונות</div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label>סוג חשבונית</label>
+          <select id="invoiceType" class="form-select">
+            <option>חשבונית מס</option>
+            <option>תעודת משלוח</option>
+            <option>הזמנה</option>
+            <option>חשבונית מרוכזת</option>
+            <option>אין חשבונית</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label>עיתוי ההפקה</label>
+          <select id="invoiceTiming" class="form-select">
+            <option>לכל הזמנה</option>
+            <option>סוף חודש</option>
+          </select>
         </div>
       </div>
-
-      <div class="tab-pane fade" id="emails" role="tabpanel">
-        <div class="mt-3">
-          <div class="mb-3">
-            <label class="form-label">כתובת מייל לשגיאות מערכת</label>
-            <input type="email" class="form-control" name="error_email">
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="alert_excel_errors">
-            <label class="form-check-label">שלח התראה אם אקסל כולל שגיאות</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="alert_unprocessed_orders">
-            <label class="form-check-label">התראה להזמנות שלא טופלו</label>
-          </div>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label>האם לפצל שורת משלוח לחשבונית נפרדת?</label>
+          <select id="splitShippingLine" class="form-select">
+            <option>לא</option>
+            <option>כן</option>
+          </select>
         </div>
       </div>
+    </div>
 
-      <div class="tab-pane fade" id="backup" role="tabpanel">
-        <div class="mt-3">
-          <button class="btn btn-secondary mb-2" type="button">הורד גיבוי נתונים</button><br>
-          <button class="btn btn-outline-primary mb-2" type="button">ייצוא כל ההגדרות ל‑CSV</button><br>
-          <button class="btn btn-danger" type="button">איפוס כל ההגדרות לברירת מחדל</button>
+    <div class="form-section mt-4">
+      <div class="section-title">פרטי לקוח כלליים</div>
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label>טלפון</label>
+          <input type="text" id="clientPhone" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>אימייל</label>
+          <input type="email" id="clientEmail" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>מספר עוסק / ח.פ</label>
+          <input type="text" id="clientVat" class="form-control">
         </div>
       </div>
+    </div>
 
-      <div class="save-btn-container">
-        <button type="submit" class="btn btn-success btn-lg">שמור הגדרות</button>
+    <div class="form-section mt-4">
+      <div class="section-title">מסמך התקשרות עם הלקוח</div>
+      <input type="file" id="clientAgreement" class="form-control">
+    </div>
+
+    <div class="form-section mt-4">
+      <div class="section-title">הערות טכניות / לוגים</div>
+      <div class="log-box" id="logBox">
+        🟢 טעינת כרטיס לקוח בוצעה בהצלחה.<br>
+        🕒 13/07/2025 23:38: נוצר כרטיס חדש ללקוח ID=0
       </div>
-    </form>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-success" onclick="saveClientSettings()">💾 שמור הגדרות</button>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.querySelector('form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      const data = {};
+    function toggleDiscount() {
+      const priceType = document.getElementById("priceType").value;
+      document.getElementById("discountSection").style.display = priceType.includes("גזור") ? "block" : "none";
+    }
 
-      formData.forEach((value, key) => {
-        if (data[key]) {
-          if (!Array.isArray(data[key])) data[key] = [data[key]];
-          data[key].push(value);
-        } else {
-          data[key] = value === 'on' ? true : value;
-        }
-      });
+    function saveClientSettings() {
+      const params = new URLSearchParams(window.location.search);
+      const clientId = params.get("clientId");
+      if (!clientId) return;
 
-      console.log('הגדרות שנשמרו:', data);
-      alert('ההגדרות נשמרו (בדיקה מקומית בלבד)');
-    });
+      const clients = JSON.parse(localStorage.getItem("clients")) || [];
+      const client = clients[clientId];
+
+      if (client) {
+        client.orderMethod = document.getElementById("orderMethod").value;
+        client.priceType = document.getElementById("priceType").value;
+        client.discountPercent = document.getElementById("discountPercent").value;
+        client.includesShipping = document.getElementById("includesShipping").value;
+        client.autoSendShipping = document.getElementById("autoSendShipping").value;
+        client.invoiceType = document.getElementById("invoiceType").value;
+        client.invoiceTiming = document.getElementById("invoiceTiming").value;
+        client.splitShippingLine = document.getElementById("splitShippingLine").value;
+        client.clientPhone = document.getElementById("clientPhone").value;
+        client.clientEmail = document.getElementById("clientEmail").value;
+        client.clientVat = document.getElementById("clientVat").value;
+
+        localStorage.setItem("clients", JSON.stringify(clients));
+        document.getElementById("logBox").innerHTML += `<br>✅ שמירה הצליחה עבור לקוח ID=${clientId}`;
+      }
+    }
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const clientId = params.get("clientId");
+      const clients = JSON.parse(localStorage.getItem("clients")) || [];
+      const client = clients[clientId];
+      if (client) {
+        document.getElementById("clientTitle").innerText = `כרטיס לקוח: ${client.name}`;
+      } else {
+        document.getElementById("logBox").innerHTML += "<br>🔴 שגיאה: לקוח לא נמצא במערכת.";
+      }
+    };
   </script>
 </body>
-
 </html>
