@@ -55,6 +55,27 @@
     .badge-pending { background-color: #fff3cd; color: #664d03; }
     .badge-failed { background-color: #f8d7da; color: #842029; }
     .badge-target { background-color: #cfe2ff; color: #084298; }
+    .history-log {
+      background: #fff;
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+    .history-log h5 {
+      margin-bottom: 15px;
+    }
+    .history-log ul {
+      list-style: none;
+      padding-right: 0;
+    }
+    .history-log li {
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border-right: 4px solid #0d6efd;
+    }
   </style>
 </head>
 <body>
@@ -90,10 +111,27 @@
 
         <dt class="col-sm-3">סטטוס יעד:</dt>
         <dd class="col-sm-9"><span id="log-target-status" class="badge badge-status">-</span></dd>
+
+        <dt class="col-sm-3">מספר הזמנה:</dt>
+        <dd class="col-sm-9" id="log-order"><a href="#" id="log-order-link">-</a></dd>
       </dl>
 
       <h5 class="mt-4">פלט לוג:</h5>
       <pre class="log-pre" id="log-details">-</pre>
+
+      <h5 class="mt-4">תגובות מערכת:</h5>
+      <div id="system-response" class="alert alert-info">-</div>
+
+      <div class="history-log">
+        <h5>היסטוריית שינויים</h5>
+        <ul id="log-history">
+          <li>2025-07-08 10:14: ניסיון שליחה ראשוני</li>
+          <li>2025-07-08 10:15: התקבל שגיאה מהשרת: Attachment missing</li>
+          <li>2025-07-08 10:17: ניסיון חוזר – ממתין לתגובה</li>
+        </ul>
+      </div>
+
+      <div id="resend-container" class="mt-4"></div>
     </div>
   </div>
 
@@ -101,33 +139,39 @@
     const transactions = [
       {
         id: 'T001',
+        orderId: 'ORD001',
         product: 'מצנן ARPO 5500',
         customer: 'BOXMASTER',
         integration: 'API',
         date: '2025-07-08',
         status: 'שודר',
         targetStatus: 'התקבל',
-        log: 'POST /api/transactions\nResponse: 200 OK'
+        log: 'POST /api/transactions\nResponse: 200 OK',
+        systemNote: 'המערכת זיהתה שליחה תקינה ל-API'
       },
       {
         id: 'T002',
+        orderId: 'ORD002',
         product: 'אוהל לוגיסטי 4X4',
         customer: 'מועדון טוב',
         integration: 'Email',
         date: '2025-07-06',
         status: 'נכשל',
         targetStatus: 'שגיאה',
-        log: 'Email sent to orders@modontov.co.il\nError: Attachment missing'
+        log: 'Email sent to orders@modontov.co.il\nError: Attachment missing',
+        systemNote: '⚠️ הקובץ לא צורף להודעת המייל'
       },
       {
         id: 'T003',
+        orderId: 'ORD003',
         product: 'מטבח עץ לילדים',
         customer: 'סופר-פארם',
         integration: 'Mirakl',
         date: '2025-07-07',
         status: 'ממתין',
         targetStatus: 'ממתין',
-        log: 'Waiting for API confirmation from Mirakl...'
+        log: 'Waiting for API confirmation from Mirakl...',
+        systemNote: '🕓 ממתין לאישור מהפלטפורמה'
       }
     ];
 
@@ -144,11 +188,24 @@
       document.getElementById('log-status').textContent = deal.status;
       document.getElementById('log-target-status').textContent = deal.targetStatus;
       document.getElementById('log-details').textContent = deal.log;
+      document.getElementById('system-response').textContent = deal.systemNote;
+      document.getElementById('log-order-link').textContent = deal.orderId;
+      document.getElementById('log-order-link').href = `order-details.html?orderId=${deal.orderId}`;
 
       document.getElementById('log-status').classList.add(
         deal.status === 'שודר' ? 'badge-sent' : deal.status === 'נכשל' ? 'badge-failed' : 'badge-pending'
       );
       document.getElementById('log-target-status').classList.add('badge-target');
+
+      if (deal.status === 'נכשל') {
+        const resendBtn = document.createElement('button');
+        resendBtn.className = 'btn btn-warning';
+        resendBtn.textContent = '🔁 שליחה מחדש';
+        resendBtn.onclick = () => {
+          alert('🔄 הדמיה: העסקה נשלחת מחדש...\nבמערכת אמיתית, נבצע כאן קריאה ל-API או שליחת מייל');
+        };
+        document.getElementById('resend-container').appendChild(resendBtn);
+      }
     } else {
       document.querySelector('.log-box').innerHTML = '<div class="alert alert-danger">לא נמצאה עסקה עם מזהה ' + dealId + '</div>';
     }
