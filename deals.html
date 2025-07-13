@@ -25,6 +25,9 @@
     .status-sent { background-color: #d1e7dd; color: #0f5132; }
     .status-pending { background-color: #fff3cd; color: #664d03; }
     .status-failed { background-color: #f8d7da; color: #842029; }
+    .target-received { background-color: #cfe2ff; color: #084298; }
+    .target-done { background-color: #d1e7dd; color: #0f5132; }
+    .target-error { background-color: #f8d7da; color: #842029; }
     .filter-section {
       background: #fff;
       padding: 20px;
@@ -85,6 +88,7 @@
           <th>אינטגרציה</th>
           <th>תאריך שידור</th>
           <th>סטטוס</th>
+          <th>סטטוס יעד</th>
           <th>פעולות</th>
         </tr>
       </thead>
@@ -101,6 +105,7 @@
         integration: 'API',
         date: '2025-07-08',
         status: 'שודר',
+        targetStatus: 'התקבל',
         log: 'POST /api/transactions\nResponse: 200 OK'
       },
       {
@@ -110,6 +115,7 @@
         integration: 'Email',
         date: '2025-07-06',
         status: 'נכשל',
+        targetStatus: 'שגיאה',
         log: 'Email sent to orders@modontov.co.il\nError: Attachment missing'
       },
       {
@@ -119,6 +125,7 @@
         integration: 'Mirakl',
         date: '2025-07-07',
         status: 'ממתין',
+        targetStatus: 'ממתין',
         log: 'Waiting for API confirmation from Mirakl...'
       }
     ];
@@ -136,6 +143,11 @@
                (!statusFilter || tx.status === statusFilter) &&
                (!dateFilter || tx.date === dateFilter);
       }).forEach((tx, index) => {
+        const targetClass = tx.targetStatus === 'התקבל' ? 'target-received'
+                            : tx.targetStatus === 'בוצע' ? 'target-done'
+                            : tx.targetStatus === 'שגיאה' ? 'target-error'
+                            : 'status-pending';
+
         tbody.innerHTML += `
           <tr>
             <td>${tx.id}</td>
@@ -144,6 +156,7 @@
             <td>${tx.integration}</td>
             <td>${tx.date}</td>
             <td><span class="status-tag ${tx.status === 'שודר' ? 'status-sent' : tx.status === 'נכשל' ? 'status-failed' : 'status-pending'}">${tx.status}</span></td>
+            <td><span class="status-tag ${targetClass}">${tx.targetStatus}</span></td>
             <td><button class="btn btn-sm btn-outline-primary" onclick="showLog(${index})">הצג לוג</button></td>
           </tr>
         `;
@@ -159,8 +172,8 @@
     document.getElementById('filterDate').addEventListener('change', renderTransactions);
 
     function exportToExcel(filename) {
-      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס'];
-      const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status]);
+      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
+      const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
       const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
