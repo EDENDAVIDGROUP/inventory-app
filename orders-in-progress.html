@@ -85,6 +85,21 @@
 
     function loadInProgressOrders() {
       allOrders = JSON.parse(localStorage.getItem('inProgressOrders') || '[]');
+      if (allOrders.length === 0) {
+        const demoOrder = {
+          orderId: 'D' + Date.now(),
+          customerName: 'לקוח דמו',
+          phone: '050-0000000',
+          altPhone: '',
+          address: 'רחוב ההדגמה 1, תל אביב',
+          platform: 'DemoPlatform',
+          date: new Date().toLocaleDateString('he-IL'),
+          status: 'בטיפול',
+          notes: 'נוצר לצורך בדיקה'
+        };
+        allOrders.push(demoOrder);
+        localStorage.setItem('inProgressOrders', JSON.stringify(allOrders));
+      }
       renderOrders(allOrders);
     }
 
