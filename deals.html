@@ -1,181 +1,223 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ניהול עסקאות</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f9f9f9;
-      font-family: Arial, sans-serif;
-      padding-top: 70px;
-    }
-    .table th, .table td {
-      vertical-align: middle;
-      text-align: center;
-    }
-    .status-tag {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      display: inline-block;
-    }
-    .status-sent { background-color: #d1e7dd; color: #0f5132; }
-    .status-pending { background-color: #fff3cd; color: #664d03; }
-    .status-failed { background-color: #f8d7da; color: #842029; }
-    .target-received { background-color: #cfe2ff; color: #084298; }
-    .target-done { background-color: #d1e7dd; color: #0f5132; }
-    .target-error { background-color: #f8d7da; color: #842029; }
-    .filter-section {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .excel-icon-button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .excel-icon-button img {
-      height: 32px;
-    }
-    .fixed-toolbar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      left: 0;
-      background-color: #343a40;
-      padding: 10px 20px;
-      z-index: 1000;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .fixed-toolbar button {
-      color: white;
-      background: none;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-    }
-    .fixed-toolbar button:hover {
-      color: #0d6efd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול עסקאות</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            padding-top: 70px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .status-tag {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-sent {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+
+        .status-failed {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .target-received {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .target-done {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .target-error {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .filter-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .excel-icon-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .excel-icon-button img {
+            height: 32px;
+        }
+
+        .fixed-toolbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            background-color: #343a40;
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .fixed-toolbar button {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .fixed-toolbar button:hover {
+            color: #0d6efd;
+        }
+
+        .fixed-toolbar .bi {
+            vertical-align: middle;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="fixed-toolbar">
-    <button onclick="location.href='index.html'" title="דף הבית">🏠</button>
-    <button onclick="window.history.back()" title="חזור לעמוד קודם">↩️</button>
-    <button onclick="saveChanges()" title="שמור שינויים">💾</button>
-    <button onclick="exportToExcel('transactions.csv')" title="ייצוא לאקסל">🟩</button>
-    <button onclick="printPage()" title="הדפסה">🖨️</button>
-  </div>
+    <div class="fixed-toolbar">
+        <button onclick="location.href='index.html'" title="דף הבית"><i class="bi bi-house"></i></button>
+        <button onclick="window.history.back()" title="חזור לעמוד קודם"><i class="bi bi-arrow-return-left"></i></button>
+        <button onclick="saveChanges()" title="שמור שינויים"><i class="bi bi-floppy"></i></button>
+        <button onclick="exportToExcel('transactions.csv')" title="ייצוא לאקסל"><i class="bi-file-earmark-excel"></i></button>
+        <button onclick="printPage()" title="הדפסה"><i class="bi bi-printer"></i></button>
 
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">ניהול עסקאות</h2>
-      <div>
-        <a href="create-deal.html" class="btn btn-success me-2">+ יצירת עסקה חדשה</a>
-        <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
-      </div>
     </div>
 
-    <div class="filter-section row g-2 align-items-center">
-      <div class="col-md-4">
-        <label class="form-label">סנן לפי לקוח</label>
-        <input type="text" class="form-control" id="filterCustomer" placeholder="שם לקוח">
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">סטטוס</label>
-        <select class="form-select" id="filterStatus">
-          <option value="">הכל</option>
-          <option value="שודר">שודר</option>
-          <option value="ממתין">ממתין</option>
-          <option value="נכשל">נכשל</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">תאריך שידור</label>
-        <input type="date" class="form-control" id="filterDate">
-      </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">ניהול עסקאות</h2>
+            <div>
+                <a href="create-deal.html" class="btn btn-success me-2">+ יצירת עסקה חדשה</a>
+                <a href="index.html" class="btn btn-secondary me-2">חזרה לדף הבית</a>
+            </div>
+        </div>
+
+        <div class="filter-section row g-2 align-items-center">
+            <div class="col-md-4">
+                <label class="form-label">סנן לפי לקוח</label>
+                <input type="text" class="form-control" id="filterCustomer" placeholder="שם לקוח">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">סטטוס</label>
+                <select class="form-select" id="filterStatus">
+                    <option value="">הכל</option>
+                    <option value="שודר">שודר</option>
+                    <option value="ממתין">ממתין</option>
+                    <option value="נכשל">נכשל</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">תאריך שידור</label>
+                <input type="date" class="form-control" id="filterDate">
+            </div>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>מספר עסקה</th>
+                    <th>מוצר</th>
+                    <th>לקוח</th>
+                    <th>אינטגרציה</th>
+                    <th>תאריך שידור</th>
+                    <th>סטטוס</th>
+                    <th>סטטוס יעד</th>
+                    <th>פעולות</th>
+                </tr>
+            </thead>
+            <tbody id="transactionsTable"></tbody>
+        </table>
     </div>
 
-    <table class="table table-bordered bg-white">
-      <thead class="table-dark">
-        <tr>
-          <th>מספר עסקה</th>
-          <th>מוצר</th>
-          <th>לקוח</th>
-          <th>אינטגרציה</th>
-          <th>תאריך שידור</th>
-          <th>סטטוס</th>
-          <th>סטטוס יעד</th>
-          <th>פעולות</th>
-        </tr>
-      </thead>
-      <tbody id="transactionsTable"></tbody>
-    </table>
-  </div>
+    <script>
+        const transactions = [
+            {
+                id: 'T001',
+                product: 'מצנן ARPO 5500',
+                customer: 'BOXMASTER',
+                integration: 'API',
+                date: '2025-07-08',
+                status: 'שודר',
+                targetStatus: 'התקבל',
+                log: 'POST /api/transactions\nResponse: 200 OK'
+            },
+            {
+                id: 'T002',
+                product: 'אוהל לוגיסטי 4X4',
+                customer: 'מועדון טוב',
+                integration: 'Email',
+                date: '2025-07-06',
+                status: 'נכשל',
+                targetStatus: 'שגיאה',
+                log: 'Email sent to orders@modontov.co.il\nError: Attachment missing'
+            },
+            {
+                id: 'T003',
+                product: 'מטבח עץ לילדים',
+                customer: 'סופר-פארם',
+                integration: 'Mirakl',
+                date: '2025-07-07',
+                status: 'ממתין',
+                targetStatus: 'ממתין',
+                log: 'Waiting for API confirmation from Mirakl...'
+            }
+        ];
 
-  <script>
-    const transactions = [
-      {
-        id: 'T001',
-        product: 'מצנן ARPO 5500',
-        customer: 'BOXMASTER',
-        integration: 'API',
-        date: '2025-07-08',
-        status: 'שודר',
-        targetStatus: 'התקבל',
-        log: 'POST /api/transactions\nResponse: 200 OK'
-      },
-      {
-        id: 'T002',
-        product: 'אוהל לוגיסטי 4X4',
-        customer: 'מועדון טוב',
-        integration: 'Email',
-        date: '2025-07-06',
-        status: 'נכשל',
-        targetStatus: 'שגיאה',
-        log: 'Email sent to orders@modontov.co.il\nError: Attachment missing'
-      },
-      {
-        id: 'T003',
-        product: 'מטבח עץ לילדים',
-        customer: 'סופר-פארם',
-        integration: 'Mirakl',
-        date: '2025-07-07',
-        status: 'ממתין',
-        targetStatus: 'ממתין',
-        log: 'Waiting for API confirmation from Mirakl...'
-      }
-    ];
+        function renderTransactions() {
+            const customerFilter = document.getElementById('filterCustomer').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            const dateFilter = document.getElementById('filterDate').value;
 
-    function renderTransactions() {
-      const customerFilter = document.getElementById('filterCustomer').value;
-      const statusFilter = document.getElementById('filterStatus').value;
-      const dateFilter = document.getElementById('filterDate').value;
+            const tbody = document.getElementById('transactionsTable');
+            tbody.innerHTML = '';
 
-      const tbody = document.getElementById('transactionsTable');
-      tbody.innerHTML = '';
-
-      transactions.filter(tx => {
-        return (!customerFilter || tx.customer.includes(customerFilter)) &&
-               (!statusFilter || tx.status === statusFilter) &&
-               (!dateFilter || tx.date === dateFilter);
-      }).forEach((tx, index) => {
-        const targetClass = tx.targetStatus === 'התקבל' ? 'target-received'
-                            : tx.targetStatus === 'בוצע' ? 'target-done'
-                            : tx.targetStatus === 'שגיאה' ? 'target-error'
+            transactions.filter(tx => {
+                return (!customerFilter || tx.customer.includes(customerFilter)) &&
+                    (!statusFilter || tx.status === statusFilter) &&
+                    (!dateFilter || tx.date === dateFilter);
+            }).forEach((tx, index) => {
+                const targetClass = tx.targetStatus === 'התקבל' ? 'target-received'
+                    : tx.targetStatus === 'בוצע' ? 'target-done'
+                        : tx.targetStatus === 'שגיאה' ? 'target-error'
                             : 'status-pending';
 
-        tbody.innerHTML += `
+                tbody.innerHTML += `
           <tr>
             <td>${tx.id}</td>
             <td>${tx.product}</td>
@@ -187,39 +229,40 @@
 <td><a href="deal-log.html?dealId=${tx.id}" class="btn btn-sm btn-outline-primary">הצג לוג</a></td>
           </tr>
         `;
-      });
-    }
+            });
+        }
 
-    function showLog(index) {
-      alert("📄 לוג העסקה:\n" + transactions[index].log);
-    }
+        function showLog(index) {
+            alert("📄 לוג העסקה:\n" + transactions[index].log);
+        }
 
-    function saveChanges() {
-      alert("💾 שמירת שינויים (דמו בלבד)");
-    }
+        function saveChanges() {
+            alert("💾 שמירת שינויים (דמו בלבד)");
+        }
 
-    function printPage() {
-      window.print();
-    }
+        function printPage() {
+            window.print();
+        }
 
-    document.getElementById('filterCustomer').addEventListener('input', renderTransactions);
-    document.getElementById('filterStatus').addEventListener('change', renderTransactions);
-    document.getElementById('filterDate').addEventListener('change', renderTransactions);
+        document.getElementById('filterCustomer').addEventListener('input', renderTransactions);
+        document.getElementById('filterStatus').addEventListener('change', renderTransactions);
+        document.getElementById('filterDate').addEventListener('change', renderTransactions);
 
-    function exportToExcel(filename) {
-      const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
-      const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
-      const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+        function exportToExcel(filename) {
+            const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
+            const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
+            const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
-    renderTransactions();
-  </script>
+        renderTransactions();
+    </script>
 </body>
+
 </html>
