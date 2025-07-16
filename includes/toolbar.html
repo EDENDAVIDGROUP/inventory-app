@@ -1,0 +1,30 @@
+<div class="fixed-toolbar">
+  <button onclick="location.href='index.html'" title="דף הבית" aria-label="חזרה לדף הבית"><i class="bi bi-house"></i></button>
+  <button onclick="window.history.back()" title="חזור לעמוד קודם" aria-label="חזור לעמוד קודם"><i class="bi bi-arrow-return-left"></i></button>
+  <button onclick="saveChanges()" title="שמור שינויים" aria-label="שמור שינויים"><i class="bi bi-floppy"></i></button>
+  <button onclick="exportToExcel('transactions.csv')" title="ייצוא לאקסל" aria-label="ייצוא לאקסל"><i class="bi bi-download"></i></button>
+  <button onclick="printPage()" title="הדפסה" aria-label="הדפסה"><i class="bi bi-printer"></i></button>
+</div>
+
+<script>
+  function saveChanges() {
+    alert("💾 שמירת שינויים (דמו בלבד)");
+  }
+
+  function exportToExcel(filename) {
+    const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
+    const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function printPage() {
+    window.print();
+  }
+</script>

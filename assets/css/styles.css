@@ -1,0 +1,29 @@
+.fixed-toolbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: #343a40;
+  padding: 10px 20px;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.fixed-toolbar button {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.fixed-toolbar button:hover {
+  color: #0d6efd;
+}
+
+.fixed-toolbar .bi {
+  vertical-align: middle;
+}
