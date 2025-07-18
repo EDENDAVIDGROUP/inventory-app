@@ -91,5 +91,15 @@
         reader.readAsArrayBuffer(file);
       }
     </script>
-  </body>
+  <script>
+  window.addEventListener('load', function() {
+    fetch('includes/toolbar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.body.insertAdjacentHTML('afterbegin', html);
+      })
+      .catch(error => console.error('Error loading toolbar:', error));
+  });
+</script>
+</body>
 </html>

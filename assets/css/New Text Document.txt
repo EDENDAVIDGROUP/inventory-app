@@ -1,5 +1,5 @@
 .fixed-toolbar {
-  position: static;
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
@@ -10,11 +10,7 @@
   justify-content: flex-end;
   gap: 10px;
 }
-.content {
-  flex-grow: 1;
-  padding: 2rem;
-  /* No need for extra padding-top unless overlap occurs */
-}
+
 .fixed-toolbar button {
   color: white;
   background: none;

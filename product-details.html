@@ -224,5 +224,15 @@
       <button type="button" onclick="window.location.href='index.html'">מסך הבית</button>
     </div>
   </form>
+<script>
+  window.addEventListener('load', function() {
+    fetch('includes/toolbar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.body.insertAdjacentHTML('afterbegin', html);
+      })
+      .catch(error => console.error('Error loading toolbar:', error));
+  });
+</script>
 </body>
 </html>
