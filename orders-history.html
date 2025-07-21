@@ -70,7 +70,6 @@
     <h2 class="text-center mb-4 d-flex justify-content-between align-items-center">
       orders-history
       <button class="excel-icon-button" onclick="exportFilteredToCSV('orders-history.csv')">
-        <img src="https://cdn-icons-png.flaticon.com/512/732/732220.png" alt="Excel Icon" title="ייצוא לאקסל">
       </button>
     </h2>
 
@@ -106,13 +105,6 @@
           <button type="button" class="btn btn-primary" id="filterButton">סנן</button>
           <button type="reset" class="btn btn-outline-secondary" id="resetButton">איפוס</button>
         </div>
-        <div>
-          <button class="btn btn-warning" onclick="saveChanges()">שמור שינויים</button>
-          <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
-        </div>
-      </div>
-    </div>
-
     <table class="table table-bordered order-table bg-white" id="ordersTable">
       <thead class="table-dark">
         <tr>
@@ -133,8 +125,6 @@
     <div class="toast-body">
       ✅ השינויים נשמרו בהצלחה!
     </div>
-  </div>
-
   <script>
     const statuses = ['הזמנה חדשה', 'בטיפול', 'נשלחה', 'נמסרה', 'בהמתנה', 'הושלמה'];
     let allOrders = JSON.parse(localStorage.getItem('ordersHistory')) || [];
