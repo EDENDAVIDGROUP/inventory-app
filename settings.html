@@ -76,6 +76,27 @@
     function exportToExcel() { alert("יש לבצע ייצוא מתוך כל טאב בנפרד"); }
     function printPage() { window.print(); }
   </script>
+<script>
+  // שינוי hash בכתובת כאשר לוחצים על טאב
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', function (event) {
+      const hash = event.target.getAttribute('href');
+      history.replaceState(null, null, hash);
+    });
+  });
 
+  // פתיחת הטאב המתאים לפי ה-hash בטעינת העמוד
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash;
+    if (hash) {
+      const tabTrigger = document.querySelector(`a[href="${hash}"]`);
+      const tabPane = document.querySelector(`${hash}`);
+      if (tabTrigger && tabPane) {
+        const tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+      }
+    }
+  });
+</script>
 </body>
 </html>
