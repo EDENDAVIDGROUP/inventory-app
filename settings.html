@@ -2,13 +2,14 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>הגדרות</title>
+  <title>הגדרות מערכת</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       background-color: #f8f9fa;
       font-family: Arial, sans-serif;
+      padding: 40px;
     }
     .floating-buttons {
       position: fixed;
@@ -23,22 +24,19 @@
       gap: 10px;
       justify-content: flex-start;
     }
-    .tab-content {
-      margin-top: 100px;
-    }
-    iframe {
-      width: 100%;
-      height: 1000px;
-      border: none;
-    }
   </style>
 </head>
 <body>
-
-  
+  <div class="floating-buttons">
+    <button class="btn btn-dark" onclick="goHome()" title="חזרה לדף הבית">🏠</button>
+    <button class="btn btn-success" onclick="saveChanges()" title="שמור שינויים">💾</button>
+    <button class="btn btn-outline-success" onclick="exportToExcel()" title="ייצוא לאקסל">🟩</button>
+    <button class="btn btn-info" onclick="printPage()" title="הדפסה">🖨️</button>
   </div>
+
   <div class="container">
-    <h2 class="text-center mt-5 mb-4">הגדרות המערכת</h2>
+    <h2 class="text-center mt-5 mb-4">הגדרות מערכת</h2>
+
     <!-- טאבים -->
     <ul class="nav nav-tabs" id="settingsTabs">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#clients">לקוחות</a></li>
@@ -46,57 +44,45 @@
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#files">קבצים נכנסים</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#deals">עסקאות</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#users">ניהול משתמשים</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#finance">הנהלת חשבונות</a></li>
     </ul>
 
-    <!-- תוכן הטאבים -->
-    <div class="tab-content">
+    <!-- תוכן -->
+    <div class="tab-content mt-4">
       <div class="tab-pane fade show active" id="clients">
-        <iframe src="clients.html"></iframe>
+        <iframe src="clients.html" style="width: 100%; height: 800px; border: none;"></iframe>
       </div>
       <div class="tab-pane fade" id="products">
-        <iframe src="products.html"></iframe>
+        <iframe src="products.html" style="width: 100%; height: 800px; border: none;"></iframe>
       </div>
-<div class="tab-pane fade" id="files">
-  <iframe src="email-orders.html"></iframe>
-</div>
+      <div class="tab-pane fade" id="files">
+        <iframe src="email-orders.html" style="width: 100%; height: 800px; border: none;"></iframe>
       </div>
       <div class="tab-pane fade" id="deals">
-        <iframe src="deals.html"></iframe>
+        <iframe src="deals.html" style="width: 100%; height: 800px; border: none;"></iframe>
       </div>
       <div class="tab-pane fade" id="users">
-        <iframe src="users.html"></iframe>
+        <iframe src="users.html" style="width: 100%; height: 800px; border: none;"></iframe>
+      </div>
+      <div class="tab-pane fade" id="finance">
+        <iframe src="accounting.html" style="width: 100%; height: 800px; border: none;"></iframe>
       </div>
     </div>
   </div>
 
   <script>
-    function goBack() { window.history.back(); }
-    function goHome() { window.location.href = 'index.html'; }
-    function saveChanges() { alert("שמירה כללית תתבצע בדפי המשנה"); }
-    function exportToExcel() { alert("יש לבצע ייצוא מתוך כל טאב בנפרד"); }
-    function printPage() { window.print(); }
-  </script>
-<script>
-  // שינוי hash בכתובת כאשר לוחצים על טאב
-  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach(tab => {
-    tab.addEventListener('shown.bs.tab', function (event) {
-      const hash = event.target.getAttribute('href');
-      history.replaceState(null, null, hash);
-    });
-  });
-
-  // פתיחת הטאב המתאים לפי ה-hash בטעינת העמוד
-  window.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash;
-    if (hash) {
-      const tabTrigger = document.querySelector(`a[href="${hash}"]`);
-      const tabPane = document.querySelector(`${hash}`);
-      if (tabTrigger && tabPane) {
-        const tab = new bootstrap.Tab(tabTrigger);
-        tab.show();
-      }
+    function goHome() {
+      window.location.href = 'index.html';
     }
-  });
-</script>
+    function saveChanges() {
+      alert('השינויים נשמרו (דמו).');
+    }
+    function exportToExcel() {
+      alert('הייצוא יתממש בקרוב.');
+    }
+    function printPage() {
+      window.print();
+    }
+  </script>
 </body>
 </html>
