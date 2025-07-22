@@ -158,6 +158,21 @@
 
       <label for="category">קטגוריה *</label>
       <input type="text" id="category" name="category" />
+<div class="mb-3">
+  <label for="classification" class="form-label">סיווג</label>
+  <input type="text" class="form-control" id="classification" placeholder="למשל: ציוד קיץ">
+</div>
+
+<div class="mb-3">
+  <label for="tag" class="form-label">תג סיווג</label>
+  <select class="form-select" id="tag">
+    <option selected disabled>בחר תג סיווג</option>
+    <option value="קבוע">קבוע</option>
+    <option value="עונתי">עונתי</option>
+    <option value="זמני">זמני</option>
+    <option value="מיוחד">מיוחד</option>
+  </select>
+</div>
 
       <label for="shortDesc">תיאור קצר *</label>
       <textarea id="shortDesc" name="shortDesc" rows="4"></textarea>
