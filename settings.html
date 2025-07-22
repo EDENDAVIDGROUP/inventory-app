@@ -84,5 +84,35 @@
       window.print();
     }
   </script>
+  <script>
+  function goHome() {
+    window.location.href = 'index.html';
+  }
+  function saveChanges() {
+    alert('השינויים נשמרו (דמו).');
+  }
+  function exportToExcel() {
+    alert('הייצוא יתממש בקרוב.');
+  }
+  function printPage() {
+    window.print();
+  }
+
+  // הצגת הטאב לפי hash אם קיים
+  document.addEventListener('DOMContentLoaded', function () {
+    const hash = window.location.hash;
+    if (hash) {
+      const tabLink = document.querySelector(`.nav-link[href="${hash}"]`);
+      if (tabLink) new bootstrap.Tab(tabLink).show();
+    }
+
+    // שינוי ה-URL כשעוברים טאב
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('shown.bs.tab', function (e) {
+        history.replaceState(null, null, e.target.getAttribute('href'));
+      });
+    });
+  });
+</script>
 </body>
 </html>
