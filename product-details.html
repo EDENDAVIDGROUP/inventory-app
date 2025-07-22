@@ -208,7 +208,17 @@
       <label for="volumeType">סוג נפח</label>
       <input type="text" id="volumeType" name="volumeType" />
     </div>
-
+<div class="mb-3">
+  <label for="warehouseLocation" class="form-label">מחסן לוגיסטי</label>
+  <select id="warehouseLocation" class="form-select">
+    <option value="">-- בחר מיקום מחסן --</option>
+    <option value="main">מחסן ראשי (ברירת מחדל)</option>
+    <option value="logistics1">מחסן לוגיסטי 1</option>
+    <option value="logistics2">מחסן לוגיסטי 2</option>
+    <option value="external">מחסן חיצוני (Dropshipping)</option>
+  </select>
+  <small class="form-text text-muted text-danger">אם תבחר מחסן לוגיסטי, ההזמנה תנותב אוטומטית לשם.</small>
+</div>
     <div class="section">
       <h3>שיווק</h3>
       <label for="youtube">לינק לוידאו יוטיוב</label>
@@ -219,9 +229,6 @@
     </div>
 
     <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 30px;">
-      <button type="submit">שמור שינויים</button>
-      <button type="button" onclick="window.location.href='products.html'">חזרה לדף מוצרים</button>
-      <button type="button" onclick="window.location.href='index.html'">מסך הבית</button>
     </div>
   </form>
 <script>
