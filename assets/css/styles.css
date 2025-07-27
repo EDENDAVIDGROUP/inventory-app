@@ -30,5 +30,5 @@
 }
 
 body {
-  padding-top: 60px; /* only if toolbar is fixed and overlaps content */
+  padding-top: 50px; /* only if toolbar is fixed and overlaps content */
 }
