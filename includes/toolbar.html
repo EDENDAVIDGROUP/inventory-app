@@ -1,9 +1,12 @@
-<div class="fixed-toolbar">
-  <button onclick="location.href='index.html'">דף הבית</button>
-  <button onclick="window.history.back()">חזור לעמוד קודם</button>
-  <button onclick="saveChanges()">שמור שינויים</button>
-  <button onclick="exportToExcel('transactions.csv')">ייצוא לאקסל</button>
-  <button onclick="printPage()">הדפסה</button>
+<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3">
+  <div id="page-specific-buttons" class="d-flex gap-2"></div>
+  <div class="d-flex gap-2">
+    <button onclick="location.href='index.html'">דף הבית</button>
+    <button onclick="window.history.back()">חזור לעמוד קודם</button>
+    <button onclick="saveChanges()">שמור שינויים</button>
+    <button onclick="exportToExcel('transactions.csv')">ייצוא לאקסל</button>
+    <button onclick="printPage()">הדפסה</button>
+  </div>
 </div>
 
 <script>
@@ -13,9 +16,7 @@
 
   function exportToExcel(filename) {
     const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
-    const rows = (typeof transactions !== 'undefined' ? transactions : []).map(tx =>
-      [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]
-    );
+    const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
