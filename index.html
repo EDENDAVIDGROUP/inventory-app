@@ -190,6 +190,66 @@
   </table>
 </div>
                   </tr>
+                  <tr>
+                    <td>מוצר 4</td>
+                    <td>₪500</td>
+                    <td>30/06/2025</td>
+                    <td><span class="badge bg-warning">בטיפול</span></td>
+                  </tr>
+                  <tr>
+                    <td>מוצר 5</td>
+                    <td>₪300</td>
+                    <td>29/06/2025</td>
+                    <td><span class="badge bg-danger">לא זמין</span></td>
+                  </tr>
+                  <tr>
+                    <td>מיקרוגל 800W</td>
+                    <td>₪450</td>
+                    <td>28/06/2025</td>
+                    <td><span class="badge bg-success">שולם</span></td>
+                  </tr>
+                  <tr>
+                    <td>ספה נפתחת</td>
+                    <td>₪1,200</td>
+                    <td>27/06/2025</td>
+                    <td><span class="badge bg-info">ממתין לאישור</span></td>
+                  </tr>
+                  <tr>
+                    <td>טוסטר אובן</td>
+                    <td>₪350</td>
+                    <td>26/06/2025</td>
+                    <td><span class="badge bg-success">שולם</span></td>
+                  </tr>
+                  <tr>
+                    <td>שטיח סלון</td>
+                    <td>₪750</td>
+                    <td>25/06/2025</td>
+                    <td><span class="badge bg-warning">בטיפול</span></td>
+                  </tr>
+                  <tr>
+                    <td>מקרר 300L</td>
+                    <td>₪2,000</td>
+                    <td>24/06/2025</td>
+                    <td><span class="badge bg-danger">לא זמין</span></td>
+                  </tr>
+                  <tr>
+                    <td>כסא משרדי</td>
+                    <td>₪400</td>
+                    <td>23/06/2025</td>
+                    <td><span class="badge bg-success">שולם</span></td>
+                  </tr>
+                  <tr>
+                    <td>מנורה LED</td>
+                    <td>₪150</td>
+                    <td>22/06/2025</td>
+                    <td><span class="badge bg-info">ממתין לאישור</span></td>
+                  </tr>
+                  <tr>
+                    <td>שולחן קפה</td>
+                    <td>₪600</td>
+                    <td>21/06/2025</td>
+                    <td><span class="badge bg-warning">בטיפול</span></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -199,59 +259,74 @@
         <div class="col-md-12 mt-3">
           <div class="card">
             <div class="card-header bg-secondary text-white">דוח לקוח חודשי</div>
-            <div class="card-body">
-              <canvas id="customerChart" height="140"></canvas>
+            <div class="card-body d-flex justify-content-center">
+              <div id="chartWrapper" style="width: 100%; max-width: 1200px; min-width: 400px; overflow-x: auto;">
+                <canvas id="customerChart" height="300"></canvas>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    const ctx = document.getElementById('customerChart').getContext('2d');
+    <script>
+  const labels = ['Boxmaster', 'Pro-Tools', 'מועדון טוב', 'מחסני חשמל', 'סופר-פארם', 'קונימבו', 'לקוח ידני'];
 
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Boxmaster', 'Pro-Tools', 'מועדון טוב', 'מחסני חשמל', 'סופר-פארם', 'קונימבו', 'לקוח ידני'],
-        datasets: [{
-          label: 'סה״כ רכישות',
-          data: [13800, 27650, 7500, 12600, 50500, 240000, 1000000],
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 5
-        }]
+  const canvas = document.getElementById('customerChart');
+  canvas.style.width = (labels.length * 100) + 'px'; // 100px per label
+
+  const ctx = canvas.getContext('2d');
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'סה״כ רכישות',
+        data: [13800, 27650, 7500, 12600, 50500, 240000, 1000000],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
       },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'לקוחות'
+          },
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0
+          }
         },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'לקוחות'
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function (value) {
+              if (value >= 1000000) return '1M';
+              if (value >= 1000) return value.toLocaleString();
+              return value;
             }
           },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function (value) {
-                if (value >= 1000000) return '1M';
-                if (value >= 1000) return value.toLocaleString();
-                return value;
-              }
-            },
-            suggestedMax: 1000000
-          }
+          suggestedMax: 1000000
         }
       }
-    });
-  </script>
+    }
+  });
+
+  // Scroll to left to show Y-axis by default
+  document.getElementById('chartWrapper').scrollLeft = 0;
+</script>
 
 </body>
 
