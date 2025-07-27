@@ -271,73 +271,63 @@
     </div>
 
     <script>
-      const labels = [
-        'Boxmaster', 'Pro-Tools', 'מועדון טוב', 'מחסני חשמל', 'סופר-פארם', 'קונימבו', 'לקוח ידני',
-        'חנות A', 'חנות B', 'חנות C', 'חנות D', 'חנות E', 'חנות F', 'חנות G', 'חנות H',
-        'חנות I', 'חנות J', 'חנות K', 'חנות L', 'חנות M', 'חנות N', 'חנות O', 'חנות P',
-        'חנות Q', 'חנות R', 'חנות S', 'חנות T', 'חנות U', 'חנות V'
-      ];
+  const labels = ['Boxmaster', 'Pro-Tools', 'מועדון טוב', 'מחסני חשמל', 'סופר-פארם', 'קונימבו', 'לקוח ידני'];
 
-      const data = [
-        13800, 27650, 7500, 12600, 50500, 240000, 1000000,
-        45000, 78000, 32000, 59000, 110000, 23000, 87000, 150000,
-        42000, 31500, 12800, 67000, 21500, 54000, 29000, 99000,
-        61000, 84000, 34000, 73000, 18500, 49000, 102000
-      ];
+  const canvas = document.getElementById('customerChart');
+  canvas.style.width = (labels.length * 100) + 'px'; // 100px per label
 
-      const canvas = document.getElementById('customerChart');
-      canvas.style.width = (labels.length * 100) + 'px'; // 100px per label for spacing
+  const ctx = canvas.getContext('2d');
 
-      const ctx = canvas.getContext('2d');
-
-      const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'סה״כ רכישות',
-            data: data,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: true,
-            tension: 0.4,
-            pointRadius: 5
-          }]
-        },
-        options: {
-          responsive: false,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'סה״כ רכישות',
+        data: [13800, 27650, 7500, 12600, 50500, 240000, 1000000],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'לקוחות'
           },
-          scales: {
-            x: {
-              title: { display: true, text: 'לקוחות' },
-              ticks: {
-                autoSkip: false,
-                maxRotation: 0,
-                minRotation: 0
-              }
-            },
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function (value) {
-                  if (value >= 1000000) return '1M';
-                  if (value >= 1000) return value.toLocaleString();
-                  return value;
-                }
-              },
-              suggestedMax: 1100000
-            }
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0
           }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function (value) {
+              if (value >= 1000000) return '1M';
+              if (value >= 1000) return value.toLocaleString();
+              return value;
+            }
+          },
+          suggestedMax: 1000000
         }
-      });
+      }
+    }
+  });
 
-      // Optional: scroll to left (show Y-axis)
-      document.getElementById('chartWrapper')?.scrollTo({ left: 0 });
-    </script>
-
+  // Scroll to left to show Y-axis by default
+  document.getElementById('chartWrapper').scrollLeft = 0;
+</script>
 
 </body>
 
