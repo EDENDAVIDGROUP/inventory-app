@@ -28,3 +28,7 @@
   background-color: #e2e6ea;
   color: #0d6efd;
 }
+
+body {
+  padding-top: 60px; /* only if toolbar is fixed and overlaps content */
+}
