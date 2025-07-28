@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>הזמנות בטיפול</title>
+  <title>הזמנות במחסן</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link href="assets/css/styles.css" rel="stylesheet">
@@ -14,25 +15,32 @@
       background-color: #f5f5f5;
       font-family: Arial, sans-serif;
     }
+
     .container {
       margin-top: 40px;
     }
+
     .table thead {
       background-color: #1f2235;
       color: white;
     }
-    .actions button, .actions a {
+
+    .actions button,
+    .actions a {
       margin-left: 5px;
     }
+
     .action-bar {
       margin-bottom: 20px;
     }
+
     .filters {
       display: flex;
       gap: 10px;
       align-items: center;
       flex-wrap: wrap;
     }
+
     .filters input,
     .filters select,
     .filters button {
@@ -42,30 +50,70 @@
     }
   </style>
 </head>
+
 <body onload="loadInProgressOrders()">
   <div class="container">
     <h2 class="text-center mb-4">הזמנות בטיפול</h2>
 
     <div class="action-bar d-flex flex-wrap justify-content-between align-items-center">
-      <div class="filters">
-        <input type="text" id="searchInput" class="form-control" placeholder="חיפוש לפי מספר / שם / טלפון" style="max-width: 200px;">
-        <input type="date" id="fromDate" class="form-control">
-        <input type="date" id="toDate" class="form-control">
-        <select id="bulkStatus" class="form-select">
-          <option value="">סינון לפי סטטוס</option>
-          <option value="בטיפול">בטיפול</option>
-          <option value="שודר לנהג חברה">שודר לנהג חברה</option>
-          <option value="שודר לבלדר">שודר לבלדר</option>
-          <option value="לא טופל">לא טופל</option>
-        </select>
-        <button class="btn btn-outline-dark" onclick="applyFilters()">סנן</button>
-        <button class="btn btn-outline-secondary" onclick="clearFilters()">איפוס</button>
+      <div class="card p-3 mb-4 w-100">
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-end gap-3 justify-content-between flex-row-reverse"
+            style="direction: rtl;">
+            <!-- 🔍 General Search -->
+            <div style="min-width: 150px; max-width: 200px; ">
+              <label class="form-label fw-semibold text-muted text-end" style="color: #4d526c;">חיפוש</label>
+              <div class="input-group rounded-pill shadow-sm flex-row-reverse">
+                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-0 py-1 text-end" id="searchInput"
+                  style="background-color: #f9fafb; font-size: 0.9rem;" placeholder="חיפוש לפי מספר / שם / טלפון">
+              </div>
+            </div>
+
+            <!-- 📅 From Date -->
+            <div>
+              <label class="form-label fw-semibold text-muted text-end" style="color: #4d526c;">מתאריך</label>
+              <input type="date" id="fromDate" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+                style="background-color: #f9fafb;">
+            </div>
+
+            <!-- 📅 To Date -->
+            <div>
+              <label class="form-label fw-semibold text-muted text-end" style="color: #4d526c;">עד תאריך</label>
+              <input type="date" id="toDate" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+                style="background-color: #f9fafb;">
+            </div>
+
+            <!-- 📦 Status -->
+            <div>
+              <label class="form-label fw-semibold text-muted text-end" style="color: #4d526c;">סטטוס</label>
+              <select class="form-select rounded-pill shadow-sm border-0 px-3 text-end" id="bulkStatus"
+                style="background-color: #f9fafb;">
+                <option value="">סינון לפי סטטוס</option>
+                <option value="בטיפול">בטיפול</option>
+                <option value="שודר לנהג חברה">שודר לנהג חברה</option>
+                <option value="שודר לבלדר">שודר לבלדר</option>
+                <option value="לא טופל">לא טופל</option>
+              </select>
+            </div>
+
+            <!-- 🔘 Buttons -->
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-dark rounded-pill px-4" style="border-color: #6e728c; color: #4d526c;"
+                onclick="clearFilters()">
+                <i class="bi bi-arrow-counterclockwise ms-1"></i> איפוס
+              </button>
+              <button class="btn btn-dark rounded-pill px-4" style="background-color: #6e728c; border-color: #6e728c;"
+                onclick="applyFilters()">
+                <i class="bi bi-funnel ms-1"></i> סינון
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="mt-2 mt-sm-0">
-        <button class="btn btn-success" onclick="exportToExcel()">📤 יצוא לאקסל</button>
         <button class="btn btn-primary" onclick="routeToShipments()">נתב למשלוחים</button>
-        <button class="btn btn-info" onclick="printSelectedOrders()">🖨️ הדפס</button>
-        <button class="btn btn-secondary" onclick="location.href='index.html'">🏠 חזרה לדף הבית</button>
       </div>
     </div>
 
@@ -87,12 +135,7 @@
       </tbody>
     </table>
 
-    <div class="d-flex justify-content-between mt-4">
-      <div>
-        <button class="btn btn-secondary" onclick="toggleAllCheckboxes(true)">סמן הכל</button>
-        <button class="btn btn-warning" onclick="toggleAllCheckboxes(false)">בטל סימון</button>
-      </div>
-    </div>
+    
   </div>
 
   <script>
@@ -163,7 +206,7 @@
     }
 
     async function printSelectedOrders() {
-      const selected = allOrders.filter(order => 
+      const selected = allOrders.filter(order =>
         document.querySelector(`.row-check[data-id="${order.orderId}"]`)?.checked
       );
       if (selected.length === 0) return alert('בחר לפחות הזמנה אחת להדפסה');
@@ -251,7 +294,7 @@
     }
 
     // Load toolbar for the main page
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
       fetch('includes/toolbar.html')
         .then(response => response.text())
         .then(html => {
@@ -262,4 +305,5 @@
     });
   </script>
 </body>
+
 </html>
