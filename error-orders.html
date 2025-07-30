@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,28 +12,35 @@
       background-color: #f8f9fa;
       padding: 30px;
     }
+
     .table-container {
       background-color: white;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .table th, .table td {
+
+    .table th,
+    .table td {
       vertical-align: middle;
     }
+
     .actions button {
       margin-left: 5px;
     }
+
     .filters {
       background: white;
       padding: 20px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     }
+
     .export-btn {
       margin-right: 10px;
     }
+
     .error-type {
       background-color: #ffe4b2;
       padding: 4px 8px;
@@ -41,20 +49,19 @@
       font-weight: bold;
     }
   </style>
-<link href="assets/css/styles.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<script src="assets/js/scripts.js" defer></script>
+  <link href="assets/css/styles.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="assets/js/scripts.js" defer></script>
 </head>
+
 <body>
   <div class="container-fluid position-relative">
     <h2 class="mb-4 text-center">הזמנות שגויות</h2>
 
     <div class="d-flex justify-content-between mb-3">
       <div>
-        <button class="btn btn-success export-btn" onclick="exportToExcel()">
-          <i class="fa-solid fa-file-excel"></i> ייצוא לאקסל
-        </button>
+
         <button class="btn btn-primary" onclick="moveSelectedToNewOrders()">העבר להזמנה חדשה</button>
       </div>
     </div>
@@ -63,7 +70,8 @@
       <div class="row g-2 align-items-end">
         <div class="col-md-3">
           <label>חיפוש חופשי</label>
-          <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון..." oninput="filterTable()">
+          <input type="text" class="form-control" id="searchInput" placeholder="חפש לפי שם, מספר הזמנה, טלפון..."
+            oninput="filterTable()">
         </div>
         <div class="col-md-2">
           <label>תאריך</label>
@@ -180,15 +188,27 @@
     renderTable();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  window.addEventListener('load', function() {
-    fetch('includes/toolbar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.body.insertAdjacentHTML('afterbegin', html);
-      })
-      .catch(error => console.error('Error loading toolbar:', error));
-  });
-</script>
+  <script>
+    window.addEventListener('load', function () {
+      fetch('includes/toolbar.html')
+        .then(response => response.text())
+        .then(html => {
+          document.body.insertAdjacentHTML('afterbegin', html);
+
+          const checkExist = setInterval(() => {
+            const btnContainer = document.getElementById('page-specific-buttons');
+            if (btnContainer) {
+              clearInterval(checkExist);
+
+              btnContainer.innerHTML = `
+            <button class="btn btn-primary" onclick="moveSelectedToNewOrders()">העבר להזמנה חדשה</button>
+          `;
+            }
+          }, 50);
+        })
+        .catch(error => console.error('Error loading toolbar:', error));
+    });
+  </script>
 </body>
+
 </html>

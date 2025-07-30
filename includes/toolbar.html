@@ -1,11 +1,15 @@
-<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3">
+<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3"
+     style="position: fixed; top: 0; width: 100%; background-color: #f9fafb; padding: 10px; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <!-- Page-specific buttons injected dynamically -->
   <div id="page-specific-buttons" class="d-flex gap-2"></div>
+
+  <!-- Global toolbar buttons -->
   <div class="d-flex gap-2">
-    <button onclick="location.href='index.html'">דף הבית</button>
-    <button onclick="window.history.back()">חזור לעמוד קודם</button>
-    <button onclick="saveChanges()">שמור שינויים</button>
-    <button onclick="exportToExcel('transactions.csv')">ייצוא לאקסל</button>
-    <button onclick="printPage()">הדפסה</button>
+    <button class="btn btn-outline-dark rounded-pill px-3" onclick="location.href='index.html'">דף הבית</button>
+    <button class="btn btn-outline-dark rounded-pill px-3" onclick="window.history.back()">חזור לעמוד קודם</button>
+    <button class="btn btn-outline-dark rounded-pill px-3" onclick="saveChanges()">שמור שינויים</button>
+    <button class="btn btn-outline-dark rounded-pill px-3" onclick="exportToExcel()">ייצוא לאקסל</button>
+    <button class="btn btn-outline-dark rounded-pill px-3" onclick="printPage()">הדפסה</button>
   </div>
 </div>
 
@@ -15,13 +19,32 @@
   }
 
   function exportToExcel(filename) {
+    // Fallback if no data exists
+    const rows = (typeof transactions !== "undefined" ? transactions : []);
+    if (!rows.length) {
+      alert("⚠️ אין נתונים לייצוא");
+      return;
+    }
+
+    // Default headers
     const headers = ['מספר עסקה', 'מוצר', 'לקוח', 'אינטגרציה', 'תאריך שידור', 'סטטוס', 'סטטוס יעד'];
-    const rows = transactions.map(tx => [tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus]);
-    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const dataRows = rows.map(tx => [
+      tx.id, tx.product, tx.customer, tx.integration, tx.date, tx.status, tx.targetStatus
+    ]);
+
+    // Build CSV
+    const csv = [headers, ...dataRows].map(r => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+    // Dynamic filename: use page title + date
+    const pageTitle = document.title.replace(/\s+/g, "-");
+    const today = new Date().toISOString().split("T")[0];
+    const exportName = filename || `${pageTitle}-${today}.csv`;
+
+    // Download
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', filename);
+    link.setAttribute("download", exportName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
