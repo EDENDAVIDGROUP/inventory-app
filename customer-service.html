@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,24 +12,31 @@
       font-family: Arial, sans-serif;
       padding: 30px;
     }
-    .table th, .table td {
+
+    .table th,
+    .table td {
       vertical-align: middle;
       text-align: center;
     }
+
     .filter-section {
       background: #fff;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
     }
-    .filter-section .form-control, .filter-section .form-select {
+
+    .filter-section .form-control,
+    .filter-section .form-select {
       font-size: 0.75rem;
       padding: 4px;
     }
+
     .status-tag {
       display: none;
     }
+
     .floating-save {
       position: fixed;
       top: 20px;
@@ -44,66 +52,108 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
       cursor: pointer;
     }
   </style>
-<link href="assets/css/styles.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<script src="assets/js/scripts.js" defer></script>
+  <link href="assets/css/styles.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="assets/js/scripts.js" defer></script>
 </head>
+
 <body>
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">שירות לקוחות</h2>
-      <div>
-    <div class="filter-section row g-2 align-items-center">
-      <div class="col-md-2">
-        <label class="form-label">מתאריך</label>
-        <input type="date" class="form-control" id="filterStartDate">
+    <div class="container mt-5" style="max-width: 1200px;">
+
+      <!-- Page Title -->
+      <h2 class="text-center mb-4" style="font-weight:600; color:#333;">שירות לקוחות</h2>
+
+      <!-- Filter Card -->
+      <div class="card p-4 mb-4 shadow-sm border-0"
+        style="border-radius: 1rem; background: #f5f7fa; box-shadow: 0 3px 8px rgba(0,0,0,0.15); direction: rtl;">
+        <div class="d-flex flex-wrap align-items-end gap-3 justify-content-between flex-row-reverse">
+
+          <!-- 📅 From Date -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">מתאריך</label>
+            <input type="date" id="filterStartDate" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+              style="background-color: #f9fafb;">
+          </div>
+
+          <!-- 📅 To Date -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">עד תאריך</label>
+            <input type="date" id="filterEndDate" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+              style="background-color: #f9fafb;">
+          </div>
+
+          <!-- ✉️ Email -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">אימייל</label>
+            <input type="text" id="filterEmail" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+              style="background-color: #f9fafb;" placeholder="חפש לפי אימייל...">
+          </div>
+
+          <!-- 🏷 Customer -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">שם לקוח</label>
+            <input type="text" id="filterCustomer" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+              style="background-color: #f9fafb;" placeholder="חפש לפי שם לקוח...">
+          </div>
+
+          <!-- 👤 Sender -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">שם פונה</label>
+            <input type="text" id="filterSender" class="form-control rounded-pill shadow-sm text-end px-3 border-0"
+              style="background-color: #f9fafb;" placeholder="חפש לפי שם פונה...">
+          </div>
+
+          <!-- 📦 Status -->
+          <div>
+            <label class="form-label fw-semibold text-muted text-end">סטטוס</label>
+            <select id="filterStatus" class="form-select rounded-pill shadow-sm border-0 px-3 text-end"
+              style="background-color: #f9fafb;">
+              <option value="">הכל</option>
+              <option value="חדש">חדש</option>
+              <option value="בטיפול">בטיפול</option>
+              <option value="מענה">מענה</option>
+              <option value="סגור">סגור</option>
+            </select>
+          </div>
+
+          <!-- 🔘 Buttons -->
+          <div class="d-flex gap-2 ms-auto">
+            <button class="btn btn-outline-dark rounded-pill px-4" style="border-color: #6e728c; color: #4d526c;"
+              onclick="resetFilters()">
+              <i class="bi bi-arrow-counterclockwise ms-1"></i> איפוס
+            </button>
+            <button class="btn btn-dark rounded-pill px-4" style="background-color: #6e728c; border-color: #6e728c;"
+              onclick="renderMessages()">
+              <i class="bi bi-funnel ms-1"></i> סינון
+            </button>
+          </div>
+
+        </div>
       </div>
-      <div class="col-md-2">
-        <label class="form-label">עד תאריך</label>
-        <input type="date" class="form-control" id="filterEndDate">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">אימייל</label>
-        <input type="text" class="form-control" id="filterEmail">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">שם לקוח</label>
-        <input type="text" class="form-control" id="filterCustomer">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">שם פונה</label>
-        <input type="text" class="form-control" id="filterSender">
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">סטטוס</label>
-        <select class="form-select" id="filterStatus">
-          <option value="">הכל</option>
-          <option value="חדש">חדש</option>
-          <option value="בטיפול">בטיפול</option>
-          <option value="מענה">מענה</option>
-          <option value="סגור">סגור</option>
-        </select>
-      </div>
+
+      <!-- Table -->
+      <table class="table table-bordered bg-white">
+        <thead class="table-dark">
+          <tr>
+            <th>תאריך</th>
+            <th>שם פונה</th>
+            <th>אימייל</th>
+            <th>שיוך פלטפורמה</th>
+            <th>סטטוס</th>
+            <th>פעולות</th>
+          </tr>
+        </thead>
+        <tbody id="messagesTable"></tbody>
+      </table>
+
     </div>
 
-    <table class="table table-bordered bg-white">
-      <thead class="table-dark">
-        <tr>
-          <th>תאריך</th>
-          <th>שם פונה</th>
-          <th>אימייל</th>
-          <th>שיוך פלטפורמה</th>
-          <th>סטטוס</th>
-          <th>פעולות</th>
-        </tr>
-      </thead>
-      <tbody id="messagesTable"></tbody>
-    </table>
   </div>
 
   <script>
@@ -144,11 +194,11 @@
         const from = startDate ? new Date(startDate) : null;
         const to = endDate ? new Date(endDate) : null;
         return (!senderFilter || msg.sender.includes(senderFilter)) &&
-               (!customerFilter || msg.customer.includes(customerFilter)) &&
-               (!emailFilter || msg.email.includes(emailFilter)) &&
-               (!from || msgDate >= from) &&
-               (!to || msgDate <= to) &&
-               (!statusFilter || msg.status === statusFilter);
+          (!customerFilter || msg.customer.includes(customerFilter)) &&
+          (!emailFilter || msg.email.includes(emailFilter)) &&
+          (!from || msgDate >= from) &&
+          (!to || msgDate <= to) &&
+          (!statusFilter || msg.status === statusFilter);
       }).forEach((msg, index) => {
         tbody.innerHTML += `
           <tr>
@@ -211,15 +261,16 @@
 
     renderMessages();
   </script>
-<script>
-  window.addEventListener('load', function() {
-    fetch('includes/toolbar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.body.insertAdjacentHTML('afterbegin', html);
-      })
-      .catch(error => console.error('Error loading toolbar:', error));
-  });
-</script>
+  <script>
+    window.addEventListener('load', function () {
+      fetch('includes/toolbar.html')
+        .then(response => response.text())
+        .then(html => {
+          document.body.insertAdjacentHTML('afterbegin', html);
+        })
+        .catch(error => console.error('Error loading toolbar:', error));
+    });
+  </script>
 </body>
+
 </html>

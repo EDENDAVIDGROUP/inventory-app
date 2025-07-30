@@ -32,3 +32,17 @@
 body {
   padding-top: 50px; /* only if toolbar is fixed and overlaps content */
 }
+
+/* Force placeholder alignment to RTL */
+#productSearch::placeholder {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Force dropdown selected value alignment */
+#statusFilter,
+#statusFilter option {
+  text-align: right;
+  direction: rtl;
+  text-align-last: right;
+}
