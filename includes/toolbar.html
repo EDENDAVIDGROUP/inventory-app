@@ -1,17 +1,19 @@
-<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3" style="position: fixed; top: 0; width: 100%; z-index: 1000;">
-  <!-- Brand (replacing logo) -->
-  <a href="index.html" class="brand" style="font-size: 1.25rem; font-weight: 700; color: #343a40; text-decoration: none;">עדן דוד</a>
+<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3" id="toolbar">
+  <!-- Brand (Logo replacement) -->
+  <a href="index.html" class="brand" style="text-decoration: none;">עדן דוד</a>
 
-  <!-- Page-specific buttons injected dynamically -->
-  <div id="page-specific-buttons" class="d-flex gap-2"></div>
-
-  <!-- Global toolbar buttons -->
-  <div class="d-flex gap-2">
-    <button class="btn btn-link" onclick="location.href='index.html'">דף הבית</button>
-    <button class="btn btn-link" onclick="window.history.back()">חזור לעמוד קודם</button>
-    <button class="btn btn-link" onclick="saveChanges()">שמור שינויים</button>
-    <button class="btn btn-link" onclick="exportToExcel()">ייצוא לאקסל</button>
-    <button class="btn btn-link" onclick="printPage()">הדפסה</button>
+  <!-- Combined button container (global + page-specific) -->
+  <div class="d-flex gap-2 align-items-center">
+    <!-- Page-specific buttons -->
+    <div id="page-specific-buttons" class="d-flex gap-2"></div>
+    <!-- Global toolbar buttons -->
+    <div class="d-flex gap-2">
+      <button class="btn-toolbar" onclick="location.href='index.html'">דף הבית</button>
+      <button class="btn-toolbar" onclick="window.history.back()">חזור לעמוד קודם</button>
+      <button class="btn-toolbar" onclick="saveChanges()">שמור שינויים</button>
+      <button class="btn-toolbar" onclick="exportToExcel()">ייצוא לאקסל</button>
+      <button class="btn-toolbar" onclick="printPage()">הדפסה</button>
+    </div>
   </div>
 </div>
 
