@@ -10,21 +10,22 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Links -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link active" href="#">דף הבית</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">שירותים</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">מוצרים</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">דוחות</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">צור קשר</a></li>
-      </ul>
+<!-- Toolbar -->
+<nav id="mainNavbar" class="fixed-toolbar navbar navbar-expand-lg fixed-top navbar-light py-2">
+  <div class="container d-flex justify-content-between align-items-center">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="#">עדן דוד</a>
+
+    <!-- Buttons -->
+    <div class="d-flex gap-2 fw-bold">
+      <button class="btn btn-outline-dark rounded-pill px-3" onclick="location.href='index.html'">דף הבית</button>
+      <button class="btn btn-outline-dark rounded-pill px-3" onclick="window.history.back()">חזור לעמוד קודם</button>
+      <button class="btn btn-outline-dark rounded-pill px-3" onclick="saveChanges()">שמור שינויים</button>
+      <button class="btn btn-outline-dark rounded-pill px-3" onclick="exportToExcel()">ייצוא לאקסל</button>
+      <button class="btn btn-outline-dark rounded-pill px-3" onclick="printPage()">הדפסה</button>
     </div>
   </div>
 </nav>
-
-<!-- Page Content (for testing scroll effect) -->
-<div style="height:1500px; background:linear-gradient(white, #eaeaea);"></div>
 
 
 
