@@ -237,6 +237,8 @@
       alert("השינויים נשמרו (סימולציה בלבד - יש לחבר ל‑API בעתיד)");
     }
   </script>
+
+
   <script>
     window.addEventListener('load', function () {
       fetch('includes/toolbar.html')
@@ -251,15 +253,34 @@
               clearInterval(checkExist);
 
               btnContainer.innerHTML = `
-              <button class="btn btn-info" onclick="checkChitaStatus()">בדוק סטטוס מצ'יטה</button>
-              <button class="btn btn-danger" onclick="generateLabels(true)">שדר להדפסת מדבקות</button>
-              <button class="btn btn-success" onclick="generateLabels(false)">הדפס מדבקות</button>
+              <button class="btn btn-link" onclick="checkChitaStatus()" style="color: #343a40; font-weight: 700; font-size: 15px; padding: 6px 12px;">בדוק סטטוס מצ'יטה</button>
+              <button class="btn btn-link" onclick="generateLabels(true)" style="color: #343a40; font-weight: 700; font-size: 15px; padding: 6px 12px;">שדר להדפסת מדבקות</button>
+              <button class="btn btn-link" onclick="generateLabels(false)" style="color: #343a40; font-weight: 700; font-size: 15px; padding: 6px 12px;">הדפס מדבקות</button>
             `;
             }
           }, 50);
         })
         .catch(error => console.error('Error loading toolbar:', error));
     });
+
+    // Scroll effect for toolbar
+    window.addEventListener('scroll', () => {
+      const toolbar = document.querySelector('.fixed-toolbar');
+      if (window.scrollY > 0) {
+        toolbar.classList.add('scrolled');
+      } else {
+        toolbar.classList.remove('scrolled');
+      }
+    });
+
+    // Placeholder functions (implement as needed)
+    function checkChitaStatus() {
+      alert("בדיקת סטטוס מצ'יטה (דמו בלבד)");
+    }
+
+    function generateLabels(sendToPrint) {
+      alert(`הדפסת מדבקות ${sendToPrint ? 'שליחה להדפסה' : 'הדפסה מקומית'} (דמו בלבד)`);
+    }
   </script>
 
 </body>

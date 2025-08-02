@@ -6,7 +6,7 @@
   left: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between; /* brand left, buttons right */
+  justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
   background: transparent;
@@ -16,7 +16,7 @@
 /* Toolbar on scroll */
 .fixed-toolbar.scrolled {
   background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Brand */
@@ -24,14 +24,15 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #343a40;
+  text-decoration: none;
 }
 
 /* Toolbar Buttons (link style) */
-.fixed-toolbar button {
+.fixed-toolbar .btn-link {
   background: none;
-  border: none;              /* 🚫 no border */
-  color: #343a40;            /* dark text */
-  font-weight: 700;          /* bold */
+  border: none;
+  color: #343a40;
+  font-weight: 700;
   font-size: 15px;
   padding: 6px 12px;
   cursor: pointer;
@@ -39,11 +40,11 @@
 }
 
 /* Hover */
-.fixed-toolbar button:hover {
-  color: #0d6efd;            /* classic blue */
+.fixed-toolbar .btn-link:hover {
+  color: #0d6efd;
 }
 
 /* Active button */
-.fixed-toolbar button.active {
-  color: #0d6efd;            /* permanently blue */
+.fixed-toolbar .btn-link.active {
+  color: #0d6efd;
 }
