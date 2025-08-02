@@ -1,17 +1,34 @@
-<div class="fixed-toolbar d-flex justify-content-between align-items-center px-3"
-     style="position: fixed; top: 0; width: 100%; background-color: #f9fafb; padding: 10px; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-  <!-- Page-specific buttons injected dynamically -->
-  <div id="page-specific-buttons" class="d-flex gap-2"></div>
+<!-- Navbar -->
+<nav id="mainNavbar" class="navbar navbar-expand-lg fixed-top navbar-light">
+  <div class="container">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="#">FlexStart</a>
 
-  <!-- Global toolbar buttons -->
-  <div class="d-flex gap-2">
-    <button class="btn btn-outline-dark rounded-pill px-3" onclick="location.href='index.html'">דף הבית</button>
-    <button class="btn btn-outline-dark rounded-pill px-3" onclick="window.history.back()">חזור לעמוד קודם</button>
-    <button class="btn btn-outline-dark rounded-pill px-3" onclick="saveChanges()">שמור שינויים</button>
-    <button class="btn btn-outline-dark rounded-pill px-3" onclick="exportToExcel()">ייצוא לאקסל</button>
-    <button class="btn btn-outline-dark rounded-pill px-3" onclick="printPage()">הדפסה</button>
+    <!-- Toggle button (for mobile) -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link active" href="#">דף הבית</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">שירותים</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">מוצרים</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">דוחות</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">צור קשר</a></li>
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
+
+<!-- Page Content (for testing scroll effect) -->
+<div style="height:1500px; background:linear-gradient(white, #eaeaea);"></div>
+
+
+
+
 
 <script>
   function saveChanges() {
