@@ -1,55 +1,64 @@
-/* Fixed Toolbar */
+/* Base Toolbar */
 .fixed-toolbar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  background: transparent; /* transparent at top */
-  padding: 10px 20px;
   z-index: 1000;
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: space-between; /* logo left, buttons right */
+  align-items: center;
+  padding: 12px 20px;
+  background: transparent; /* transparent at top */
   transition: all 0.3s ease;
-  box-shadow: none;
-  border-bottom: none;
 }
 
+/* Toolbar when scrolled */
 .fixed-toolbar.scrolled {
-  background: #ffffff; /* white on scroll */
-  border-bottom: 1px solid #ddd;
+  background: #ffffff;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #eee;
 }
 
+/* Logo/Brand */
+.fixed-toolbar .brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #343a40;
+}
+
+/* Buttons */
 .fixed-toolbar button {
-  background: none;
+  background: transparent;
   color: #343a40;
   border: 1px solid #343a40;
   border-radius: 50px; /* pill style */
-  padding: 6px 14px;
+  padding: 6px 16px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 700; /* bold */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .fixed-toolbar button:hover {
   color: #0d6efd;
   border-color: #0d6efd;
-  background: #f8f9fa;
 }
 
+/* Body padding so toolbar doesn't overlap */
 body {
-  padding-top: 60px; /* prevent overlap */
+  padding-top: 60px;
 }
 
-/* RTL Placeholder alignment */
+/* --- Filters fix (keep from before) --- */
+
+/* Force placeholder alignment to RTL */
 #productSearch::placeholder {
   text-align: right;
   direction: rtl;
 }
 
-/* RTL Dropdown alignment */
+/* Force dropdown selected value alignment */
 #statusFilter,
 #statusFilter option {
   text-align: right;
