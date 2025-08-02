@@ -67,3 +67,7 @@
     gap: 8px;
   }
 }
+
+body {
+  padding-top: 50px; /* only if toolbar is fixed and overlaps content */
+}
